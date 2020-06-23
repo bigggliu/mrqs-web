@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mediot.ygb.mrqs.analysis.monitoringIndexManage.dao.TCheckColMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.mediot.ygb.mrqs.analysis.monitoringIndexManage.entity.TCheckCol">
+        <id column="CHECK_COL_ID" property="checkColId" />
+        <result column="COL_NAME" property="colName" />
+        <result column="COL_COMMENTS" property="colComments" />
+        <result column="FQUN" property="fQun" />
+        <result column="CMIS_CHOICE" property="cmisChoice" />
+        <result column="EMR_CHOICE" property="emrChoice" />
+        <result column="FSORT" property="fSort" />
+        <result column="QUALITY_CLASS" property="qualityClass" />
+        <result column="GRADING_LEVEL" property="gradingLevel" />
+        <result column="INFORMATION_CLASS" property="informationClass" />
+        <result column="RULE_TYPE" property="ruleType" />
+        <result column="SCORE" property="score" />
+        <result column="MUST_FILL" property="mustFill" />
+        <result column="RULE_DESCRIPTION" property="ruleDescription" />
+        <result column="VERIFICATION_LOGIC" property="verificationLogic" />
+        <result column="COL_TYPE" property="colType" />
+        <result column="ORG_NAMES" property="orgNames" />
+        <result column="TABLE_NAME" property="tableName" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        a.CHECK_COL_ID,a.COL_NAME,a.COL_COMMENTS,a.FQUN,a.CMIS_CHOICE,a.EMR_CHOICE,
+        a.FSORT,a.QUALITY_CLASS,a.GRADING_LEVEL,a.INFORMATION_CLASS,a.RULE_TYPE,
+        a.SCORE,MUST_FILL,a.RULE_DESCRIPTION,a.VERIFICATION_LOGIC,
+        a.COL_TYPE
+    </sql>
+
+    <select id="selectErrorDetailByYear" parameterType="java.util.Map" resultType="com.mediot.ygb.mrqs.common.entity.vo.ErrorDetailVo">
+        SELECT
+            count(*)
+                as total,t.col_name,t.col_comments,t.error_message
+        FROM
+            (select t.batch_id,t.case_id,t.col_name,t.col_comments,t.error_message from t_error_detail t where t.batch_id=#{batchId}) t
+                INNER join
+            (
+                select DISTINCT t.batch_id,t.case_no from t_firstpage_testing t where t.batch_id=#{batchId} and to_char(t.out_dtime,'yyyy')=#{year}) f
+            on t.batch_id=f.batch_id
+                and t.case_id=f.case_no
+        GROUP by t.col_name,t.col_comments,t.error_message
+    </select>
+
+
+    <select id="getErrorNumOfCurrentYear" parameterType="java.util.Map" resultType="String">
+        SELECT
+            count(*)
+
+        FROM
+            (select t.batch_id,t.case_id,t.col_name,t.col_comments,t.error_message from t_error_detail t where t.batch_id=#{batchId}) t
+                INNER join
+            (
+                select DISTINCT t.batch_id,t.case_no from t_firstpage_testing t where t.batch_id=#{batchId} and to_char(t.out_dtime,'yyyy')=#{year}) f
+            on t.batch_id=f.batch_id
+                and t.case_id=f.case_no
+    </select>
+
+    <select id="getRptListByBatchId" parameterType="java.util.Map" resultType="com.mediot.ygb.mrqs.common.entity.vo.ReportManageVo">
+        SELECT
+            to_char(f.out_dtime,'yyyy') as year
+        FROM
+            (select t.batch_id,t.case_id from t_error_detail t where t.batch_id=#{batchId}) t
+             INNER join
+            (
+             select DISTINCT t.out_dtime, t.batch_id,t.case_no from t_firstpage_testing t where t.batch_id=#{batchId}) f
+        on t.batch_id=f.batch_id
+           and t.case_id=f.case_no GROUP by to_char(f.out_dtime,'yyyy')
+    </select>
+
+    <select id="getNumOfCurrentYear" parameterType="java.util.Map" resultType="String">
+        SELECT
+            count(*)
+        FROM t_firstpage_testing t
+        WHERE t.batch_id=#{batchId}
+          and to_char(t.out_dtime,'yyyy')=#{year}
+    </select>
+
+
+    <select id="getNumOfErrorFileds" parameterType="java.util.Map" resultType="String">
+        select count(DISTINCT e.col_comments) FROM
+        t_error_detail e LEFT JOIN t_firstpage_testing f
+        on
+        e.case_id=f.case_no
+        and e.batch_id=f.batch_id
+          WHERE f.batch_id=#{batchId}
+          <if test="year!=null">
+              and to_char(f.out_dtime,'yyyy')=#{year}
+          </if>
+    </select>
+
+    <select id="selectTCheckColList" parameterType="java.util.Map" resultMap="BaseResultMap">
+        select a.*, s.ORG_NAMES from t_check_col a INNER join
+                                     (         select n.CHECK_COL_ID,listagg(n.ORG_NAME,',') within GROUP(ORDER BY n.CHECK_COL_ID) as ORG_NAMES from
+                                         (         select a.*,b.ORG_NAME from T_CHECK_COL a         LEFT join         T_CHECK_ORG b         on a.CHECK_COL_ID=b.CHECK_COL_ID
+                                                   WHERE a.COL_NAME like concat(concat('%',#{queryStr}),'%')
+                                                      or a.rule_description like concat(concat('%',#{queryStr}),'%')
+                                                      or b.ORG_NAME like concat(concat('%',#{queryStr}),'%')
+                                         )         n GROUP BY n.CHECK_COL_ID
+                                     ) s         on a.CHECK_COL_ID=s.CHECK_COL_ID
+    </select>
+
+    <select id="selectTCheckColListWithOutQs" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/>,s.org_names from (select  a.COL_NAME,listagg(nvl(b.ORG_NAME,''),',') within GROUP(ORDER BY b.CHECK_COL_ID) as ORG_NAMES
+        from t_check_col a left join
+        T_CHECK_ORG b
+        on a.CHECK_COL_ID=b.CHECK_COL_ID
+        GROUP BY a.COL_NAME) s INNER JOIN t_check_col a on s.col_name=a.col_name  order by s.ORG_NAMES
+    </select>
+
+    <select id="selectTCheckColsByOrgId" parameterType="java.util.Map" resultType="com.mediot.ygb.mrqs.analysis.monitoringIndexManage.entity.TCheckCol">
+        select a.* from t_check_col a
+        left join T_CHECK_ORG b
+        on a.CHECK_COL_ID=b.CHECK_COL_ID
+        where b.ORG_ID=#{orgId}
+    </select>
+</mapper>

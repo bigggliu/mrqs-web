@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mediot.ygb.mrqs.dict.dao.TDataStandardMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.mediot.ygb.mrqs.dict.entity.TDataStandard">
+        <!--<id column="BASE_CODE" property="baseCode" />-->
+        <id column="STANDARD_CODE" property="standardCode" />
+        <result column="STANDARD_NAME" property="standardName" />
+        <result column="REMARK" property="remark" />
+        <result column="FSTATE" property="fState" />
+        <result column="FQUN" property="fQun" />
+        <result column="TOTAL_NUMBER" property="totalNumber" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        STANDARD_CODE, STANDARD_NAME
+    </sql>
+
+</mapper>

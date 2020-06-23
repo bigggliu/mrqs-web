@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mediot.ygb.mrqs.dict.dao.TBaseMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.mediot.ygb.mrqs.dict.entity.TBase">
+        <id column="BASE_CODE" property="baseCode" />
+        <result column="BASE_NAME" property="baseName" />
+        <result column="FQUN" property="fQun" />
+        <result column="PARENT_CODE" property="parentCode" />
+        <result column="REMARK" property="remark" />
+        <result column="FSTATE" property="fState" />
+        <result column="VERSION" property="version" />
+        <result column="DCODE" property="dCode" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        BASE_CODE, BASE_NAME, FSTATE,FQUN,PARENT_CODE,FQUN
+    </sql>
+
+    <select id="selectTBaseByMap" parameterType="java.util.Map" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"></include>
+        from T_BASE a where 1=1
+        <if test="baseCode!=null">
+            and REGEXP_LIKE (a.base_code, concat(concat('^\d{3,}',${baseCode}),'$'))
+        </if>
+        <if test="baseName!=null">
+            and a.base_name like concat(concat('%',#{baseName}),'%')
+        </if>
+    </select>
+
+</mapper>

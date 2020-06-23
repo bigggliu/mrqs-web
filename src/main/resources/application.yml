@@ -1,0 +1,95 @@
+application:
+  version: 1.0
+debug: false
+mybatis-plus:
+  enabled: true
+  generic:
+    enabled: true
+  dialectType: oracle
+  mapper-locations: classpath*:META-INF/mapping/*.xml,META-INF/mapping/**/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+    call-setters-on-nulls: false
+    cache-enabled: false
+    #log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    #主键类型  0:"数据库ID自增", 1:"用户输入ID",2:"全局唯一ID (数字类型唯一ID)", 3:"全局唯一ID UUID";
+    id-type: 3
+    #机器 ID 部分(影响雪花ID)
+    workerId: 1
+    #数据标识 ID 部分(影响雪花ID)(workerId 和 datacenterId 一起配置才能重新初始化 Sequence)
+    datacenterId: 18
+    #刷新mapper 调试神器
+#    refresh-mapper: true
+server:
+  port: 8512
+  tomcat:
+    uri-encoding: UTF-8
+  error:
+    include-exception: true
+spring:
+  datasource:
+    #url: jdbc:oracle:thin:@115.220.9.93:1521/orcl.168.0.70?useUnicode=true&characterEncoding=UTF-8&useSSL=false
+    druid:
+      driver-class-name: oracle.jdbc.driver.OracleDriver
+      url: "jdbc:oracle:thin:@115.220.9.93:1521/orcl.168.0.70"
+      maxActive: 1000
+      username: mrqs
+      password: mrqs
+      initial-size: 20
+      max-wait: 100000
+      min-idle: 5
+      pool-prepared-statements: true
+      validation-query: "SELECT 1 FROM DUAL"
+      time-between-eviction-runs-millis: 60000
+      remove-abandoned: true
+      test-on-borrow: false
+      test-on-return: false
+      test-while-idle: true
+      filters: mergeStat
+  http:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+  main:
+    allow-bean-definition-overriding: true
+  redis:
+    host: 115.220.9.93
+    port: 6379
+    database: 1
+    password: 98761234
+    jedis:
+      pool:
+        # 最大空闲连接
+        max-idle: 8
+        # 最小空闲链接
+        min-idle: 0
+        # 最大连接数（负数表示没有限制）
+        max-active: 8
+        # 最大阻塞等待时间（负数表示没有限制）
+        max-wait: 0
+    # 链接超时时间（毫秒）
+    timeout: 200000000
+  session:
+    store-type: redis
+    timeout: 86400
+  mvc:
+    throw-exception-if-no-handler-found: true
+  resources:
+    add-mappings: false
+  servlet:
+    multipart:
+      max-file-size: 2048MB
+  profiles:
+    active: local
+usercenter:
+  LoginFilter:
+    enable: false
+fileUpload:
+  path: C:\Users\Administrator\Desktop\file_test
+  tempPath: \temp\
+  basePath: C:\Users\Administrator\Desktop\
+  unZipPath: \unZip\
+  pdfPath: C:\Users\Administrator\Desktop\pdf\
+  excelPath: C:\Users\Administrator\Desktop\excel\

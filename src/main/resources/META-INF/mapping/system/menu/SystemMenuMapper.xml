@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mediot.ygb.mrqs.system.menu.dao.SystemMenuMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.mediot.ygb.mrqs.system.menu.entity.SystemMenu">
+        <id column="system_code" property="systemCode" />
+        <result column="menu_code" property="menuCode" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        system_code, menu_code
+    </sql>
+
+    <!--<resultMap id="BaseResultWithAssoMap" type="java.util.Map">
+        <association property="subMenus" column="{id=menuId,sId=systemId}" select="selectSubMenusByParentId"></association>
+    </resultMap>-->
+
+    <!-- 查询菜单列表(一级菜单) -->
+    <select id="querySystemMenuList" resultType="com.mediot.ygb.mrqs.system.menu.vo.MenuVo" parameterType="java.util.Map">
+        SELECT
+            m.fsort "fsort",m.menu_code "menuCode",m.node_level "nodeLevel",m.menu_name "menuName",
+            m.parent_code "parentCode",m.url "url",m.remark "remark",m.fstate "fstate"
+        FROM
+            ts_system_menu t,
+            ts_menu m
+        WHERE
+            m.menu_code = t.menu_code
+            <if test="systemCode!=null">
+                AND t.system_code = ${systemCode}
+            </if>
+        ORDER BY
+            m.node_level,m.fsort ASC
+    </select>
+
+    <!-- 查询菜单列表(二级菜单) -->
+    <!--<select id="selectSubMenusByParentId" resultType="java.util.Map" parameterType="java.util.Map">
+        SELECT
+            m.fsort "fsort",m.menu_id "menuId",m.menu_code "menuCode",m.level "level",m.menu_name "menuName",
+            m.parent_id "parentId",m.url "url",IFNULL(m.remark," ") "remark",m.fstate "fstate"
+        FROM
+            ts_system_menu t,
+            ts_menu m
+        WHERE
+            m.menu_id = t.menu_id
+          AND m.parent_id = #{id}
+          AND t.system_id = #{sId}
+        ORDER BY
+            m.fsort ASC
+    </select>-->
+
+    <!-- 查找一级菜单(下拉框) -->
+    <select id="searchTopMenuBySystemId" resultType="com.mediot.ygb.mrqs.system.menu.vo.SystemLabelVo" parameterType="java.util.Map">
+        SELECT
+            m.menu_code "value",m.menu_name "text"
+        FROM
+            ts_system_menu t,
+            ts_menu m
+        WHERE
+            m.menu_code = t.menu_code
+          AND m.parent_code = '0'
+          AND t.system_code = #{systemCode, jdbcType=VARCHAR}
+        ORDER BY
+            m.fsort ASC
+    </select>
+
+    <select id="selectCountMenuName" resultType="int" parameterType="java.util.Map">
+        SELECT
+        count( 0 )
+        FROM
+        ts_menu m
+        LEFT JOIN ts_system_menu t ON m.menu_code = t.menu_code
+        WHERE
+        m.menu_name = #{menuName, jdbcType=VARCHAR}
+        <if test="parentCode!=null and parentCode!=''">
+           AND m.parent_code = #{parentCode, jdbcType=VARCHAR}
+        </if>
+           AND t.system_code = #{systemCode, jdbcType=VARCHAR}
+        <if test="menuCode!=null and menuCode!=''">
+            and <![CDATA[ m.menu_code <> #{menuCode, jdbcType=VARCHAR} ]]>
+        </if>
+    </select>
+
+    <!-- 获取系统下菜单编码的最大值 -->
+    <select id="getMenuCode" resultType="java.lang.String">
+        SELECT
+            IFNULL(MAX(m.menu_code),0)
+        FROM
+            ts_menu m
+                LEFT JOIN ts_system_menu t ON m.menu_id = t.menu_id
+        WHERE m.parent_code = #{parentCode, jdbcType=VARCHAR}
+          AND t.system_code = #{systemCode, jdbcType=VARCHAR}
+    </select>
+
+    <!-- 查询系统下同级别中的菜单编码是否重复 -->
+    <select id="selectMenuCodeCount" resultType="int">
+        SELECT
+            count( 0 )
+        FROM
+            ts_menu m
+        <!--  LEFT JOIN ts_system_menu t ON m.menu_code = t.menu_code -->
+        WHERE m.menu_code = #{afterCode, jdbcType=VARCHAR}
+        <!--  AND m.parent_code = #{parentCode, jdbcType=VARCHAR}
+        AND t.system_code = #{systemCode, jdbcType=VARCHAR} -->
+  </select>
+
+    <!-- 查询某个“系统管理员”的菜单权限集合 ｜ ｜2019年3月20日 -->
+    <select id="findMeueCodesBygbsAdmin" resultType="string">
+        select distinct
+            sm.menu_code
+        from ts_platform_system_user psu
+        join ts_platform_system ps on psu.platform_system_id=ps.platform_system_id
+        join ts_system_menu sm on ps.system_code=sm.system_code
+        join ts_menu m on sm.menu_code=m.menu_code
+        left join ts_platform_system_menu psm on psu.platform_system_id=psm.platform_system_id and sm.menu_code = psm.menu_code
+        where psu.user_id=#{userId}
+            <if test="platformSystemId!=null and platformSystemId!=''">
+                and psu.platform_system_id=#{platformSystemId}
+            </if>
+            and ifnull(psm.fstate, m.fstate) = 1
+    </select>
+
+
+    <select id="querySystemMenuByArray"  resultType="com.mediot.ygb.mrqs.system.menu.vo.MenuVo">
+        SELECT
+        m.fsort "fsort",m.menu_code "menuCode",m.node_level "nodeLevel",m.menu_name "menuName",
+        m.parent_code "parentCode",m.url "url",m.remark "remark",m.fstate "fstate"
+        FROM
+        ts_system_menu t,
+        ts_menu m
+        WHERE
+        m.menu_code = t.menu_code
+        and
+        m.fstate=1
+        and
+        <foreach item="item" index="index" collection="array" open="(" separator="or" close=")">
+            t.system_code in #{item}
+        </foreach>
+    </select>
+
+</mapper>

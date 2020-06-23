@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mediot.ygb.mrqs.index.errorInfoManage.dao.TErrorMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.mediot.ygb.mrqs.index.errorInfoManage.entity.TErrorEntity">
+        <id column="BATCH_ID" property="batchId" />
+        <result column="INTERVAL_PARTITION" property="intervalPartiton" />
+        <result column="START_MONTH" property="startMonth" />
+        <result column="END_MONTH" property="endMonth" />
+        <result column="TOTAL" property="total" />
+        <result column="TOTAL_NUMBER_OF_FIELDS" property="totalNumberOfFields" />
+        <result column="NUMBER_OF_REQUIRED_FIELDS" property="numberOfRequiredFields" />
+        <result column="HIT_DATA_VOLUME" property="hitDataVolume" />
+        <result column="NUMBER_OF_TEST_INDICATORS" property="numberOfTestIndicators" />
+        <result column="ERROR_FILEDS" property="errorFields" />
+        <result column="PROPORTIONOFERROR" property="proportionOfError" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+
+    </sql>
+
+    <delete id="batchDeleteTError" parameterType="java.util.List">
+        delete from T_ERROR a where a.BATCH_ID in
+        <foreach collection="list" open="(" close=")" item="bid" separator=",">
+            #{bid}
+        </foreach>
+    </delete>
+
+</mapper>

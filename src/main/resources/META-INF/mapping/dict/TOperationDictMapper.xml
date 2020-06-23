@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mediot.ygb.mrqs.dict.dao.TOperationDictMapper">
+  <resultMap id="BaseResultMap" type="com.mediot.ygb.mrqs.dict.entity.TOperationDict">
+    <id column="T_OPERATION_DICT_ID" property="tOperationDictId" />
+    <result column="BASE_CODE" jdbcType="VARCHAR" property="baseCode" />
+    <result column="DICT_CODE" jdbcType="VARCHAR" property="dictCode" />
+    <result column="DICT_NAME" jdbcType="VARCHAR" property="dictName" />
+    <result column="FQUN" jdbcType="VARCHAR" property="fqun" />
+    <result column="REMARK" jdbcType="VARCHAR" property="remark" />
+    <result column="FPROP" jdbcType="VARCHAR" property="fprop" />
+    <result column="NON_RE_OP" jdbcType="VARCHAR" property="nonReOp" />
+    <result column="OP_FLAG" jdbcType="VARCHAR" property="opFlag" />
+    <result column="PART_NAME" jdbcType="VARCHAR" property="partName" />
+    <result column="OP_FLAG5" jdbcType="VARCHAR" property="opFlag5" />
+    <result column="CHECK_CODE" jdbcType="VARCHAR" property="checkCode" />
+    <result column="ENTRY_OPTIONS" jdbcType="VARCHAR" property="entryOptions" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    T_OPERATION_DICT_ID, BASE_CODE, DICT_CODE, DICT_NAME, FQUN, REMARK, FPROP, NON_RE_OP, 
+    OP_FLAG, PART_NAME, OP_FLAG5, CHECK_CODE, ENTRY_OPTIONS
+  </sql>
+</mapper>

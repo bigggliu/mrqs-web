@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mediot.ygb.mrqs.workingRecord.FileUploadManage.dao.FileUploadMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.mediot.ygb.mrqs.workingRecord.FileUploadManage.entity.FileUploadEntity">
+        <id column="FILE_ID" property="fileId" />
+        <result column="FILE_NAME" property="fileName" />
+        <result column="FILE_PATH" property="filePath" />
+        <result column="MD5" property="md5" />
+        <result column="CHUNKS" property="chunks" />
+        <result column="CHUNK" property="chunk" />
+        <result column="FILESIZE" property="size" />
+        <result column="UPLOAD_TIME" property="uploadTime" />
+        <result column="UPDATE_TIME" property="updateTime" />
+        <result column="STATE" property="state" />
+        <result column="STANDARD_CODE" property="standardCode" />
+        <result column="BATCH_ID" property="batchId" />
+        <result column="ACTUAL_YEAR" property="actualYear" />
+        <result column="SOURCE_CODE" property="sourceCode" />
+        <result column="TOTAL" property="total" />
+        <result column="TOTAL_NUMBER_OF_FIELDS" property="totalNumberOfFields" />
+        <result column="NUMBER_OF_REQUIRED_FIELDS" property="numberOfRequiredFields" />
+        <result column="HIT_DATA_VOLUME" property="hitDataVolume" />
+        <result column="NUMBER_OF_TEST_INDICATORS" property="numberOfTestIndicators" />
+        <result column="START_TIME" property="startTime" />
+        <result column="END_TIME" property="endTime" />
+        <result column="ORG_ID" property="orgId" />
+        <result column="DW_STATUS" property="dwStatus" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+          a.FILE_ID,a.FILE_PATH,a.FILE_NAME,a.MD5,a.CHUNKS,a.CHUNK,a.FILESIZE,a.UPLOAD_TIME,a.UPDATE_TIME,a.STATE
+          ,a.STANDARD_CODE,a.BATCH_ID,a.ACTUAL_YEAR,a.SOURCE_CODE,a.START_TIME,a.END_TIME,a.ORG_ID,a.DW_STATUS
+    </sql>
+
+    <sql id="Base_Column_List_A">
+          a.FILE_ID,a.FILE_PATH,a.FILE_NAME,a.MD5,a.CHUNKS,a.CHUNK,a.FILESIZE,a.UPLOAD_TIME,a.UPDATE_TIME,a.STATE
+          ,a.STANDARD_CODE,a.BATCH_ID,a.ACTUAL_YEAR,a.SOURCE_CODE,a.START_TIME,a.END_TIME,a.ORG_ID
+          ,b.TOTAL,b.TOTAL_NUMBER_OF_FIELDS,b.NUMBER_OF_REQUIRED_FIELDS,b.HIT_DATA_VOLUME,b.NUMBER_OF_TEST_INDICATORS
+          ,b.ERROR_FILEDS as errorFields,b.PROPORTIONOFERROR as proportionOfError
+    </sql>
+
+    <select id="selectFileUpload" parameterType="java.util.Map" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/> from T_FILE_UPLOAD_INFO a
+        <where>
+            <if test="fileId">
+                and a.FILE_ID=#{fileId}
+            </if>
+            <if test="MD5!=null">
+               and a.MD5=#{MD5}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectListByParam" parameterType="java.util.Map" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List_A"/> from T_FILE_UPLOAD_INFO a
+        inner join T_ERROR b
+        on a.BATCH_ID=b.BATCH_ID
+        <where>
+        <if test="queryStr!=null">
+              (a.file_name like concat(concat('%',#{queryStr}),'%')
+              or
+              a.standard_code like concat(concat('%',#{queryStr}),'%')
+              or
+              to_char(a.update_time,'yyyy') like concat(concat('%',#{queryStr}),'%'))
+        </if>
+        <if test="fileId!=null">
+              and a.FILE_ID=#{fileId}
+        </if>
+        <if test="state!=null">
+              and a.state=#{state}
+        </if>
+        </where>
+        order by a.upload_time DESC
+    </select>
+
+    <delete id="batchDeleteFile" parameterType="java.util.List">
+        delete from T_FILE_UPLOAD_INFO a where a.FILE_ID in
+        <foreach collection="list" open="(" close=")" item="fid" separator=",">
+            #{fid}
+        </foreach>
+    </delete>
+
+    <select id="selectFileUploadList" parameterType="java.util.Map" resultMap="BaseResultMap">
+
+        select <include refid="Base_Column_List"/> from
+        T_FILE_UPLOAD_INFO a where
+        a.FILE_ID in
+        <foreach collection="array" open="(" close=")" separator="," item="bid">
+            #{bid}
+        </foreach>
+    </select>
+
+    <select id="selectFileUploadEntityByParam" parameterType="java.util.Map" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/> from
+        T_FILE_UPLOAD_INFO a
+        where 1=1
+        <if test="fileId!=null">
+           and a.FILE_ID=#{fileId}
+        </if>
+    </select>
+</mapper>

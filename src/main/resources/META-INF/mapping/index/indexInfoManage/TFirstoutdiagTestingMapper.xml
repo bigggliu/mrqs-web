@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mediot.ygb.mrqs.index.indexInfoManage.dao.TFirstoutdiagTestingMapper">
+  <resultMap id="BaseResultMap" type="com.mediot.ygb.mrqs.index.indexInfoManage.entity.TFirstoutdiagTesting">
+    <id column="T_FIRSTOUTDIAG_TESTING_ID"  property="tFirstoutdiagTestingId" />
+    <result column="BATCH_ID" jdbcType="DECIMAL" property="batchId" />
+    <result column="CASE_ID" jdbcType="VARCHAR" property="caseId" />
+    <result column="DIAG_TYPE" jdbcType="VARCHAR" property="diagType" />
+    <result column="DIAG_ORDER" jdbcType="DECIMAL" property="diagOrder" />
+    <result column="DIAGNOSIS_CODE" jdbcType="VARCHAR" property="diagnosisCode" />
+    <result column="DIAGNOSIS_NAME" jdbcType="VARCHAR" property="diagnosisName" />
+    <result column="IN_CONDITION" jdbcType="VARCHAR" property="inCondition" />
+    <result column="DISCHARGE_STATUS" jdbcType="VARCHAR" property="dischargeStatus" />
+    <result column="PATHOLOGICAL_NUMBER" jdbcType="VARCHAR" property="pathologicalNumber" />
+    <result column="DEGREE_OF_DIFFERENTIATION" jdbcType="VARCHAR" property="degreeOfDifferentiation" />
+    <result column="T_FIRST_PAGE_TESTING_ID" jdbcType="DECIMAL" property="tFirstPageTestingId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    T_FIRSTOUTDIAG_TESTING_ID, BATCH_ID, CASE_ID, DIAG_TYPE, DIAG_ORDER, DIAGNOSIS_CODE, 
+    DIAGNOSIS_NAME, IN_CONDITION, DISCHARGE_STATUS, PATHOLOGICAL_NUMBER, DEGREE_OF_DIFFERENTIATION
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from T_FIRSTOUTDIAG_TESTING
+    where T_FIRSTOUTDIAG_TESTING_ID = #{tFirstoutdiagTestingId,jdbcType=VARCHAR}
+  </select>
+
+  <delete id="batchDelOutDiagByMap" parameterType="java.util.Map">
+    delete from T_FIRSTOUTDIAG_TESTING a
+    <where>
+      <if test="batchId!=null">
+        a.BATCH_ID=#{batchId}
+      </if>
+      <if test="caseId!=null">
+       and a.CASE_ID=#{caseId}
+      </if>
+    </where>
+  </delete>
+
+  <delete id="batchDelOutDiag" parameterType="java.util.List">
+    delete from T_FIRSTOUTOPER_TESTING a where (a.BATCH_ID,a.CASE_ID)
+    in
+    <foreach collection="list" open="(" close=")" item="obj" separator=",">
+      (#{obj.batchId},#{obj.caseId})
+    </foreach>
+  </delete>
+
+  <insert id="batchInsertOutDiag" parameterType="java.util.List">
+    insert all
+    <trim suffix="SELECT 1 FROM DUAL">
+      <foreach collection="list" item="obj">
+        into T_FIRSTOUTDIAG_TESTING
+          <trim prefix="(" suffix=")" suffixOverrides=",">
+              T_FIRSTOUTDIAG_TESTING_ID,
+            <if test="obj.caseId != null">
+              CASE_ID,
+            </if>
+            <if test="obj.batchId != null">
+              BATCH_ID,
+            </if>
+            <if test="obj.diagType != null">
+              DIAG_TYPE,
+            </if>
+            <if test="obj.diagOrder != null">
+              DIAG_ORDER,
+            </if>
+            <if test="obj.diagnosisCode != null">
+              DIAGNOSIS_CODE,
+            </if>
+            <if test="obj.diagnosisName != null">
+              DIAGNOSIS_NAME,
+            </if>
+            <if test="obj.inCondition != null">
+              IN_CONDITION,
+            </if>
+            <if test="obj.dischargeStatus != null">
+              DISCHARGE_STATUS,
+            </if>
+            <if test="obj.pathologicalNumber != null">
+              PATHOLOGICAL_NUMBER,
+            </if>
+            <if test="obj.degreeOfDifferentiation != null">
+              DEGREE_OF_DIFFERENTIATION,
+            </if>
+            <if test="obj.tFirstPageTestingId != null">
+              T_FIRST_PAGE_TESTING_ID,
+            </if>
+          </trim>
+          <trim prefix="values (" suffix=")" suffixOverrides=",">
+              #{obj.tFirstoutdiagTestingId,jdbcType=VARCHAR},
+            <if test="obj.caseId != null">
+              #{obj.caseId,jdbcType=DECIMAL},
+            </if>
+            <if test="obj.batchId != null">
+              #{obj.batchId,jdbcType=DECIMAL},
+            </if>
+            <if test="obj.diagType != null">
+              #{obj.diagType,jdbcType=VARCHAR},
+            </if>
+            <if test="obj.diagOrder != null">
+              #{obj.diagOrder,jdbcType=DECIMAL},
+            </if>
+            <if test="obj.diagnosisCode != null">
+              #{obj.diagnosisCode,jdbcType=VARCHAR},
+            </if>
+            <if test="obj.diagnosisName != null">
+              #{obj.diagnosisName,jdbcType=VARCHAR},
+            </if>
+            <if test="obj.inCondition != null">
+              #{obj.inCondition,jdbcType=VARCHAR},
+            </if>
+            <if test="obj.dischargeStatus != null">
+              #{obj.dischargeStatus,jdbcType=VARCHAR},
+            </if>
+            <if test="obj.pathologicalNumber != null">
+              #{obj.pathologicalNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="obj.degreeOfDifferentiation != null">
+              #{obj.degreeOfDifferentiation,jdbcType=VARCHAR},
+            </if>
+            <if test="obj.tFirstPageTestingId != null">
+              #{obj.tFirstPageTestingId,jdbcType=DECIMAL},
+            </if>
+          </trim>
+      </foreach>
+    </trim>
+  </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.mediot.ygb.mrqs.index.indexInfoManage.dto.TFirstoutdiagTestingDto">
+    update T_FIRSTOUTDIAG_TESTING
+    <set>
+      <if test="batchId != null">
+        BATCH_ID = #{batchId,jdbcType=DECIMAL},
+      </if>
+      <if test="caseId != null">
+        CASE_ID = #{caseId,jdbcType=DECIMAL},
+      </if>
+      <if test="diagType != null">
+        DIAG_TYPE = #{diagType,jdbcType=VARCHAR},
+      </if>
+      <if test="diagOrder != null">
+        DIAG_ORDER = #{diagOrder,jdbcType=DECIMAL},
+      </if>
+      <if test="diagnosisCode != null">
+        DIAGNOSIS_CODE = #{diagnosisCode,jdbcType=VARCHAR},
+      </if>
+      <if test="diagnosisName != null">
+        DIAGNOSIS_NAME = #{diagnosisName,jdbcType=VARCHAR},
+      </if>
+      <if test="inCondition != null">
+        IN_CONDITION = #{inCondition,jdbcType=VARCHAR},
+      </if>
+      <if test="dischargeStatus != null">
+        DISCHARGE_STATUS = #{dischargeStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="pathologicalNumber != null">
+        PATHOLOGICAL_NUMBER = #{pathologicalNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="degreeOfDifferentiation != null">
+        DEGREE_OF_DIFFERENTIATION = #{degreeOfDifferentiation,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where T_FIRSTOUTDIAG_TESTING_ID = #{tFirstoutdiagTestingId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mediot.ygb.mrqs.index.indexInfoManage.dto.TFirstoutdiagTestingDto">
+    update T_FIRSTOUTDIAG_TESTING
+    set BATCH_ID = #{batchId,jdbcType=DECIMAL},
+      CASE_ID = #{caseId,jdbcType=DECIMAL},
+      DIAG_TYPE = #{diagType,jdbcType=VARCHAR},
+      DIAG_ORDER = #{diagOrder,jdbcType=DECIMAL},
+      DIAGNOSIS_CODE = #{diagnosisCode,jdbcType=VARCHAR},
+      DIAGNOSIS_NAME = #{diagnosisName,jdbcType=VARCHAR},
+      IN_CONDITION = #{inCondition,jdbcType=VARCHAR},
+      DISCHARGE_STATUS = #{dischargeStatus,jdbcType=VARCHAR},
+      PATHOLOGICAL_NUMBER = #{pathologicalNumber,jdbcType=VARCHAR},
+      DEGREE_OF_DIFFERENTIATION = #{degreeOfDifferentiation,jdbcType=VARCHAR}
+    where T_FIRSTOUTDIAG_TESTING_ID = #{tFirstoutdiagTestingId,jdbcType=VARCHAR}
+  </update>
+</mapper>

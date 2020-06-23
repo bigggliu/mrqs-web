@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mediot.ygb.mrqs.dict.dao.TBaseDictMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.mediot.ygb.mrqs.dict.entity.TBaseDict">
+        <id column="BASE_CODE" property="baseCode" />
+        <result column="DICT_CODE" property="dictCode" />
+        <result column="DICT_NAME" property="dictName" />
+        <result column="REMARK" property="remark" />
+        <result column="FSTATE" property="fState" />
+        <result column="FQUN" property="fQun" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        bd.BASE_CODE, bd.DICT_CODE, bd.DICT_NAME,bd.REMARK,bd.FSTATE,bd.FQUN
+    </sql>
+
+    <select id="selectTBaseDictByMap" parameterType="java.util.Map" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"></include>
+        from T_BASE_DICT bd left join
+        T_BASE b on bd.BASE_CODE=b.BASE_CODE
+        where b.DCODE=#{dCode}
+        <if test="baseCode!=null">
+            and
+            REGEXP_LIKE (bd.BASE_CODE, concat(concat('^\d{3,}',${baseCode}),'$'))
+        </if>
+        <if test="dictCode!=null">
+            and bd.DICT_CODE=#{dictCode}
+        </if>
+    </select>
+
+    <select id="selectTBaseDictListByMap" parameterType="java.util.Map" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"></include>
+        from T_BASE_DICT bd left join
+        T_BASE b on bd.BASE_CODE=b.BASE_CODE
+        where b.DCODE=#{dCode}
+        <if test="baseCode!=null">
+            and
+            REGEXP_LIKE (bd.BASE_CODE, concat(concat('^\d{3,}',${baseCode}),'$'))
+        </if>
+    </select>
+
+    <select id="selectTBaseDictsByMap" parameterType="java.util.Map" resultMap="BaseResultMap">
+        SELECT
+            a.BASE_CODE, a.DICT_CODE, a.DICT_NAME,a.REMARK,a.FSTATE,a.FQUN
+        FROM
+        t_base_dict a LEFT JOIN
+        t_base b on a.base_code=b.base_code
+        WHERE b.base_name like concat(concat('%',#{baseName}),'%')
+        and  REGEXP_LIKE (a.base_code, concat(concat('^\d{3,}',${baseCode}),'$'))
+    </select>
+
+    <select id="selectListByQueryStr" parameterType="java.util.Map" resultMap="BaseResultMap">
+        select * from t_base_dict t
+        WHERE
+            t.base_code like concat(concat('%',#{queryStr}),'%')
+           or
+            t.dict_name like concat(concat('%',#{queryStr}),'%')
+    </select>
+
+    <select id="selectSexByDCode" parameterType="java.lang.String" resultMap="BaseResultMap">
+        SELECT
+            DISTINCT t.dict_code,t.dict_name
+        FROM t_base_dict t WHERE t.base_code in
+         (SELECT
+             t.base_code
+             FROM t_base t
+             WHERE t.dcode ='RC001')
+        and t.DICT_CODE=#{sex}
+    </select>
+
+    <select id="selectPayWayByBC" parameterType="java.lang.String" resultMap="BaseResultMap">
+        SELECT
+            DISTINCT t.dict_code,t.dict_name
+        FROM t_base_dict t WHERE t.base_code in
+         (SELECT
+             t.base_code
+         FROM t_base t
+         WHERE t.parent_code='001' and t.base_code not in '00101')
+         and t.dict_code=#{payWay}
+    </select>
+
+</mapper>

@@ -1,0 +1,478 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mediot.ygb.mrqs.index.indexInfoManage.dao.TFirstpageTestingMapper">
+  <resultMap id="BaseResultMap" type="com.mediot.ygb.mrqs.index.indexInfoManage.entity.TFirstPageTesting">
+    <id column="T_FIRST_PAGE_TESTING_ID" jdbcType="DECIMAL" property="tFirstPageTestingId" />
+    <result column="BATCH_ID" jdbcType="DECIMAL" property="batchId" />
+    <result column="ORG_NAME" jdbcType="VARCHAR" property="orgName" />
+    <result column="CASE_ID" jdbcType="VARCHAR" property="caseId" />
+    <result column="ORG_ID" jdbcType="VARCHAR" property="orgId" />
+    <result column="MEDICARE_CARD" jdbcType="VARCHAR" property="medicareCard" />
+    <result column="IN_HOSPITAL_TIMES" jdbcType="VARCHAR" property="inHospitalTimes" />
+    <result column="CASE_NO" jdbcType="VARCHAR" property="caseNo" />
+    <result column="PAY_WAY_CODE" jdbcType="VARCHAR" property="payWayCode" />
+    <result column="CARD_NO" jdbcType="VARCHAR" property="cardNo" />
+    <result column="FNAME" jdbcType="VARCHAR" property="fname" />
+    <result column="SEX_CODE" jdbcType="VARCHAR" property="sexCode" />
+    <result column="BIRTH_DATE" jdbcType="DATE" property="birthDate" />
+    <result column="AGE" jdbcType="DECIMAL" property="age" />
+    <result column="COUNTRY" jdbcType="VARCHAR" property="country" />
+    <result column="BIRTH_WEIGHT" jdbcType="DECIMAL" property="birthWeight" />
+    <result column="BIRTH_WEIGHT5" jdbcType="DECIMAL" property="birthWeight5" />
+    <result column="BIRTH_WEIGHT4" jdbcType="DECIMAL" property="birthWeight4" />
+    <result column="BIRTH_WEIGHT3" jdbcType="DECIMAL" property="birthWeight3" />
+    <result column="BIRTH_WEIGHT2" jdbcType="DECIMAL" property="birthWeight2" />
+    <result column="IN_WEIGHT" jdbcType="DECIMAL" property="inWeight" />
+    <result column="ID_NO" jdbcType="VARCHAR" property="idNo" />
+    <result column="OCCUPATION_CODE" jdbcType="VARCHAR" property="occupationCode" />
+    <result column="MARRIAGE_CODE" jdbcType="VARCHAR" property="marriageCode" />
+    <result column="BIRTH_ADDR_PROVINCE" jdbcType="VARCHAR" property="birthAddrProvince" />
+    <result column="BIRTH_ADDR_CITY" jdbcType="VARCHAR" property="birthAddrCity" />
+    <result column="BIRTH_ADDR_COUNTY" jdbcType="VARCHAR" property="birthAddrCounty" />
+    <result column="NATIVE_ADDR_PROVINCE" jdbcType="VARCHAR" property="nativeAddrProvince" />
+    <result column="NATIVE_ADDR_CITY" jdbcType="VARCHAR" property="nativeAddrCity" />
+    <result column="NATIVE_ADDR_COUNTY" jdbcType="VARCHAR" property="nativeAddrCounty" />
+    <result column="NATIONALITY_CODE" jdbcType="VARCHAR" property="nationalityCode" />
+    <result column="PRESENT_ADDR_PROVINCE" jdbcType="VARCHAR" property="presentAddrProvince" />
+    <result column="PRESENT_ADDR_CITY" jdbcType="VARCHAR" property="presentAddrCity" />
+    <result column="PRESENT_ADDR_COUNTY" jdbcType="VARCHAR" property="presentAddrCounty" />
+    <result column="PRESENT_ADDR_TEL" jdbcType="VARCHAR" property="presentAddrTel" />
+    <result column="PRESENT_ADDR_POSTAL_CODE" jdbcType="VARCHAR" property="presentAddrPostalCode" />
+    <result column="REGISTER_ADDR_PROVINCE" jdbcType="VARCHAR" property="registerAddrProvince" />
+    <result column="REGISTER_ADDR_CITY" jdbcType="VARCHAR" property="registerAddrCity" />
+    <result column="REGISTER_ADDR_COUNTY" jdbcType="VARCHAR" property="registerAddrCounty" />
+    <result column="REGISTER_ADDR_TEL" jdbcType="VARCHAR" property="registerAddrTel" />
+    <result column="REGISTER_ADDR_POSTAL_CODE" jdbcType="VARCHAR" property="registerAddrPostalCode" />
+    <result column="EMPLOYER_ADDR" jdbcType="VARCHAR" property="employerAddr" />
+    <result column="EMPLOYER_TEL" jdbcType="VARCHAR" property="employerTel" />
+    <result column="EMPLOYER_POSTAL_CODE" jdbcType="VARCHAR" property="employerPostalCode" />
+    <result column="CONTACT_NAME" jdbcType="VARCHAR" property="contactName" />
+    <result column="CONTACT_RELATIONSHIP" jdbcType="VARCHAR" property="contactRelationship" />
+    <result column="CONTACT_ADDR" jdbcType="VARCHAR" property="contactAddr" />
+    <result column="CONTACT_TEL" jdbcType="VARCHAR" property="contactTel" />
+    <result column="IN_ROAD" jdbcType="VARCHAR" property="inRoad" />
+    <result column="OUTPATIENT_DOCTOR" jdbcType="VARCHAR" property="outpatientDoctor" />
+    <result column="IN_DTIME" jdbcType="DATE" property="inDtime" />
+    <result column="OUT_DTIME" jdbcType="DATE" property="outDtime" />
+    <result column="IN_DEPT_CODE" jdbcType="VARCHAR" property="inDeptCode" />
+    <result column="IN_DEPT_ROOM" jdbcType="VARCHAR" property="inDeptRoom" />
+    <result column="MOVE_DEPT" jdbcType="VARCHAR" property="moveDept" />
+    <result column="OUT_DEPT_CODE" jdbcType="VARCHAR" property="outDeptCode" />
+    <result column="OUT_DEPT_ROOM" jdbcType="VARCHAR" property="outDeptRoom" />
+    <result column="ACTUAL_IN_DAYS" jdbcType="DECIMAL" property="actualInDays" />
+    <result column="OUTPAT_DIAG_CODE" jdbcType="VARCHAR" property="outpatDiagCode" />
+    <result column="OUTPAT_DIAG_NAME" jdbcType="VARCHAR" property="outpatDiagName" />
+    <result column="ON_ADMISSION" jdbcType="VARCHAR" property="onAdmission" />
+    <result column="IN_DIAG_CODE" jdbcType="VARCHAR" property="inDiagCode" />
+    <result column="IN_DIAG_NAME" jdbcType="VARCHAR" property="inDiagName" />
+    <result column="DATE_OF_DIAGNOSIS" jdbcType="DATE" property="dateOfDiagnosis" />
+    <result column="TOTAL_NUMBER_OF_INFECTIONS" jdbcType="VARCHAR" property="totalNumberOfInfections" />
+    <result column="ALLERGY_SOURCE" jdbcType="VARCHAR" property="allergySource" />
+    <result column="NAME_OF_ALLERGIC_DRUG" jdbcType="VARCHAR" property="nameOfAllergicDrug" />
+    <result column="ABO_CODE" jdbcType="VARCHAR" property="aboCode" />
+    <result column="RH_CODE9" jdbcType="VARCHAR" property="rhCode9" />
+    <result column="TRANSFUSION_REACTION" jdbcType="VARCHAR" property="transfusionReaction" />
+    <result column="RED_BLOOD_CELL" jdbcType="VARCHAR" property="redBloodCell" />
+    <result column="PLATELET" jdbcType="VARCHAR" property="platelet" />
+    <result column="PLASMA" jdbcType="VARCHAR" property="plasma" />
+    <result column="WHOLE_BLOOD" jdbcType="VARCHAR" property="wholeBlood" />
+    <result column="SELF_RECOVERY" jdbcType="VARCHAR" property="selfRecovery" />
+    <result column="OTHER_INPUTS" jdbcType="VARCHAR" property="otherInputs" />
+    <result column="DRUG_ALLERGY_MARK" jdbcType="VARCHAR" property="drugAllergyMark" />
+    <result column="DRUG_ALLERGENS_NAME" jdbcType="VARCHAR" property="drugAllergensName" />
+    <result column="AUTOPSY_MARK" jdbcType="VARCHAR" property="autopsyMark" />
+    <result column="DEPT_DIRECTOR" jdbcType="VARCHAR" property="deptDirector" />
+    <result column="CHIEF_DOCTOR" jdbcType="VARCHAR" property="chiefDoctor" />
+    <result column="IN_CHARGE_DOCTOR" jdbcType="VARCHAR" property="inChargeDoctor" />
+    <result column="RESIDENT_DOCTOR" jdbcType="VARCHAR" property="residentDoctor" />
+    <result column="RESP_NURSE" jdbcType="VARCHAR" property="respNurse" />
+    <result column="LEARNING_DOCTOR" jdbcType="VARCHAR" property="learningDoctor" />
+    <result column="INTERN_DOCTOR" jdbcType="VARCHAR" property="internDoctor" />
+    <result column="CATALOGER" jdbcType="VARCHAR" property="cataloger" />
+    <result column="CASE_QUALITY" jdbcType="VARCHAR" property="caseQuality" />
+    <result column="QC_DOCTOR" jdbcType="VARCHAR" property="qcDoctor" />
+    <result column="QC_NURSE" jdbcType="VARCHAR" property="qcNurse" />
+    <result column="QC_DTIME" jdbcType="DATE" property="qcDtime" />
+    <result column="DISCHARGE_CLASS" jdbcType="VARCHAR" property="dischargeClass" />
+    <result column="ORDER_REFERRAL_ORG" jdbcType="VARCHAR" property="orderReferralOrg" />
+    <result column="REHOSP_AFTER31_MARK" jdbcType="VARCHAR" property="rehospAfter31Mark" />
+    <result column="REHOSP_AFTER31_PURPOSE" jdbcType="VARCHAR" property="rehospAfter31Purpose" />
+    <result column="COMA_DURATION_BEFORE_DAY" jdbcType="DECIMAL" property="comaDurationBeforeDay" />
+    <result column="COMA_DURATION_BEFORE_HOUR" jdbcType="DECIMAL" property="comaDurationBeforeHour" />
+    <result column="COMA_DURATION_BEFORE_MINUTE" jdbcType="DECIMAL" property="comaDurationBeforeMinute" />
+    <result column="COMA_DURATION_AFTER_DAY" jdbcType="DECIMAL" property="comaDurationAfterDay" />
+    <result column="COMA_DURATION_AFTER_HOUR" jdbcType="DECIMAL" property="comaDurationAfterHour" />
+    <result column="COMA_DURATION_AFTER_MINUTE" jdbcType="DECIMAL" property="comaDurationAfterMinute" />
+    <result column="HBSAG" jdbcType="VARCHAR" property="hbsag" />
+    <result column="HCV_AB" jdbcType="VARCHAR" property="hcvAb" />
+    <result column="HIV_AB" jdbcType="VARCHAR" property="hivAb" />
+    <result column="CLINIC2OUT" jdbcType="VARCHAR" property="clinic2out" />
+    <result column="IN2OUT" jdbcType="VARCHAR" property="in2out" />
+    <result column="PRE_OPER2OPER" jdbcType="VARCHAR" property="preOper2oper" />
+    <result column="CLINIC2AUTOPSY" jdbcType="VARCHAR" property="clinic2autopsy" />
+    <result column="RADIATION2PATHOLOGY" jdbcType="VARCHAR" property="radiation2pathology" />
+    <result column="RESCUE_TIMES" jdbcType="VARCHAR" property="rescueTimes" />
+    <result column="RESCUE_SUCCESS_TIMES" jdbcType="VARCHAR" property="rescueSuccessTimes" />
+    <result column="HIGHEST_DIAGNOSTIC_BASIS" jdbcType="VARCHAR" property="highestDiagnosticBasis" />
+    <result column="DAYS_OF_INTENSIVE_CARE" jdbcType="VARCHAR" property="daysOfIntensiveCare" />
+    <result column="DAYS_OF_PRIMARY_CARE" jdbcType="VARCHAR" property="daysOfPrimaryCare" />
+    <result column="DAYS_OF_SECONDARY_CARE" jdbcType="VARCHAR" property="daysOfSecondaryCare" />
+    <result column="DAYS_OF_TERTIARY_CARE" jdbcType="VARCHAR" property="daysOfTertiaryCare" />
+    <result column="ICU_NAME1" jdbcType="VARCHAR" property="icuName1" />
+    <result column="ENTRY_TIME1" jdbcType="DATE" property="entryTime1" />
+    <result column="EXIT_TIME1" jdbcType="DATE" property="exitTime1" />
+    <result column="ICU_NAME2" jdbcType="VARCHAR" property="icuName2" />
+    <result column="ENTRY_TIME2" jdbcType="DATE" property="entryTime2" />
+    <result column="EXIT_TIME2" jdbcType="DATE" property="exitTime2" />
+    <result column="ICU_NAME3" jdbcType="VARCHAR" property="icuName3" />
+    <result column="ENTRY_TIME3" jdbcType="DATE" property="entryTime3" />
+    <result column="EXIT_TIME3" jdbcType="DATE" property="exitTime3" />
+    <result column="ICU_NAME4" jdbcType="VARCHAR" property="icuName4" />
+    <result column="ENTRY_TIME4" jdbcType="DATE" property="entryTime4" />
+    <result column="EXIT_TIME4" jdbcType="DATE" property="exitTime4" />
+    <result column="ICU_NAME5" jdbcType="VARCHAR" property="icuName5" />
+    <result column="ENTRY_TIME5" jdbcType="DATE" property="entryTime5" />
+    <result column="EXIT_TIME5" jdbcType="DATE" property="exitTime5" />
+    <result column="FIRST_CASE" jdbcType="VARCHAR" property="firstCase" />
+    <result column="SURGICAL_PATIENT_TYPE" jdbcType="VARCHAR" property="surgicalPatientType" />
+    <result column="FOLLOW_UP" jdbcType="VARCHAR" property="followUp" />
+    <result column="WEEKS_OF_FOLLOW_UP" jdbcType="VARCHAR" property="weeksOfFollowUp" />
+    <result column="MONTHS_OF_FOLLOW_UP" jdbcType="VARCHAR" property="monthsOfFollowUp" />
+    <result column="YEARS_OF_FOLLOW_UP" jdbcType="VARCHAR" property="yearsOfFollowUp" />
+    <result column="TEACHING_CASES" jdbcType="VARCHAR" property="teachingCases" />
+    <result column="POSTGRADUATE_INTERN" jdbcType="VARCHAR" property="postgraduateIntern" />
+    <result column="AGE_MONTH" jdbcType="VARCHAR" property="ageMonth" />
+    <result column="VENTILATOR_USE_TIME" jdbcType="VARCHAR" property="ventilatorUseTime" />
+    <result column="NAME_OF_TRANSFERRED_HOSPITAL" jdbcType="VARCHAR" property="nameOfTransferredHospital" />
+    <result column="COMMUNITY_SERVICE_ORGANIZATION" jdbcType="VARCHAR" property="communityServiceOrganization" />
+    <result column="FEE_TOTAL" jdbcType="DECIMAL" property="feeTotal" />
+    <result column="FEE_SELF_PAY" jdbcType="DECIMAL" property="feeSelfPay" />
+    <result column="FEE_GENERAL_MEDICAL" jdbcType="DECIMAL" property="feeGeneralMedical" />
+    <result column="FEE_GENERAL_TREAT" jdbcType="DECIMAL" property="feeGeneralTreat" />
+    <result column="FEE_TEND" jdbcType="DECIMAL" property="feeTend" />
+    <result column="FEE_MEDICAL_OTHER" jdbcType="DECIMAL" property="feeMedicalOther" />
+    <result column="FEE_PATHOLOGY" jdbcType="DECIMAL" property="feePathology" />
+    <result column="FEE_LABORATORY" jdbcType="DECIMAL" property="feeLaboratory" />
+    <result column="FEE_IMAGING" jdbcType="DECIMAL" property="feeImaging" />
+    <result column="FEE_CLINC" jdbcType="DECIMAL" property="feeClinc" />
+    <result column="FEE_NONSURGICAL_TREAT" jdbcType="DECIMAL" property="feeNonsurgicalTreat" />
+    <result column="FEE_CLIN_PHYSICAL" jdbcType="DECIMAL" property="feeClinPhysical" />
+    <result column="FEE_SURGICAL_TREAT" jdbcType="DECIMAL" property="feeSurgicalTreat" />
+    <result column="FEE_ANAES" jdbcType="DECIMAL" property="feeAnaes" />
+    <result column="FEE_OPERATION" jdbcType="DECIMAL" property="feeOperation" />
+    <result column="FEE_RECOVERY" jdbcType="DECIMAL" property="feeRecovery" />
+    <result column="FEE_CN_TREATMENT" jdbcType="DECIMAL" property="feeCnTreatment" />
+    <result column="FEE_WESTERN_MEDICINE" jdbcType="DECIMAL" property="feeWesternMedicine" />
+    <result column="FEE_ANTIMICROBIAL" jdbcType="DECIMAL" property="feeAntimicrobial" />
+    <result column="FEE_CN_MEDICINE" jdbcType="DECIMAL" property="feeCnMedicine" />
+    <result column="FEE_CN_HERBAL_MEDICINE" jdbcType="DECIMAL" property="feeCnHerbalMedicine" />
+    <result column="FEE_BLOOD" jdbcType="DECIMAL" property="feeBlood" />
+    <result column="FEE_ALBUMIN" jdbcType="DECIMAL" property="feeAlbumin" />
+    <result column="FEE_GLOBULIN" jdbcType="DECIMAL" property="feeGlobulin" />
+    <result column="FEE_BCF" jdbcType="DECIMAL" property="feeBcf" />
+    <result column="FEE_CYTOKINE" jdbcType="DECIMAL" property="feeCytokine" />
+    <result column="FEE_CHECK_MATERIAL" jdbcType="DECIMAL" property="feeCheckMaterial" />
+    <result column="FEE_TREAT_MATERIAL" jdbcType="DECIMAL" property="feeTreatMaterial" />
+    <result column="FEE_OPER_MATERIAL" jdbcType="DECIMAL" property="feeOperMaterial" />
+    <result column="FEE_OTHER" jdbcType="DECIMAL" property="feeOther" />
+    <result column="FSTATE" jdbcType="DECIMAL" property="fstate" />
+    <result column="CREATE_TIME" jdbcType="DATE" property="createTime" />
+    <result column="UP_ORG_ID" jdbcType="VARCHAR" property="upOrgId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+     T_FIRST_PAGE_TESTING_ID, ORG_NAME,ORG_ID, BATCH_ID, CASE_ID, IN_HOSPITAL_TIMES, CASE_NO, PAY_WAY_CODE,
+    CARD_NO, FNAME, SEX_CODE, BIRTH_DATE, AGE, COUNTRY, BIRTH_WEIGHT, BIRTH_WEIGHT5,
+    BIRTH_WEIGHT4, BIRTH_WEIGHT3, BIRTH_WEIGHT2, IN_WEIGHT, ID_NO, OCCUPATION_CODE, MARRIAGE_CODE,
+    BIRTH_ADDR_PROVINCE, BIRTH_ADDR_CITY, BIRTH_ADDR_COUNTY, NATIVE_ADDR_PROVINCE, NATIVE_ADDR_CITY,
+    NATIVE_ADDR_COUNTY, NATIONALITY_CODE, PRESENT_ADDR_PROVINCE, PRESENT_ADDR_CITY, PRESENT_ADDR_COUNTY,
+    PRESENT_ADDR_TEL, PRESENT_ADDR_POSTAL_CODE, REGISTER_ADDR_PROVINCE, REGISTER_ADDR_CITY,
+    REGISTER_ADDR_COUNTY, REGISTER_ADDR_TEL, REGISTER_ADDR_POSTAL_CODE, EMPLOYER_ADDR,
+    EMPLOYER_TEL, EMPLOYER_POSTAL_CODE, CONTACT_NAME, CONTACT_RELATIONSHIP, CONTACT_ADDR,
+    CONTACT_TEL, IN_ROAD, OUTPATIENT_DOCTOR, IN_DTIME, OUT_DTIME, IN_DEPT_CODE, IN_DEPT_ROOM,
+    MOVE_DEPT, OUT_DEPT_CODE, OUT_DEPT_ROOM, ACTUAL_IN_DAYS, OUTPAT_DIAG_CODE, OUTPAT_DIAG_NAME,
+    ON_ADMISSION, IN_DIAG_CODE, IN_DIAG_NAME, DATE_OF_DIAGNOSIS, TOTAL_NUMBER_OF_INFECTIONS,
+    ALLERGY_SOURCE, NAME_OF_ALLERGIC_DRUG, ABO_CODE, RH_CODE9, TRANSFUSION_REACTION,
+    RED_BLOOD_CELL, PLATELET, PLASMA, WHOLE_BLOOD, SELF_RECOVERY, OTHER_INPUTS, DRUG_ALLERGY_MARK,
+    DRUG_ALLERGENS_NAME, AUTOPSY_MARK, DEPT_DIRECTOR, CHIEF_DOCTOR, IN_CHARGE_DOCTOR,
+    RESIDENT_DOCTOR, RESP_NURSE, LEARNING_DOCTOR, INTERN_DOCTOR, CATALOGER, CASE_QUALITY,
+    QC_DOCTOR, QC_NURSE, QC_DTIME, DISCHARGE_CLASS, ORDER_REFERRAL_ORG, REHOSP_AFTER31_MARK,
+    REHOSP_AFTER31_PURPOSE, COMA_DURATION_BEFORE_DAY, COMA_DURATION_BEFORE_HOUR, COMA_DURATION_BEFORE_MINUTE,
+    COMA_DURATION_AFTER_DAY, COMA_DURATION_AFTER_HOUR, COMA_DURATION_AFTER_MINUTE, HBSAG,
+    HCV_AB, HIV_AB, CLINIC2OUT, IN2OUT, PRE_OPER2OPER, CLINIC2AUTOPSY, RADIATION2PATHOLOGY,
+    RESCUE_TIMES, RESCUE_SUCCESS_TIMES, HIGHEST_DIAGNOSTIC_BASIS, DAYS_OF_INTENSIVE_CARE,
+    DAYS_OF_PRIMARY_CARE, DAYS_OF_SECONDARY_CARE, DAYS_OF_TERTIARY_CARE, ICU_NAME1, ENTRY_TIME1,
+    EXIT_TIME1, ICU_NAME2, ENTRY_TIME2, EXIT_TIME2, ICU_NAME3, ENTRY_TIME3, EXIT_TIME3,
+    ICU_NAME4, ENTRY_TIME4, EXIT_TIME4, ICU_NAME5, ENTRY_TIME5, EXIT_TIME5, FIRST_CASE,
+    SURGICAL_PATIENT_TYPE, FOLLOW_UP, WEEKS_OF_FOLLOW_UP, MONTHS_OF_FOLLOW_UP, YEARS_OF_FOLLOW_UP,
+    TEACHING_CASES, POSTGRADUATE_INTERN, AGE_MONTH, VENTILATOR_USE_TIME, NAME_OF_TRANSFERRED_HOSPITAL,
+    COMMUNITY_SERVICE_ORGANIZATION, FEE_TOTAL, FEE_SELF_PAY, FEE_GENERAL_MEDICAL, FEE_GENERAL_TREAT,
+    FEE_TEND, FEE_MEDICAL_OTHER, FEE_PATHOLOGY, FEE_LABORATORY, FEE_IMAGING, FEE_CLINC,
+    FEE_NONSURGICAL_TREAT, FEE_CLIN_PHYSICAL, FEE_SURGICAL_TREAT, FEE_ANAES, FEE_OPERATION,
+    FEE_RECOVERY, FEE_CN_TREATMENT, FEE_WESTERN_MEDICINE, FEE_ANTIMICROBIAL, FEE_CN_MEDICINE,
+    FEE_CN_HERBAL_MEDICINE, FEE_BLOOD, FEE_ALBUMIN, FEE_GLOBULIN, FEE_BCF, FEE_CYTOKINE,
+    FEE_CHECK_MATERIAL, FEE_TREAT_MATERIAL, FEE_OPER_MATERIAL, FEE_OTHER, FSTATE, CREATE_TIME,
+    MEDICARE_CARD,UP_ORG_ID
+  </sql>
+
+  <select id="selectFirstRowByParam" parameterType="java.util.Map" resultType="String">
+    select * from (SELECT
+       to_char(t.out_dtime,'yyyy')
+     FROM
+       t_firstpage_testing t
+     WHERE
+       t.batch_id=#{batchId}
+     order by t.out_dtime asc) where rownum=1
+  </select>
+
+  <select id="selectLastRowByParam" parameterType="java.util.Map" resultType="String">
+    select * from (SELECT
+                     to_char(t.out_dtime,'yyyy')
+                   FROM
+                     t_firstpage_testing t
+                   WHERE
+                     t.batch_id=#{batchId}
+                   order by t.out_dtime desc) where rownum=1
+  </select>
+
+  <select id="selectPageList" parameterType="java.util.Map" resultType="com.mediot.ygb.mrqs.index.indexInfoManage.entity.TFirstPageTesting">
+    SELECT *
+
+    FROM (SELECT ROWNUM AS rowno, t.*
+
+          FROM t_firstpage_testing t
+
+          WHERE t.batch_id=#{batchId}
+
+            AND ROWNUM &lt;= #{upperBound}) table_alias
+
+    WHERE table_alias.rowno &gt;= #{lowerBound}
+  </select>
+
+  <select id="selectCountByMap" parameterType="java.util.Map" resultType="int">
+    SELECT count(t.T_FIRST_PAGE_TESTING_ID)
+    from t_firstpage_testing t
+    WHERE t.BATCH_ID=#{batchId}
+  </select>
+
+  <insert id="batchInsertTFInfo"  parameterType="java.util.List" useGeneratedKeys="false">
+    insert all
+    <trim suffix="SELECT 1 FROM DUAL">
+      <foreach collection="list" item="obj">
+        into T_FIRSTPAGE_TESTING (T_FIRST_PAGE_TESTING_ID,ORG_NAME,ORG_ID, BATCH_ID, CASE_ID,
+        IN_HOSPITAL_TIMES, CASE_NO, PAY_WAY_CODE,
+        CARD_NO, FNAME, SEX_CODE,
+        BIRTH_DATE, AGE, COUNTRY,
+        BIRTH_WEIGHT, BIRTH_WEIGHT5, BIRTH_WEIGHT4,
+        BIRTH_WEIGHT3, BIRTH_WEIGHT2, IN_WEIGHT,
+        ID_NO, OCCUPATION_CODE, MARRIAGE_CODE,
+        BIRTH_ADDR_PROVINCE, BIRTH_ADDR_CITY, BIRTH_ADDR_COUNTY,
+        NATIVE_ADDR_PROVINCE, NATIVE_ADDR_CITY, NATIVE_ADDR_COUNTY,
+        NATIONALITY_CODE, PRESENT_ADDR_PROVINCE, PRESENT_ADDR_CITY,
+        PRESENT_ADDR_COUNTY, PRESENT_ADDR_TEL, PRESENT_ADDR_POSTAL_CODE,
+        REGISTER_ADDR_PROVINCE, REGISTER_ADDR_CITY,
+        REGISTER_ADDR_COUNTY, REGISTER_ADDR_TEL, REGISTER_ADDR_POSTAL_CODE,
+        EMPLOYER_ADDR, EMPLOYER_TEL, EMPLOYER_POSTAL_CODE,
+        CONTACT_NAME, CONTACT_RELATIONSHIP, CONTACT_ADDR,
+        CONTACT_TEL, IN_ROAD, OUTPATIENT_DOCTOR,
+        IN_DTIME, OUT_DTIME, IN_DEPT_CODE,
+        IN_DEPT_ROOM, MOVE_DEPT, OUT_DEPT_CODE,
+        OUT_DEPT_ROOM, ACTUAL_IN_DAYS, OUTPAT_DIAG_CODE,
+        OUTPAT_DIAG_NAME, ON_ADMISSION, IN_DIAG_CODE,
+        IN_DIAG_NAME, DATE_OF_DIAGNOSIS, TOTAL_NUMBER_OF_INFECTIONS,
+        ALLERGY_SOURCE, NAME_OF_ALLERGIC_DRUG, ABO_CODE,
+        RH_CODE9, TRANSFUSION_REACTION, RED_BLOOD_CELL,
+        PLATELET, PLASMA, WHOLE_BLOOD,
+        SELF_RECOVERY, OTHER_INPUTS, DRUG_ALLERGY_MARK,
+        DRUG_ALLERGENS_NAME, AUTOPSY_MARK, DEPT_DIRECTOR,
+        CHIEF_DOCTOR, IN_CHARGE_DOCTOR, RESIDENT_DOCTOR,
+        RESP_NURSE, LEARNING_DOCTOR, INTERN_DOCTOR,
+        CATALOGER, CASE_QUALITY, QC_DOCTOR,
+        QC_NURSE, QC_DTIME, DISCHARGE_CLASS,
+        ORDER_REFERRAL_ORG, REHOSP_AFTER31_MARK, REHOSP_AFTER31_PURPOSE,
+        COMA_DURATION_BEFORE_DAY, COMA_DURATION_BEFORE_HOUR,
+        COMA_DURATION_BEFORE_MINUTE, COMA_DURATION_AFTER_DAY,
+        COMA_DURATION_AFTER_HOUR, COMA_DURATION_AFTER_MINUTE,
+        HBSAG, HCV_AB, HIV_AB,
+        CLINIC2OUT, IN2OUT, PRE_OPER2OPER,
+        CLINIC2AUTOPSY, RADIATION2PATHOLOGY, RESCUE_TIMES,
+        RESCUE_SUCCESS_TIMES, HIGHEST_DIAGNOSTIC_BASIS,
+        DAYS_OF_INTENSIVE_CARE, DAYS_OF_PRIMARY_CARE,
+        DAYS_OF_SECONDARY_CARE, DAYS_OF_TERTIARY_CARE,
+        ICU_NAME1, ENTRY_TIME1, EXIT_TIME1,
+        ICU_NAME2, ENTRY_TIME2, EXIT_TIME2,
+        ICU_NAME3, ENTRY_TIME3, EXIT_TIME3,
+        ICU_NAME4, ENTRY_TIME4, EXIT_TIME4,
+        ICU_NAME5, ENTRY_TIME5, EXIT_TIME5,
+        FIRST_CASE, SURGICAL_PATIENT_TYPE, FOLLOW_UP,
+        WEEKS_OF_FOLLOW_UP, MONTHS_OF_FOLLOW_UP, YEARS_OF_FOLLOW_UP,
+        TEACHING_CASES, POSTGRADUATE_INTERN, AGE_MONTH,
+        VENTILATOR_USE_TIME, NAME_OF_TRANSFERRED_HOSPITAL,
+        COMMUNITY_SERVICE_ORGANIZATION, FEE_TOTAL,
+        FEE_SELF_PAY, FEE_GENERAL_MEDICAL, FEE_GENERAL_TREAT,
+        FEE_TEND, FEE_MEDICAL_OTHER, FEE_PATHOLOGY,
+        FEE_LABORATORY, FEE_IMAGING, FEE_CLINC,
+        FEE_NONSURGICAL_TREAT, FEE_CLIN_PHYSICAL, FEE_SURGICAL_TREAT,
+        FEE_ANAES, FEE_OPERATION, FEE_RECOVERY,
+        FEE_CN_TREATMENT, FEE_WESTERN_MEDICINE, FEE_ANTIMICROBIAL,
+        FEE_CN_MEDICINE, FEE_CN_HERBAL_MEDICINE, FEE_BLOOD,
+        FEE_ALBUMIN, FEE_GLOBULIN, FEE_BCF,
+        FEE_CYTOKINE, FEE_CHECK_MATERIAL, FEE_TREAT_MATERIAL,
+        FEE_OPER_MATERIAL, FEE_OTHER, FSTATE,
+        CREATE_TIME, MEDICARE_CARD,UP_ORG_ID)
+        values
+        (
+        #{obj.tFirstPageTestingId,jdbcType=DECIMAL},#{obj.orgName,jdbcType=VARCHAR},
+        #{obj.orgId,jdbcType=DECIMAL}, #{obj.batchId,jdbcType=DECIMAL}, #{obj.caseId,jdbcType=VARCHAR},
+        #{obj.inHospitalTimes,jdbcType=VARCHAR}, #{obj.caseNo,jdbcType=VARCHAR}, #{obj.payWayCode,jdbcType=VARCHAR},
+        #{obj.cardNo,jdbcType=VARCHAR}, #{obj.fname,jdbcType=VARCHAR}, #{obj.sexCode,jdbcType=VARCHAR},
+        #{obj.birthDate,jdbcType=DATE}, #{obj.age,jdbcType=DECIMAL}, #{obj.country,jdbcType=VARCHAR},
+        #{obj.birthWeight,jdbcType=DECIMAL}, #{obj.birthWeight5,jdbcType=DECIMAL}, #{obj.birthWeight4,jdbcType=DECIMAL},
+        #{obj.birthWeight3,jdbcType=DECIMAL}, #{obj.birthWeight2,jdbcType=DECIMAL}, #{obj.inWeight,jdbcType=DECIMAL},
+        #{obj.idNo,jdbcType=VARCHAR}, #{obj.occupationCode,jdbcType=VARCHAR}, #{obj.marriageCode,jdbcType=VARCHAR},
+        #{obj.birthAddrProvince,jdbcType=VARCHAR}, #{obj.birthAddrCity,jdbcType=VARCHAR}, #{obj.birthAddrCounty,jdbcType=VARCHAR},
+        #{obj.nativeAddrProvince,jdbcType=VARCHAR}, #{obj.nativeAddrCity,jdbcType=VARCHAR}, #{obj.nativeAddrCounty,jdbcType=VARCHAR},
+        #{obj.nationalityCode,jdbcType=VARCHAR}, #{obj.presentAddrProvince,jdbcType=VARCHAR}, #{obj.presentAddrCity,jdbcType=VARCHAR},
+        #{obj.presentAddrCounty,jdbcType=VARCHAR}, #{obj.presentAddrTel,jdbcType=VARCHAR}, #{obj.presentAddrPostalCode,jdbcType=VARCHAR},
+        #{obj.registerAddrProvince,jdbcType=VARCHAR}, #{obj.registerAddrCity,jdbcType=VARCHAR},
+        #{obj.registerAddrCounty,jdbcType=VARCHAR}, #{obj.registerAddrTel,jdbcType=VARCHAR}, #{obj.registerAddrPostalCode,jdbcType=VARCHAR},
+        #{obj.employerAddr,jdbcType=VARCHAR}, #{obj.employerTel,jdbcType=VARCHAR}, #{obj.employerPostalCode,jdbcType=VARCHAR},
+        #{obj.contactName,jdbcType=VARCHAR}, #{obj.contactRelationship,jdbcType=VARCHAR}, #{obj.contactAddr,jdbcType=VARCHAR},
+        #{obj.contactTel,jdbcType=VARCHAR}, #{obj.inRoad,jdbcType=VARCHAR}, #{obj.outpatientDoctor,jdbcType=VARCHAR},
+        #{obj.inDtime,jdbcType=DATE}, #{obj.outDtime,jdbcType=DATE}, #{obj.inDeptCode,jdbcType=VARCHAR},
+        #{obj.inDeptRoom,jdbcType=VARCHAR}, #{obj.moveDept,jdbcType=VARCHAR}, #{obj.outDeptCode,jdbcType=VARCHAR},
+        #{obj.outDeptRoom,jdbcType=VARCHAR}, #{obj.actualInDays,jdbcType=DECIMAL}, #{obj.outpatDiagCode,jdbcType=VARCHAR},
+        #{obj.outpatDiagName,jdbcType=VARCHAR}, #{obj.onAdmission,jdbcType=VARCHAR}, #{obj.inDiagCode,jdbcType=VARCHAR},
+        #{obj.inDiagName,jdbcType=VARCHAR}, #{obj.dateOfDiagnosis,jdbcType=DATE}, #{obj.totalNumberOfInfections,jdbcType=VARCHAR},
+        #{obj.allergySource,jdbcType=VARCHAR}, #{obj.nameOfAllergicDrug,jdbcType=VARCHAR}, #{obj.aboCode,jdbcType=VARCHAR},
+        #{obj.rhCode9,jdbcType=VARCHAR}, #{obj.transfusionReaction,jdbcType=VARCHAR}, #{obj.redBloodCell,jdbcType=VARCHAR},
+        #{obj.platelet,jdbcType=VARCHAR}, #{obj.plasma,jdbcType=VARCHAR}, #{obj.wholeBlood,jdbcType=VARCHAR},
+        #{obj.selfRecovery,jdbcType=VARCHAR}, #{obj.otherInputs,jdbcType=VARCHAR}, #{obj.drugAllergyMark,jdbcType=VARCHAR},
+        #{obj.drugAllergensName,jdbcType=VARCHAR}, #{obj.autopsyMark,jdbcType=VARCHAR}, #{obj.deptDirector,jdbcType=VARCHAR},
+        #{obj.chiefDoctor,jdbcType=VARCHAR}, #{obj.inChargeDoctor,jdbcType=VARCHAR}, #{obj.residentDoctor,jdbcType=VARCHAR},
+        #{obj.respNurse,jdbcType=VARCHAR}, #{obj.learningDoctor,jdbcType=VARCHAR}, #{obj.internDoctor,jdbcType=VARCHAR},
+        #{obj.cataloger,jdbcType=VARCHAR}, #{obj.caseQuality,jdbcType=VARCHAR}, #{obj.qcDoctor,jdbcType=VARCHAR},
+        #{obj.qcNurse,jdbcType=VARCHAR}, #{obj.qcDtime,jdbcType=DATE}, #{obj.dischargeClass,jdbcType=VARCHAR},
+        #{obj.orderReferralOrg,jdbcType=VARCHAR}, #{obj.rehospAfter31Mark,jdbcType=VARCHAR}, #{obj.rehospAfter31Purpose,jdbcType=VARCHAR},
+        #{obj.comaDurationBeforeDay,jdbcType=DECIMAL}, #{obj.comaDurationBeforeHour,jdbcType=DECIMAL},
+        #{obj.comaDurationBeforeMinute,jdbcType=DECIMAL}, #{obj.comaDurationAfterDay,jdbcType=DECIMAL},
+        #{obj.comaDurationAfterHour,jdbcType=DECIMAL}, #{obj.comaDurationAfterMinute,jdbcType=DECIMAL},
+        #{obj.hbsag,jdbcType=VARCHAR}, #{obj.hcvAb,jdbcType=VARCHAR}, #{obj.hivAb,jdbcType=VARCHAR},
+        #{obj.clinic2out,jdbcType=VARCHAR}, #{obj.in2out,jdbcType=VARCHAR}, #{obj.preOper2oper,jdbcType=VARCHAR},
+        #{obj.clinic2autopsy,jdbcType=VARCHAR}, #{obj.radiation2pathology,jdbcType=VARCHAR}, #{obj.rescueTimes,jdbcType=VARCHAR},
+        #{obj.rescueSuccessTimes,jdbcType=VARCHAR}, #{obj.highestDiagnosticBasis,jdbcType=VARCHAR},
+        #{obj.daysOfIntensiveCare,jdbcType=VARCHAR}, #{obj.daysOfPrimaryCare,jdbcType=VARCHAR},
+        #{obj.daysOfSecondaryCare,jdbcType=VARCHAR}, #{obj.daysOfTertiaryCare,jdbcType=VARCHAR},
+        #{obj.icuName1,jdbcType=VARCHAR}, #{obj.entryTime1,jdbcType=DATE}, #{obj.exitTime1,jdbcType=DATE},
+        #{obj.icuName2,jdbcType=VARCHAR}, #{obj.entryTime2,jdbcType=DATE}, #{obj.exitTime2,jdbcType=DATE},
+        #{obj.icuName3,jdbcType=VARCHAR}, #{obj.entryTime3,jdbcType=DATE}, #{obj.exitTime3,jdbcType=DATE},
+        #{obj.icuName4,jdbcType=VARCHAR}, #{obj.entryTime4,jdbcType=DATE}, #{obj.exitTime4,jdbcType=DATE},
+        #{obj.icuName5,jdbcType=VARCHAR}, #{obj.entryTime5,jdbcType=DATE}, #{obj.exitTime5,jdbcType=DATE},
+        #{obj.firstCase,jdbcType=VARCHAR}, #{obj.surgicalPatientType,jdbcType=VARCHAR}, #{obj.followUp,jdbcType=VARCHAR},
+        #{obj.weeksOfFollowUp,jdbcType=VARCHAR}, #{obj.monthsOfFollowUp,jdbcType=VARCHAR}, #{obj.yearsOfFollowUp,jdbcType=VARCHAR},
+        #{obj.teachingCases,jdbcType=VARCHAR}, #{obj.postgraduateIntern,jdbcType=VARCHAR}, #{obj.ageMonth,jdbcType=VARCHAR},
+        #{obj.ventilatorUseTime,jdbcType=VARCHAR}, #{obj.nameOfTransferredHospital,jdbcType=VARCHAR},
+        #{obj.communityServiceOrganization,jdbcType=VARCHAR}, #{obj.feeTotal,jdbcType=DECIMAL},
+        #{obj.feeSelfPay,jdbcType=DECIMAL}, #{obj.feeGeneralMedical,jdbcType=DECIMAL}, #{obj.feeGeneralTreat,jdbcType=DECIMAL},
+        #{obj.feeTend,jdbcType=DECIMAL}, #{obj.feeMedicalOther,jdbcType=DECIMAL}, #{obj.feePathology,jdbcType=DECIMAL},
+        #{obj.feeLaboratory,jdbcType=DECIMAL}, #{obj.feeImaging,jdbcType=DECIMAL}, #{obj.feeClinc,jdbcType=DECIMAL},
+        #{obj.feeNonsurgicalTreat,jdbcType=DECIMAL}, #{obj.feeClinPhysical,jdbcType=DECIMAL}, #{obj.feeSurgicalTreat,jdbcType=DECIMAL},
+        #{obj.feeAnaes,jdbcType=DECIMAL}, #{obj.feeOperation,jdbcType=DECIMAL}, #{obj.feeRecovery,jdbcType=DECIMAL},
+        #{obj.feeCnTreatment,jdbcType=DECIMAL}, #{obj.feeWesternMedicine,jdbcType=DECIMAL}, #{obj.feeAntimicrobial,jdbcType=DECIMAL},
+        #{obj.feeCnMedicine,jdbcType=DECIMAL}, #{obj.feeCnHerbalMedicine,jdbcType=DECIMAL}, #{obj.feeBlood,jdbcType=DECIMAL},
+        #{obj.feeAlbumin,jdbcType=DECIMAL}, #{obj.feeGlobulin,jdbcType=DECIMAL}, #{obj.feeBcf,jdbcType=DECIMAL},
+        #{obj.feeCytokine,jdbcType=DECIMAL}, #{obj.feeCheckMaterial,jdbcType=DECIMAL}, #{obj.feeTreatMaterial,jdbcType=DECIMAL},
+        #{obj.feeOperMaterial,jdbcType=DECIMAL}, #{obj.feeOther,jdbcType=DECIMAL}, #{obj.fstate,jdbcType=DECIMAL},
+        #{obj.createTime,jdbcType=DATE}, #{obj.medicareCard,jdbcType=VARCHAR},#{obj.upOrgId,jdbcType=VARCHAR}
+        )
+      </foreach>
+    </trim>
+  </insert>
+
+
+  <select id="selectCaseList" parameterType="java.util.Map" resultType="com.mediot.ygb.mrqs.index.indexInfoManage.entity.TFirstPageTesting">
+    SELECT
+    distinct  t.T_FIRST_PAGE_TESTING_ID,
+    t.org_id,t.org_name,t.card_no,t.medicare_card,t.pay_way_code,t.actual_in_days
+    ,t.case_no,t.sex_code,t.create_time,t.out_dept_code,t.batch_id,t.fname
+    FROM (SELECT
+    a.T_FIRST_PAGE_TESTING_ID,
+    a.org_id,a.org_name,a.card_no,a.medicare_card,a.pay_way_code,a.actual_in_days
+    ,a.case_no,a.sex_code,a.create_time,a.out_dept_code,a.batch_id,a.fname
+    FROM
+    t_firstpage_testing a
+    LEFT JOIN
+    t_firstoutdiag_testing b
+    on
+    a.T_FIRST_PAGE_TESTING_ID=b.T_FIRST_PAGE_TESTING_ID
+    <where>
+      <if test="orgIds!=null">
+        a.UP_ORG_ID in
+        <foreach collection="orgIds" item="obj" separator="," open="(" close=")">
+          #{obj}
+        </foreach>
+      </if>
+      <if test="diagnosisCode!=null">
+        and b.diagnosis_code=#{diagnosisCode}
+      </if>
+      <if test="fname!=null">
+        and a.fname like concat(concat('%',#{fname}),'%')
+      </if>
+      <if test="case_no!=null">
+        and a.case_no like concat(concat('%',#{caseNo}),'%')
+      </if>
+      <if test="org_name!=null">
+        and a.org_name like concat(concat('%',#{orgName}),'%')
+      </if>
+    </where>
+    ) t
+    LEFT JOIN
+    t_firstoutoper_testing c
+    on t.T_FIRST_PAGE_TESTING_ID=c.T_FIRST_PAGE_TESTING_ID
+    <where>
+      <if test="operationCode!=null">
+        c.operation_code=#{operationCode}
+      </if>
+    </where>
+    GROUP by  t.T_FIRST_PAGE_TESTING_ID,
+    t.org_id,t.org_name,t.card_no,t.medicare_card,t.pay_way_code,t.actual_in_days
+    ,t.case_no,t.sex_code,t.create_time,t.out_dept_code,t.batch_id,t.fname
+  </select>
+
+  <select id="selectBaseInfoOfCaseList" parameterType="java.util.Map" resultType="com.mediot.ygb.mrqs.index.indexInfoManage.entity.TFirstPageTesting">
+    SELECT distinct
+    t.T_FIRST_PAGE_TESTING_ID，t.fname
+    ,t.org_id,t.org_name,t.card_no,t.medicare_card,t.pay_way_code,t.actual_in_days
+    ,t.case_no,t.sex_code,t.create_time,t.out_dept_code,t.batch_id,b.dict_name
+    FROM
+    t_firstpage_testing  t
+    LEFT JOIN
+    (SELECT DISTINCT  b.dict_code,b.dict_name from
+    t_base_dict b LEFT JOIN
+    t_base a on a.base_code=b.base_code
+    WHERE
+    a.base_name like '%科%'
+    ) b
+    on t.out_dept_code=b.dict_code
+    <where>
+      <if test="orgIds!=null">
+          t.UP_ORG_ID in
+         <foreach collection="orgIds" item="obj" separator="," open="(" close=")">
+            #{obj}
+         </foreach>
+      </if>
+      <if test="outDeptName!=null">
+        and b.dict_name like concat(concat('%',#{outDeptName}),'%')
+      </if>
+      <if test="fname!=null">
+        and t.fname like concat(concat('%',#{fname}),'%')
+      </if>
+      <if test="caseNo!=null">
+        and t.case_no like concat(concat('%',#{caseNo}),'%')
+      </if>
+      <if test="orgName!=null">
+        and t.org_name like concat(concat('%',#{orgName}),'%')
+      </if>
+    </where>
+  </select>
+
+</mapper>

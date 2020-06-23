@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mediot.ygb.mrqs.analysis.medRecManage.dao.TDatacleanStandardMapper">
+  <resultMap id="BaseResultMap" type="com.mediot.ygb.mrqs.analysis.medRecManage.entity.TDatacleanStandard">
+    <id column="DATACLEAN_ID" property="datacleanId" />
+    <result column="DATA_COL" jdbcType="VARCHAR" property="dataCol" />
+    <result column="DATA_COL_NAME" jdbcType="VARCHAR" property="dataColName" />
+    <result column="DATA_TYPE" jdbcType="VARCHAR" property="dataType" />
+    <result column="DATA_LENGTH" jdbcType="VARCHAR" property="dataLength" />
+    <result column="MUSTFILL" jdbcType="VARCHAR" property="mustfill" />
+    <result column="DATA_STANDARD" jdbcType="VARCHAR" property="dataStandard" />
+    <result column="STANDARD_TYPE" jdbcType="VARCHAR" property="standardType" />
+    <result column="REMARK" jdbcType="VARCHAR" property="remark" />
+  </resultMap>
+
+  <sql id="base_col">
+    a.DATACLEAN_ID,a.DATA_COL,a.DATA_COL_NAME,a.DATA_TYPE,a.DATA_LENGTH,a.MUSTFILL,a.DATA_STANDARD,a.STANDARD_TYPE,a.REMARK
+  </sql>
+
+  <select id="selectListByMap" parameterType="java.util.Map" resultType="com.mediot.ygb.mrqs.analysis.medRecManage.entity.TDatacleanStandard">
+      select <include refid="base_col"/> from T_DATACLEAN_STAMDRAD  a
+      <where>
+        <if test="standard_type!=null">
+          a.STANDERD_TYPE=#{standard_type}
+        </if>
+        <if test="must_fill!=null">
+          and a.MUSTFILL=#{must_fill}
+        </if>
+      </where>
+  </select>
+
+  <select id="selectBatchByDataCol" parameterType="java.util.List" resultType="com.mediot.ygb.mrqs.analysis.medRecManage.entity.TDatacleanStandard">
+    select <include refid="base_col"/> from T_DATACLEAN_STAMDRAD  a
+    <where>
+      a.DATA_COL_NAME
+      in
+      <foreach collection="list" open="(" close=")" separator="," index="index" item="obj">
+        #{obj}
+      </foreach>
+    </where>
+  </select>
+
+  <update id="createTempTable"  >
+  	  create temp table ${pvsTb} as select fa_login, fa_name, fa_status, fa_type, fa_create_by, fa_create_dt, fa_update_by,
+      fa_update_dt, fa_email, fa_passwd, fa_remark, fa_staff_id, fa_last_notify
+      from ta_user order by fa_login limit 10;
+  </update>
+
+  <update id="dropTable" >
+  	   drop table if exists ${pvsTb}
+  </update>
+  <select id="selectFromTmpTable"  resultType="java.util.HashMap">
+      select
+      *
+      from ${pvsTb} where fa_login=#{pvsLogin}
+  </select>
+
+</mapper>

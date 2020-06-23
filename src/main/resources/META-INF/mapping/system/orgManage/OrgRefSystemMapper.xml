@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mediot.ygb.mrqs.system.orgManage.dao.OrgRefSystemMapper">
+  <resultMap id="BaseResultMap" type="com.mediot.ygb.mrqs.system.orgManage.entity.OrgRefSystem">
+    <id column="REF_ID"  property="refId" />
+    <result column="SYSTEM_CODE" jdbcType="VARCHAR" property="systemCode" />
+    <result column="ORG_ID" jdbcType="VARCHAR" property="orgId" />
+
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    REF_ID,SYSTEM_CODE,ORG_ID
+  </sql>
+
+  <insert id="batchInsertRelation"  parameterType="java.util.List"  >
+    insert all
+    <trim suffix="SELECT 1 FROM DUAL">
+      <foreach collection="list" item="obj">
+        into T_ORG_REF_SYSTEM (REF_ID,SYSTEM_CODE,ORG_ID) values
+        (#{obj.refId,jdbcType=BIGINT},#{obj.systemCode,jdbcType=VARCHAR},#{obj.orgId,jdbcType=VARCHAR})
+      </foreach>
+    </trim>
+  </insert>
+
+  <delete id="batchDeleteRef" parameterType="java.util.List">
+    delete from T_ORG_REF_SYSTEM a where a.BATCH_ID in
+    <foreach collection="list" open="(" close=")" item="bid" separator=",">
+      #{bid}
+    </foreach>
+  </delete>
+
+</mapper>

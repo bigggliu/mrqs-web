@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mediot.ygb.mrqs.index.indexInfoManage.dao.TFirstoutoperTestingMapper">
+  <resultMap id="BaseResultMap" type="com.mediot.ygb.mrqs.index.indexInfoManage.entity.TFirstoutoperTesting">
+    <id column="T_FIRSTOUTOPER_TESTING_ID" property="tFirstoutoperTestingId" />
+    <result column="BATCH_ID" jdbcType="DECIMAL" property="batchId" />
+    <result column="CASE_ID" jdbcType="VARCHAR" property="caseId" />
+    <result column="OPERATION_ORDER" jdbcType="DECIMAL" property="operationOrder" />
+    <result column="OPERATION_CODE" jdbcType="VARCHAR" property="operationCode" />
+    <result column="OPERATION_DTIME" jdbcType="VARCHAR" property="operationDtime" />
+    <result column="OPER_DURATION" jdbcType="DECIMAL" property="operDuration" />
+    <result column="OPERATION_LEVEL" jdbcType="VARCHAR" property="operationLevel" />
+    <result column="BODY_PART" jdbcType="VARCHAR" property="bodyPart" />
+    <result column="OPERATION_NAME" jdbcType="VARCHAR" property="operationName" />
+    <result column="SURGEON" jdbcType="VARCHAR" property="surgeon" />
+    <result column="ASSISTANT1" jdbcType="VARCHAR" property="assistant1" />
+    <result column="ASSISTANT2" jdbcType="VARCHAR" property="assistant2" />
+    <result column="INCISION_TYPE" jdbcType="VARCHAR" property="incisionType" />
+    <result column="INCISION_HEALING" jdbcType="VARCHAR" property="incisionHealing" />
+    <result column="ANESTHESIA_MODE" jdbcType="VARCHAR" property="anesthesiaMode" />
+    <result column="ANESTHESIA_LEVEL" jdbcType="VARCHAR" property="anesthesiaLevel" />
+    <result column="ANESTHESIOLOGIST" jdbcType="VARCHAR" property="anesthesiologist" />
+    <result column="SURGICAL_PATIENT_TYPE" jdbcType="VARCHAR" property="surgicalPatientType" />
+    <result column="OPERATION_TYPE" jdbcType="VARCHAR" property="operationType" />
+    <result column="INCISION_HEALING_TYPE" jdbcType="VARCHAR" property="incisionHealingType" />
+    <result column="T_FIRST_PAGE_TESTING_ID" jdbcType="DECIMAL" property="tFirstPageTestingId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    T_FIRSTOUTOPER_TESTING_ID, BATCH_ID, CASE_ID, OPERATION_ORDER, OPERATION_CODE, OPERATION_DTIME, 
+    OPER_DURATION, OPERATION_LEVEL, BODY_PART, OPERATION_NAME, SURGEON, ASSISTANT1, ASSISTANT2, 
+    INCISION_TYPE, INCISION_HEALING, ANESTHESIA_MODE, ANESTHESIA_LEVEL, ANESTHESIOLOGIST, 
+    SURGICAL_PATIENT_TYPE,INCISION_HEALING_TYPE
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from T_FIRSTOUTOPER_TESTING
+    where T_FIRSTOUTOPER_TESTING_ID = #{tFirstoutoperTestingId,jdbcType=VARCHAR}
+  </select>
+
+  <delete id="batchDelOutDiagByMap" parameterType="java.util.Map">
+    delete from T_FIRSTOUTOPER_TESTING a
+    <where>
+      <if test="batchId!=null">
+        a.BATCH_ID=#{batchId}
+      </if>
+      <if test="caseId!=null">
+        and a.CASE_ID=#{caseId}
+      </if>
+    </where>
+  </delete>
+
+  <delete id="batchDelOutOper" parameterType="java.util.List">
+    delete from T_FIRSTOUTOPER_TESTING a where (a.BATCH_ID,a.CASE_ID)
+    in
+    <foreach collection="list" open="(" close=")" item="obj" separator=",">
+      (#{obj.batchId},#{obj.caseId})
+    </foreach>
+  </delete>
+
+  <insert id="batchInsertOutOper" parameterType="java.util.List" useGeneratedKeys="false">
+    insert all
+    <trim suffix="SELECT 1 FROM DUAL">
+      <foreach collection="list" item="obj">
+          into T_FIRSTOUTOPER_TESTING
+          <trim prefix="(" suffix=")" suffixOverrides=",">
+              T_FIRSTOUTOPER_TESTING_ID,
+            <if test="obj.caseId != null">
+              CASE_ID,
+            </if>
+            <if test="obj.batchId != null">
+              BATCH_ID,
+            </if>
+            <if test="obj.operationOrder != null">
+              OPERATION_ORDER,
+            </if>
+            <if test="obj.operationCode != null">
+              OPERATION_CODE,
+            </if>
+            <if test="obj.operationDtime != null">
+              OPERATION_DTIME,
+            </if>
+            <if test="obj.operDuration != null">
+              OPER_DURATION,
+            </if>
+            <if test="obj.operationLevel != null">
+              OPERATION_LEVEL,
+            </if>
+            <if test="obj.bodyPart != null">
+              BODY_PART,
+            </if>
+            <if test="obj.operationName != null">
+              OPERATION_NAME,
+            </if>
+            <if test="obj.surgeon != null">
+              SURGEON,
+            </if>
+            <if test="obj.assistant1 != null">
+              ASSISTANT1,
+            </if>
+            <if test="obj.assistant2 != null">
+              ASSISTANT2,
+            </if>
+            <if test="obj.incisionType != null">
+              INCISION_TYPE,
+            </if>
+            <if test="obj.incisionHealing != null">
+              INCISION_HEALING,
+            </if>
+            <if test="obj.anesthesiaMode != null">
+              ANESTHESIA_MODE,
+            </if>
+            <if test="obj.anesthesiaLevel != null">
+              ANESTHESIA_LEVEL,
+            </if>
+            <if test="obj.anesthesiologist != null">
+              ANESTHESIOLOGIST,
+            </if>
+            <if test="obj.surgicalPatientType != null">
+              SURGICAL_PATIENT_TYPE,
+            </if>
+            <if test="obj.operationType != null">
+              OPERATION_TYPE,
+            </if>
+            <if test="obj.tFirstPageTestingId != null">
+              T_FIRST_PAGE_TESTING_ID,
+            </if>
+          </trim>
+          <trim prefix="values (" suffix=")" suffixOverrides=",">
+              #{obj.tFirstoutoperTestingId,jdbcType=DECIMAL},
+            <if test="obj.caseId != null">
+              #{obj.caseId,jdbcType=VARCHAR},
+            </if>
+            <if test="obj.batchId != null">
+              #{obj.batchId,jdbcType=VARCHAR},
+            </if>
+            <if test="obj.operationOrder != null">
+              #{obj.operationOrder,jdbcType=DECIMAL},
+            </if>
+            <if test="obj.operationCode != null">
+              #{obj.operationCode,jdbcType=VARCHAR},
+            </if>
+            <if test="obj.operationDtime != null">
+              #{obj.operationDtime,jdbcType=VARCHAR},
+            </if>
+            <if test="obj.operDuration != null">
+              #{obj.operDuration,jdbcType=DECIMAL},
+            </if>
+            <if test="obj.operationLevel != null">
+              #{obj.operationLevel,jdbcType=VARCHAR},
+            </if>
+            <if test="obj.bodyPart != null">
+              #{obj.bodyPart,jdbcType=VARCHAR},
+            </if>
+            <if test="obj.operationName != null">
+              #{obj.operationName,jdbcType=VARCHAR},
+            </if>
+            <if test="obj.surgeon != null">
+              #{obj.surgeon,jdbcType=VARCHAR},
+            </if>
+            <if test="obj.assistant1 != null">
+              #{obj.assistant1,jdbcType=VARCHAR},
+            </if>
+            <if test="obj.assistant2 != null">
+              #{obj.assistant2,jdbcType=VARCHAR},
+            </if>
+            <if test="obj.incisionType != null">
+              #{obj.incisionType,jdbcType=VARCHAR},
+            </if>
+            <if test="obj.incisionHealing != null">
+              #{obj.incisionHealing,jdbcType=VARCHAR},
+            </if>
+            <if test="obj.anesthesiaMode != null">
+              #{obj.anesthesiaMode,jdbcType=VARCHAR},
+            </if>
+            <if test="obj.anesthesiaLevel != null">
+              #{obj.anesthesiaLevel,jdbcType=VARCHAR},
+            </if>
+            <if test="obj.anesthesiologist != null">
+              #{obj.anesthesiologist,jdbcType=VARCHAR},
+            </if>
+            <if test="obj.surgicalPatientType != null">
+              #{obj.surgicalPatientType,jdbcType=VARCHAR},
+            </if>
+            <if test="obj.operationType != null">
+              #{obj.operationType,jdbcType=VARCHAR},
+            </if>
+            <if test="obj.tFirstPageTestingId != null">
+              #{obj.tFirstPageTestingId,jdbcType=DECIMAL},
+            </if>
+          </trim>
+      </foreach>
+    </trim>
+  </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.mediot.ygb.mrqs.index.indexInfoManage.dto.TFirstoutoperTestingDto">
+    update T_FIRSTOUTOPER_TESTING
+    <set>
+      <if test="batchId != null">
+        BATCH_ID = #{batchId,jdbcType=DECIMAL},
+      </if>
+      <if test="caseId != null">
+        CASE_ID = #{caseId,jdbcType=VARCHAR},
+      </if>
+      <if test="operationOrder != null">
+        OPERATION_ORDER = #{operationOrder,jdbcType=DECIMAL},
+      </if>
+      <if test="operationCode != null">
+        OPERATION_CODE = #{operationCode,jdbcType=VARCHAR},
+      </if>
+      <if test="operationDtime != null">
+        OPERATION_DTIME = #{operationDtime,jdbcType=VARCHAR},
+      </if>
+      <if test="operDuration != null">
+        OPER_DURATION = #{operDuration,jdbcType=DECIMAL},
+      </if>
+      <if test="operationLevel != null">
+        OPERATION_LEVEL = #{operationLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="bodyPart != null">
+        BODY_PART = #{bodyPart,jdbcType=VARCHAR},
+      </if>
+      <if test="operationName != null">
+        OPERATION_NAME = #{operationName,jdbcType=VARCHAR},
+      </if>
+      <if test="surgeon != null">
+        SURGEON = #{surgeon,jdbcType=VARCHAR},
+      </if>
+      <if test="assistant1 != null">
+        ASSISTANT1 = #{assistant1,jdbcType=VARCHAR},
+      </if>
+      <if test="assistant2 != null">
+        ASSISTANT2 = #{assistant2,jdbcType=VARCHAR},
+      </if>
+      <if test="incisionType != null">
+        INCISION_TYPE = #{incisionType,jdbcType=VARCHAR},
+      </if>
+      <if test="incisionHealing != null">
+        INCISION_HEALING = #{incisionHealing,jdbcType=VARCHAR},
+      </if>
+      <if test="anesthesiaMode != null">
+        ANESTHESIA_MODE = #{anesthesiaMode,jdbcType=VARCHAR},
+      </if>
+      <if test="anesthesiaLevel != null">
+        ANESTHESIA_LEVEL = #{anesthesiaLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="anesthesiologist != null">
+        ANESTHESIOLOGIST = #{anesthesiologist,jdbcType=VARCHAR},
+      </if>
+      <if test="surgicalPatientType != null">
+        SURGICAL_PATIENT_TYPE = #{surgicalPatientType,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where T_FIRSTOUTOPER_TESTING_ID = #{tFirstoutoperTestingId,jdbcType=VARCHAR}
+  </update>
+  <!--<update id="updateByPrimaryKey" parameterType="com.mediot.ygb.mrqs.common.pojo.TFirstoutoperTesting">-->
+    <!--update T_FIRSTOUTOPER_TESTING-->
+    <!--set BATCH_ID = #{batchId,jdbcType=DECIMAL},-->
+      <!--CASE_ID = #{caseId,jdbcType=VARCHAR},-->
+      <!--OPERATION_ORDER = #{operationOrder,jdbcType=DECIMAL},-->
+      <!--OPERATION_CODE = #{operationCode,jdbcType=VARCHAR},-->
+      <!--OPERATION_DTIME = #{operationDtime,jdbcType=VARCHAR},-->
+      <!--OPER_DURATION = #{operDuration,jdbcType=DECIMAL},-->
+      <!--OPERATION_LEVEL = #{operationLevel,jdbcType=VARCHAR},-->
+      <!--BODY_PART = #{bodyPart,jdbcType=VARCHAR},-->
+      <!--OPERATION_NAME = #{operationName,jdbcType=VARCHAR},-->
+      <!--SURGEON = #{surgeon,jdbcType=VARCHAR},-->
+      <!--ASSISTANT1 = #{assistant1,jdbcType=VARCHAR},-->
+      <!--ASSISTANT2 = #{assistant2,jdbcType=VARCHAR},-->
+      <!--INCISION_TYPE = #{incisionType,jdbcType=VARCHAR},-->
+      <!--INCISION_HEALING = #{incisionHealing,jdbcType=VARCHAR},-->
+      <!--ANESTHESIA_MODE = #{anesthesiaMode,jdbcType=VARCHAR},-->
+      <!--ANESTHESIA_LEVEL = #{anesthesiaLevel,jdbcType=VARCHAR},-->
+      <!--ANESTHESIOLOGIST = #{anesthesiologist,jdbcType=VARCHAR},-->
+      <!--SURGICAL_PATIENT_TYPE = #{surgicalPatientType,jdbcType=VARCHAR}-->
+    <!--where T_FIRSTOUTOPER_TESTING_ID = #{tFirstoutoperTestingId,jdbcType=VARCHAR}-->
+  <!--</update>-->
+</mapper>

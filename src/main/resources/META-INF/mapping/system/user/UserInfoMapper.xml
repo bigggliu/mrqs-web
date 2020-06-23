@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mediot.ygb.mrqs.system.user.dao.UserInfoMapper">
+  <resultMap id="BaseResultMap" type="com.mediot.ygb.mrqs.system.user.entity.UserInfo">
+    <id column="USER_ID"  property="userId" />
+    <result column="USER_NO" jdbcType="VARCHAR" property="userNo" />
+    <result column="PWD" jdbcType="VARCHAR" property="pwd" />
+    <result column="USER_NAME" jdbcType="VARCHAR" property="userName" />
+    <result column="SORT_NO" jdbcType="VARCHAR" property="sortNo" />
+    <result column="USER_LEVEL" jdbcType="VARCHAR" property="userLevel" />
+    <result column="MOBILE_PHONE" jdbcType="VARCHAR" property="mobilePhone" />
+    <result column="USER_ADDRESS" jdbcType="VARCHAR" property="userAddress" />
+    <result column="TF_FLAG" jdbcType="VARCHAR" property="tfFlag" />
+    <result column="FTYPE_USER" jdbcType="VARCHAR" property="ftypeUser" />
+    <result column="ORG_ID" jdbcType="DECIMAL" property="orgId" />
+    <result column="AUDIT_ID" jdbcType="VARCHAR" property="auditId" />
+    <result column="AUDIT_NAME" jdbcType="VARCHAR" property="auditName" />
+    <result column="AUDIT_TIME" jdbcType="DATE" property="auditTime" />
+    <result column="AUDIT_FSTATE" jdbcType="VARCHAR" property="auditFstate" />
+    <result column="TF_REMARK" jdbcType="VARCHAR" property="tfRemark" />
+    <result column="ORG_TYPE" jdbcType="VARCHAR" property="orgType" />
+    <result column="MODIFY_TIME" jdbcType="DATE" property="modifyTime" />
+    <result column="CREATE_TIME" jdbcType="DATE" property="createTime" />
+    <result column="CREATE_USERID" jdbcType="VARCHAR" property="createUserid" />
+    <result column="MODIFY_USERID" jdbcType="VARCHAR" property="modifyUserid" />
+    <result column="AUDIT_ORG_CODE" jdbcType="VARCHAR" property="auditOrgCode" />
+    <result column="AUDIT_TF_ACCESSORY" jdbcType="VARCHAR" property="auditTfAccessory" />
+    <result column="EMAIL" jdbcType="VARCHAR" property="email" />
+    <result column="DEPT_NAME" jdbcType="VARCHAR" property="deptName" />
+    <result column="POST_NAME" jdbcType="VARCHAR" property="postName" />
+    <result column="TF_PROVINCE" jdbcType="VARCHAR" property="tfProvince" />
+    <result column="TF_CITY" jdbcType="VARCHAR" property="tfCity" />
+    <result column="TF_DISTRICT" jdbcType="VARCHAR" property="tfDistrict" />
+    <result column="ADDRESS" jdbcType="VARCHAR" property="address" />
+    <result column="FSTATE"  property="fstate" />
+    <result column="SYSTEM_CODES"  property="systemCodes" />
+    <result column="ORG_NAME"  property="orgName" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+     a.USER_ID, a.USER_NO, a.PWD,  a.USER_NAME,  a.SORT_NO,  a.USER_LEVEL,  a.MOBILE_PHONE,  a.USER_ADDRESS,
+     a.TF_FLAG,  a.FTYPE_USER,  a.ORG_ID,  a.AUDIT_ID,  a.AUDIT_NAME,  a.AUDIT_TIME,  a.AUDIT_FSTATE,  a.TF_REMARK,
+     a.ORG_TYPE,  a.MODIFY_TIME,  a.CREATE_TIME,  a.CREATE_USERID,  a.MODIFY_USERID,  a.AUDIT_ORG_CODE,
+     a.AUDIT_TF_ACCESSORY,  a.EMAIL,  a.DEPT_NAME,  a.POST_NAME,  a.TF_PROVINCE,  a.TF_CITY,  a.TF_DISTRICT,
+     a.ADDRESS,a.FSTATE,  a.SYSTEM_CODES
+  </sql>
+
+  <select id="selecUsertList" parameterType="java.util.Map" resultMap="BaseResultMap">
+      select b.org_name ,<include refid="Base_Column_List"/>
+      FROM
+      TS_USER_INFO a left join
+      T_ORGS b on b.ORG_ID=a.ORG_ID
+      <where>
+        <if test="queryStr!=null">
+          (a.USER_NAME like concat(concat('%',#{queryStr}),'%')
+           or
+           a.USER_NO like concat(concat('%',#{queryStr}),'%')
+           or
+           a.MOBILE_PHONE like concat(concat('%',#{queryStr}),'%')
+          )
+        </if>
+        <if test="orgId!=null">
+          and a.ORG_ID=#{orgId}
+        </if>
+      </where>
+      order by a.CREATE_TIME desc
+  </select>
+
+</mapper>

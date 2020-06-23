@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mediot.ygb.mrqs.dict.dao.TDiagDictMapper">
+  <resultMap id="BaseResultMap" type="com.mediot.ygb.mrqs.dict.entity.TDiagDict">
+    <id column="T_DIAG_DICT_ID" jdbcType="DECIMAL" property="tDiagDictId" />
+    <result column="BASE_CODE" jdbcType="VARCHAR" property="baseCode" />
+    <result column="DICT_CODE" jdbcType="VARCHAR" property="dictCode" />
+    <result column="DICT_NAME" jdbcType="VARCHAR" property="dictName" />
+    <result column="FQUN" jdbcType="VARCHAR" property="fqun" />
+    <result column="REMARK" jdbcType="VARCHAR" property="remark" />
+    <result column="BODY_PART" jdbcType="VARCHAR" property="bodyPart" />
+    <result column="NON_RE_HOP" jdbcType="VARCHAR" property="nonReHop" />
+    <result column="CODING_CATEGORY" jdbcType="VARCHAR" property="codingCategory" />
+    <result column="CHECK_CODE" jdbcType="VARCHAR" property="checkCode" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    dd.T_DIAG_DICT_ID,dd.BASE_CODE,
+    dd.DICT_CODE,dd.DICT_NAME,
+    dd.FQUN,dd.REMARK,
+    dd.BODY_PART,dd.NON_RE_HOP,
+    dd.CODING_CATEGORY
+  </sql>
+
+  <select id="selectTDiagDictByMap" parameterType="java.util.Map" resultMap="BaseResultMap">
+      select <include refid="Base_Column_List"/>
+      from T_DIAG_DICT dd
+      <where>
+        <if test="dictCode!=null">
+          dd.DICT_CODE=#{dictCode}
+        </if>
+      </where>
+  </select>
+
+</mapper>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mediot.ygb.mrqs.analysis.monitoringIndexManage.dao.TCheckOrgMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.mediot.ygb.mrqs.analysis.monitoringIndexManage.entity.TCheckOrg">
+        <id column="CHECK_ORG_ID" property="checkOrgId" ></id>
+        <result column="ORG_ID" property="orgId" />
+        <result column="ORG_NAME" property="orgName" />
+        <result column="CHECK_COL_ID" property="checkColId" />
+        <result column="COL_NAME" property="colName" />
+        <result column="COL_COMMENTS" property="colComments" />
+        <result column="RULE_TYPE" property="ruleType" />
+        <result column="CMIS_CHOICE" property="cmisChoice" />
+        <result column="EMR_CHOICE" property="emrChoice" />
+        <result column="FSORT" property="fSort" />
+        <result column="SCORE" property="score" />
+        <result column="MUST_FILL" property="mustFill" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        CHECK_ORG_ID,ORG_ID,ORG_NAME,CHECK_COL_ID,COL_NAME,COL_COMMENTS,CMIS_CHOICE,EMR_CHOICE,FSORT,SCORE,MUST_FILL,RULE_TYPE
+    </sql>
+
+    <insert id="batchInsertByMap"  parameterType="java.util.List"  >
+        insert all
+        <trim suffix="SELECT 1 FROM DUAL">
+            <foreach collection="list" item="obj">
+                into T_CHECK_ORG (CHECK_ORG_ID,ORG_ID,ORG_NAME,CHECK_COL_ID,COL_NAME,COL_COMMENTS,CMIS_CHOICE,EMR_CHOICE,FSORT,SCORE,MUST_FILL,RULE_TYPE) values
+                (#{obj.checkOrgId,jdbcType=BIGINT},#{obj.orgId,jdbcType=BIGINT},#{obj.orgName,jdbcType=VARCHAR},#{obj.checkColId, jdbcType=BIGINT},
+                #{obj.colName,jdbcType=VARCHAR},#{obj.colComments,jdbcType=VARCHAR},#{obj.cmisChoice,jdbcType=VARCHAR},
+                #{obj.emrChoice,jdbcType=VARCHAR},#{obj.fSort,jdbcType=VARCHAR},#{obj.score,jdbcType=VARCHAR},
+                #{obj.mustFill,jdbcType=VARCHAR},#{obj.ruleType,jdbcType=VARCHAR})
+            </foreach>
+        </trim>
+    </insert>
+
+    <select id="selectisExistTCheckCol" parameterType="java.util.Map" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/>
+        from T_CHECK_ORG a where
+        (a.ORG_ID,a.CHECK_COL_ID) in
+        <foreach collection="list" item="obj" open="(" close=")" separator=",">
+            (#{obj.orgId},#{obj.checkColId})
+        </foreach>
+    </select>
+
+    <delete id="deleteBatchCheckColIds" parameterType="java.util.List">
+        delete from T_CHECK_ORG a where a.CHECK_COL_ID in
+        <foreach collection="list" open="(" close=")" item="cid">
+            #{cid}
+        </foreach>
+    </delete>
+
+
+</mapper>

@@ -1,0 +1,58 @@
+application:
+  version: #ygb.version#
+debug: false
+mybatis-plus:
+  mapper-locations: classpath*:META-INF/mapping/*.xml,classpath*:META-INF/mapping/**/*.xml,classpath*:META-INF/mapping/**/**/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+    call-setters-on-nulls: false
+    cache-enabled: false
+server:
+  port: 8512
+  tomcat:
+    uri-encoding: UTF-8
+  error:
+    include-exception: true
+spring:
+  datasource:
+    druid:
+      driver-class-name: oracle.jdbc.driver.OracleDriver
+      url: "jdbc:oracle:thin:@42.157.130.158:1521/orcl.168.0.57"
+      username: mrqs
+      password: mrqs
+      initial-size: 5
+      max-wait: 10000
+      min-idle: 5
+      pool-prepared-statements: true
+      validation-query: "SELECT 1 FROM DUAL"
+      time-between-eviction-runs-millis: 60000
+      remove-abandoned: true
+      test-on-borrow: false
+      test-on-return: false
+      test-while-idle: true
+      filters: mergeStat
+  http:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+  main:
+    allow-bean-definition-overriding: true
+  redis:
+    host: 114.55.175.233
+    port: 6379
+    database: 1
+    password: 98761234
+  session:
+    store-type: redis
+    timeout: 86400
+  mvc:
+    throw-exception-if-no-handler-found: true
+  resources:
+    add-mappings: false
+  servlet:
+    multipart:
+      max-file-size: 500MB
+usercenter:
+  LoginFilter:
+    enable: true

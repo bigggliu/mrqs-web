@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mediot.ygb.mrqs.index.errorInfoManage.dao.TErrorDetailMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.mediot.ygb.mrqs.index.errorInfoManage.entity.TErrorDetailEntity">
+        <id column="BATCH_ID" property="batchId" />
+        <result column="CASE_ID" property="caseId" />
+        <result column="COL_NAME" property="colName" />
+        <result column="COL_COMMENTS" property="colComments" />
+        <result column="ERROR_MESSAGE" property="errorMessage" />
+        <result column="SCORE" property="score" />
+        <result column="MUST_FILL" property="mustFill" />
+        <result column="ANALYSE_TYPE" property="analyseType" />
+        <result column="OUT_DTIME" property="outDtime" />
+        <!--<result column="STATE" property="state" />-->
+        <result column="REMARK" property="remark" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        a.BATCH_ID,a.CASE_ID,a.COL_NAME,a.COL_COMMENTS,a.ERROR_MESSAGE,a.SCORE,a.MUST_FILL,a.ANALYSE_TYPE,
+        a.REMARK,a.STATE,b.STANDARD_CODE
+    </sql>
+
+    <select id="selectPageListByBatchId" resultType="com.mediot.ygb.mrqs.index.errorInfoManage.entity.TErrorDetailEntity" parameterType="java.util.Map">
+        SELECT *
+
+        FROM (SELECT ROWNUM AS rowno, t.*
+
+        FROM t_error_detail t
+
+        WHERE t.batch_id=#{batchId}
+
+        AND ROWNUM &lt;= #{upperBound}) table_alias
+
+        WHERE table_alias.rowno &gt;= #{lowerBound}
+    </select>
+
+    <select id="selecttErrorDetailList" parameterType="java.util.Map" resultMap="BaseResultMap">
+        select  <include refid="Base_Column_List"/> from T_FILE_UPLOAD_INFO b left join
+        T_ERROR_DETAIL a on a.BATCH_ID=b.BATCH_ID where a.BATCH_ID=#{batchId}
+        <if test="analyseType!=null">
+            and a.ANALYSE_TYPE=#{analyseType}
+        </if>
+    </select>
+
+    <insert id="batchInsertTErrorDetails" parameterType="java.util.List" useGeneratedKeys="false">
+        insert all
+        <trim suffix="SELECT 1 FROM DUAL">
+            <foreach collection="list" item="obj">
+                into T_ERROR_DETAIL (BATCH_ID,CASE_ID,COL_NAME,COL_COMMENTS,ERROR_MESSAGE,SCORE,MUST_FILL,ANALYSE_TYPE,
+                REMARK,OUT_DTIME) values
+                (#{obj.batchId,jdbcType=DECIMAL},
+                #{obj.caseId,jdbcType=VARCHAR},
+                #{obj.colName,jdbcType=VARCHAR},
+                #{obj.colComments,jdbcType=VARCHAR},
+                #{obj.errorMessage,jdbcType=VARCHAR},
+                #{obj.score,jdbcType=VARCHAR},
+                #{obj.mustFill,jdbcType=VARCHAR},
+                #{obj.analyseType,jdbcType=VARCHAR},
+                #{obj.remark,jdbcType=VARCHAR},
+                #{obj.outDtime,jdbcType=DATE}
+                )
+            </foreach>
+        </trim>
+    </insert>
+
+</mapper>
