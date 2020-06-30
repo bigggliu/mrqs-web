@@ -32,10 +32,11 @@ spring:
     #url: jdbc:oracle:thin:@115.220.9.93:1521/orcl.168.0.70?useUnicode=true&characterEncoding=UTF-8&useSSL=false
     druid:
       driver-class-name: oracle.jdbc.driver.OracleDriver
-      url: "jdbc:oracle:thin:@115.220.9.93:1521/orcl.168.0.70"
+      #"jdbc:oracle:thin:@127.0.0.1:1521/ORCL"
+      url: "jdbc:oracle:thin:@127.0.0.1:1521/ORCL"
       maxActive: 1000
-      username: mrqs
-      password: mrqs
+      username: MRQS
+      password: MRQS
       initial-size: 20
       max-wait: 100000
       min-idle: 5
@@ -87,9 +88,9 @@ usercenter:
   LoginFilter:
     enable: false
 fileUpload:
-  path: C:\Users\Administrator\Desktop\file_test
+  path: C:\Users\LiuChenLiang\Desktop\file_test
   tempPath: \temp\
-  basePath: C:\Users\Administrator\Desktop\
+  basePath: C:\Users\LiuChenLiang\Desktop\
   unZipPath: \unZip\
-  pdfPath: C:\Users\Administrator\Desktop\pdf\
-  excelPath: C:\Users\Administrator\Desktop\excel\
+  pdfPath: C:\Users\LiuChenLiang\Desktop\pdf\
+  excelPath: C:\Users\LiuChenLiang\Desktop\excel\

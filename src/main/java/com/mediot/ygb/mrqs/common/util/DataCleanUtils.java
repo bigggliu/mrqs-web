@@ -3041,7 +3041,8 @@ public class DataCleanUtils {
     private static void setTidBeforeInsertForDiag(List<TFirstPageTesting> tFirstPageTestingList, List<TFirstoutdiagTesting> tFirstoutdiagTestings) {
         for(TFirstPageTesting t:tFirstPageTestingList){
             for(TFirstoutdiagTesting d:tFirstoutdiagTestings){
-                if(t.getTempSid().equals(d.getTempSid())){
+                //if(t.getTempSid().equals(d.getTempSid())){
+                if(t.getCaseNo().equals(d.getCaseId())){
                     d.setTFirstPageTestingId(t.getTFirstPageTestingId());
                 }
             }

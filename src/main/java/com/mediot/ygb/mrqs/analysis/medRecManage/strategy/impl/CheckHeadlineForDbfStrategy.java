@@ -1,5 +1,6 @@
 package com.mediot.ygb.mrqs.analysis.medRecManage.strategy.impl;
 
+import com.linuxense.javadbf.DBFField;
 import com.linuxense.javadbf.DBFReader;
 import com.linuxense.javadbf.DBFUtils;
 import com.mediot.ygb.mrqs.analysis.medRecManage.dbfListener.DBFListener;
@@ -38,6 +39,10 @@ public class CheckHeadlineForDbfStrategy implements CheckHeadLineStrategy {
             Object[] rowObjects;
             reader = new DBFReader(new FileInputStream(checkHeadLineRequest.getFile().getAbsolutePath()), Charset.forName("GBK"));
             rowObjects=new Object[reader.getFieldCount()];
+            for (int i = 0; i < reader.getFieldCount(); i++) {
+                DBFField field = reader.getField(i);
+                rowObjects[i]=field.getName();
+            }
             synchronized (o){
                 fileAnalysisDto.setRowNum(fileAnalysisDto.getRowNum()+(reader.getRecordCount()));
             }

@@ -52,29 +52,30 @@ public class CaseOfBatchHandler implements Callable<String> {
                 FileAnalysisDto f=caseOfBatchRequest
                         .getDataAnalyseRequset().getFileAnalysisDto();
                 Map<String,Object> queryMap=new HashMap<>();
-                queryMap.put("orgId","1208076308767313921");
+                //queryMap.put("orgId","1266216344326770690");
+                queryMap.put("orgId",caseOfBatchRequest.getDataAnalyseRequset().getFileAnalysisDto().getUpOrgId());
                 List<TCheckCol> tCheckCols=f.getTCheckColMapper().selectTCheckColsByOrgId(queryMap);
                 tCheckCols.forEach(e->{
                     //拼接sql语句
                     try {
+                        //内层分页语句
                         StringBuffer sb=new StringBuffer();
-                        sb.append("select T_FIRSTPAGE_TESTING.T_FIRST_PAGE_TESTING_ID,T_FIRSTPAGE_TESTING.CASE_NO from T_FIRSTPAGE_TESTING ")
-                                .append(" where ")
-                                .append("T_FIRSTPAGE_TESTING.BATCH_ID=").append(f.getBatchId())
-                                .append(" and ")
-                                .append(e.getVerificationLogic());
-                        //外层分页语句
-                        StringBuffer fetchStr=new StringBuffer();
-                        fetchStr.append("select t.* from (select a.*,ROWNUM rn FROM (");
-                        fetchStr.append(sb.toString());
-                        fetchStr.append(") a where ROWNUM <=");
+                        sb.append("(select t.* from (select a.*,ROWNUM rn FROM (select T_FIRSTPAGE_TESTING.* from T_FIRSTPAGE_TESTING")
+                          .append(" where T_FIRSTPAGE_TESTING.BATCH_ID=").append(f.getBatchId())
+                          .append(") a where ROWNUM <=");
                         if(caseOfBatchRequest.getCurrentNum()==caseOfBatchRequest.getBatchNum()-1){
-                            fetchStr.append(f.getTotalNumForCurrentBatchId()%caseOfBatchRequest.getOnceNum()+caseOfBatchRequest.getCurrentNum()*caseOfBatchRequest.getOnceNum());
+                            sb.append(f.getTotalNumForCurrentBatchId()%caseOfBatchRequest.getOnceNum()+caseOfBatchRequest.getCurrentNum()*caseOfBatchRequest.getOnceNum());
                         }else {
-                            fetchStr.append((caseOfBatchRequest.getCurrentNum()+1)*caseOfBatchRequest.getOnceNum());
+                            sb.append((caseOfBatchRequest.getCurrentNum()+1)*caseOfBatchRequest.getOnceNum());
                         }
-                        fetchStr.append(") t where rn>=");
-                        fetchStr.append(caseOfBatchRequest.getCurrentNum()*caseOfBatchRequest.getOnceNum()+1);
+                        sb.append(") t where rn>=");
+                        sb.append(caseOfBatchRequest.getCurrentNum()*caseOfBatchRequest.getOnceNum()+1);
+                        sb.append(") T_FIRSTPAGE_TESTING ");
+                        //完整sql拼接
+                        StringBuffer fetchStr=new StringBuffer();
+                        fetchStr.append("select T_FIRSTPAGE_TESTING.T_FIRST_PAGE_TESTING_ID,T_FIRSTPAGE_TESTING.CASE_NO from ");
+                        fetchStr.append(sb);
+                        fetchStr.append(" where ").append(e.getVerificationLogic());
                         setAnalysedInfo(f,fetchStr,tCheckCols,caseOfBatchRequest,e);
                     }catch (Exception ex){
                         logger.info("逐条检测方法出错，原因是："+ex.getMessage());
@@ -106,9 +107,10 @@ public class CaseOfBatchHandler implements Callable<String> {
                 ProgressVo progressVo=new ProgressVo();
                 progressVo.setState(AnalysisEnum.getValue(AnalysisEnum.DATA_ANALYSE));
                 double pg;
-                caseOfBatchRequest.setCurrentNum(caseOfBatchRequest.getCurrentNum()+1);
+                //caseOfBatchRequest.setCurrentNum(caseOfBatchRequest.getCurrentNum()+1);
                 Integer pn=caseOfBatchRequest.getAt().incrementAndGet();
-                logger.info("批次数为"+caseOfBatchRequest.getBatchNum()+"命中函数数量为："+tCheckCols.size()+"当前进度数为："+caseOfBatchRequest.getAt().get());
+                //logger.info("批次数为"+caseOfBatchRequest.getBatchNum()+"命中函数数量为："+tCheckCols.size()+"当前进度数为："+caseOfBatchRequest.getAt().get());
+                logger.info("批次数为"+(caseOfBatchRequest.getCurrentNum()+1)+"命中函数数量为："+tCheckCols.size()+"当前进度数为："+caseOfBatchRequest.getAt().get());
                 pg = (float)pn/(caseOfBatchRequest.getBatchNum()*tCheckCols.size());
                 progressVo.setAnalysisStatus(true);
                 progressVo.setProgress(pg);

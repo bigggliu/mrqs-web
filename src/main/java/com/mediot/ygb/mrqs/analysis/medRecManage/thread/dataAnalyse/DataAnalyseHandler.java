@@ -138,6 +138,7 @@ public class DataAnalyseHandler implements Callable<String> {
             fe.setEndTime(lt);
             dataAnalyseRequset.getFileAnalysisDto().getFileUploadMapper().updateById(fe);
         }catch (Exception e){
+            e.printStackTrace();
             Map<String,Object> queryMap= Maps.newHashMap();
             queryMap.put("fileId",dataAnalyseRequset.getFileAnalysisDto().getFileId());
             FileUploadEntity fe=dataAnalyseRequset.getFileAnalysisDto().getFileUploadMapper().selectFileUpload(queryMap);
