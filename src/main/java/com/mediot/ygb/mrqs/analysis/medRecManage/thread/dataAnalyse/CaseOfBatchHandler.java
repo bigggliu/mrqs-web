@@ -55,6 +55,7 @@ public class CaseOfBatchHandler implements Callable<String> {
                 //queryMap.put("orgId","1266216344326770690");
                 queryMap.put("orgId",caseOfBatchRequest.getDataAnalyseRequset().getFileAnalysisDto().getUpOrgId());
                 List<TCheckCol> tCheckCols=f.getTCheckColMapper().selectTCheckColsByOrgId(queryMap);
+                long start = System.currentTimeMillis();
                 tCheckCols.forEach(e->{
                     //拼接sql语句
                     try {
@@ -64,7 +65,7 @@ public class CaseOfBatchHandler implements Callable<String> {
                           .append(" where T_FIRSTPAGE_TESTING.BATCH_ID=").append(f.getBatchId())
                           .append(") a where ROWNUM <=");
                         if(caseOfBatchRequest.getCurrentNum()==caseOfBatchRequest.getBatchNum()-1){
-                            sb.append(f.getTotalNumForCurrentBatchId()%caseOfBatchRequest.getOnceNum()+caseOfBatchRequest.getCurrentNum()*caseOfBatchRequest.getOnceNum());
+                            sb.append(f.getTotalNumForCurrentBatchId());
                         }else {
                             sb.append((caseOfBatchRequest.getCurrentNum()+1)*caseOfBatchRequest.getOnceNum());
                         }
@@ -81,6 +82,8 @@ public class CaseOfBatchHandler implements Callable<String> {
                         logger.info("逐条检测方法出错，原因是："+ex.getMessage());
                     }
                 });
+                long end = System.currentTimeMillis();
+                logger.info("批次" + (caseOfBatchRequest.getCurrentNum()+1) + "所有检测条件执行完花费时间："+(end-start)/1000+"s");
             }
         }catch (Exception e){
             logger.info("逐条检测线程出错，原因是："+e.getMessage());
@@ -95,9 +98,10 @@ public class CaseOfBatchHandler implements Callable<String> {
         List<TFirstPageTesting> tFirstPageTestings=Lists.newArrayList();
         try {
             long s=System.currentTimeMillis();
+            logger.info("执行的完整sql："+ fetchStr);
             tFirstPageTestings= f.getTFirstpageTestingMapper().findHitRecordByQueryStr(fetchStr.toString());
             long e=System.currentTimeMillis();
-            logger.info("该命中函数所花时间为："+(e-s)/1000+"s"+",其语句为+"+fetchStr.toString());
+            logger.info("批次" + (caseOfBatchRequest.getCurrentNum()+1) +"该命中函数所花时间为："+(e-s)/1000+"s"+",其语句为"+fetchStr.toString());
         }catch (Exception e){
             logger.info("命中函数出错，原因是"+e.getMessage());
         }finally {

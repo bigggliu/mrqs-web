@@ -32,7 +32,7 @@ public class DataAnalyseHandler implements Callable<String> {
     private Integer batchNum = 1;
     private Integer maxThreadNum = 100;
     // 默认一次处理100条左右
-    private Integer onceNum = 500;
+    private Integer onceNum = 5000;
     private CountDownLatch countDownLatch;
     private AtomicInteger at=new AtomicInteger();
 
@@ -66,14 +66,14 @@ public class DataAnalyseHandler implements Callable<String> {
             dataAnalyseRequset.getFileAnalysisDto().getFileUploadMapper().updateById(f);
             if(totalNumForCurrentBatchid<100){
                 batchNum = 1;
-                uploadThreadOperator.createThreadPool(maxThreadNum,Thread.currentThread().getName(),"fix");
+                uploadThreadOperator.createThreadPool(1,Thread.currentThread().getName(),"fix");
             }else if(100 < totalNumForCurrentBatchid && totalNumForCurrentBatchid <= 10000){
                 if(totalNumForCurrentBatchid %onceNum!=0){
                     batchNum=totalNumForCurrentBatchid /onceNum+1;
                 }else {
                     batchNum = totalNumForCurrentBatchid/onceNum;
                 }
-                uploadThreadOperator.createThreadPool(maxThreadNum,Thread.currentThread().getName(),"fix");
+                uploadThreadOperator.createThreadPool(batchNum,Thread.currentThread().getName(),"fix");
             }else{
                 // 计划每批次500条左右
                 //onceNum = 500;
@@ -90,7 +90,7 @@ public class DataAnalyseHandler implements Callable<String> {
                     // 线程数等于批次数
                     threadNum = batchNum;
                 }
-                uploadThreadOperator.createThreadPool(50,Thread.currentThread().getName(),"fix");
+                uploadThreadOperator.createThreadPool(threadNum,Thread.currentThread().getName(),"fix");
             }
             countDownLatch=new CountDownLatch(batchNum);
             logger.info("--B--预计线程数为：{"+threadNum+"},预计批次数：{"+batchNum+"},总待处理数量为：{"+totalNumForCurrentBatchid+"}");
