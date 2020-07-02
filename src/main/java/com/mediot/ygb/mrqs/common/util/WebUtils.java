@@ -7,7 +7,9 @@ import org.springframework.util.Assert;
 
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 
 
 /**
@@ -21,6 +23,18 @@ public class WebUtils {
     public static final Logger logger = LoggerFactory.getLogger(WebUtils.class);
 
     private static ThreadLocal<HttpServletRequest> requestLocal = new ThreadLocal<>();
+
+
+    /**
+     * 当前线程绑定：request、response
+     * @param request 请求
+     * @param response 响应
+     */
+    public static void bindRequestAndResponse(HttpServletRequest request, HttpServletResponse response) {
+        requestLocal.set(request);
+        logger.trace("WebUtils：已经绑定request和response资源。");
+    }
+
 
     /**
      * 获取当前request，没有就抛出异常

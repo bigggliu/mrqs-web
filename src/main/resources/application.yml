@@ -86,7 +86,7 @@ spring:
     active: local
 usercenter:
   LoginFilter:
-    enable: false
+    enable: true
 fileUpload:
   path: C:\Users\LiuChenLiang\Desktop\file_test
   tempPath: \temp\
