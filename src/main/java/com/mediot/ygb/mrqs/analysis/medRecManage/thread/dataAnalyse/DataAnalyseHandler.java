@@ -30,7 +30,7 @@ public class DataAnalyseHandler implements Callable<String> {
     private Integer totalNumForCurrentBatchid;
     private Integer threadNum = 100;
     private Integer batchNum = 1;
-    private Integer maxThreadNum = 100;
+    private Integer maxThreadNum = 50;
     // 默认一次处理100条左右
     private Integer onceNum = 5000;
     private CountDownLatch countDownLatch;

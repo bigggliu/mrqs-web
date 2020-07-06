@@ -22,6 +22,7 @@
         <result column="COL_TYPE" property="colType" />
         <result column="ORG_NAMES" property="orgNames" />
         <result column="TABLE_NAME" property="tableName" />
+        <result column="IS_MULTI_TABLE_QUERY" property="isMultiTableQuery"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->
@@ -29,7 +30,7 @@
         a.CHECK_COL_ID,a.COL_NAME,a.COL_COMMENTS,a.FQUN,a.CMIS_CHOICE,a.EMR_CHOICE,
         a.FSORT,a.QUALITY_CLASS,a.GRADING_LEVEL,a.INFORMATION_CLASS,a.RULE_TYPE,
         a.SCORE,MUST_FILL,a.RULE_DESCRIPTION,a.VERIFICATION_LOGIC,
-        a.COL_TYPE
+        a.COL_TYPE,a.IS_MULTI_TABLE_QUERY
     </sql>
 
     <select id="selectErrorDetailByYear" parameterType="java.util.Map" resultType="com.mediot.ygb.mrqs.common.entity.vo.ErrorDetailVo">

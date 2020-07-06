@@ -74,6 +74,9 @@ public class TCheckCol implements Serializable {
     @TableField("COL_TYPE")
     private String colType;
 
+    @TableField("IS_MULTI_TABLE_QUERY")
+    private Integer isMultiTableQuery;
+
     @TableField(exist = false)
     private String orgNames;
 
