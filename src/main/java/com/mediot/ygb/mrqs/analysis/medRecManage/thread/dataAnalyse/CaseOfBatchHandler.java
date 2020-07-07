@@ -55,43 +55,25 @@ public class CaseOfBatchHandler implements Callable<String> {
                 //queryMap.put("orgId","1266216344326770690");
                 queryMap.put("orgId",caseOfBatchRequest.getDataAnalyseRequset().getFileAnalysisDto().getUpOrgId());
                 List<TCheckCol> tCheckCols=f.getTCheckColMapper().selectTCheckColsByOrgId(queryMap);
+                //首页id分页起始值
+                int pageSet = caseOfBatchRequest.getCurrentNum()*caseOfBatchRequest.getOnceNum()+1;
+                //首页id分页结束值
+                int pageOff = 0;
+                if(caseOfBatchRequest.getCurrentNum()==caseOfBatchRequest.getBatchNum()-1){
+                    pageOff = f.getTotalNumForCurrentBatchId();
+                }else {
+                    pageOff = (caseOfBatchRequest.getCurrentNum()+1)*caseOfBatchRequest.getOnceNum();
+                }
+                int finalPageOff = pageOff;
                 long start = System.currentTimeMillis();
                 tCheckCols.forEach(e->{
                     //拼接sql语句
                     try {
-                        //内层分页语句
-                        StringBuffer sb=new StringBuffer();
-                        sb.append("(select t.* from (select a.*,ROWNUM rn FROM (select T_FIRSTPAGE_TESTING.* from T_FIRSTPAGE_TESTING")
-                          .append(" where T_FIRSTPAGE_TESTING.BATCH_ID=").append(f.getBatchId())
-                          .append(") a where ROWNUM <=");
-                        if(caseOfBatchRequest.getCurrentNum()==caseOfBatchRequest.getBatchNum()-1){
-                            sb.append(f.getTotalNumForCurrentBatchId());
-                        }else {
-                            sb.append((caseOfBatchRequest.getCurrentNum()+1)*caseOfBatchRequest.getOnceNum());
-                        }
-                        sb.append(") t where rn>=");
-                        sb.append(caseOfBatchRequest.getCurrentNum()*caseOfBatchRequest.getOnceNum()+1);
-                        sb.append(") T_FIRSTPAGE_TESTING ");
-                        //完整sql拼接
-                        StringBuffer fetchStr=new StringBuffer();
-                        if(e.getIsMultiTableQuery() == 1){
-                            if(e.getVerificationLogic().contains("page_query_flag2")){
-                                StringBuffer replaceStr = new StringBuffer();
-                                replaceStr.append("select T_FIRSTPAGE_TESTING.T_FIRST_PAGE_TESTING_ID,T_FIRSTPAGE_TESTING.CASE_NO from ").append(sb + " where ");
-                                String temp1 = e.getVerificationLogic().replace("page_query_flag2",replaceStr);
-                                String temp2 = temp1.replace("page_query_flag1", new StringBuffer(sb).append(" where T_FIRSTPAGE_TESTING.T_FIRST_PAGE_TESTING_ID = t.T_FIRST_PAGE_TESTING_ID "));
-                                fetchStr.append(temp2);
-                            } else {
-                                String temp = e.getVerificationLogic().replace("page_query_flag1",new StringBuffer(sb).append(" where T_FIRSTPAGE_TESTING.T_FIRST_PAGE_TESTING_ID = t.T_FIRST_PAGE_TESTING_ID "));
-                                fetchStr.append("select T_FIRSTPAGE_TESTING.T_FIRST_PAGE_TESTING_ID,T_FIRSTPAGE_TESTING.CASE_NO from T_FIRSTPAGE_TESTING where ");
-                                fetchStr.append(temp);
-                            }
-                        }else {
-                            fetchStr.append("select T_FIRSTPAGE_TESTING.T_FIRST_PAGE_TESTING_ID,T_FIRSTPAGE_TESTING.CASE_NO from ");
-                            fetchStr.append(sb);
-                            fetchStr.append(" where ").append(e.getVerificationLogic());
-                        }
-                        setAnalysedInfo(f,fetchStr,tCheckCols,caseOfBatchRequest,e);
+                        //标签值替换
+                        String step1 = e.getVerificationLogic().replace("batchId_tag",f.getBatchId()+"");
+                        String step2 = step1.replace("pageSet_tag",pageSet+"");
+                        String finalSQL = step2.replace("pageOff_tag", finalPageOff +"");
+                        setAnalysedInfo(f,new StringBuffer(finalSQL),tCheckCols,caseOfBatchRequest,e);
                     }catch (Exception ex){
                         logger.info("逐条检测方法出错，原因是："+ex.getMessage());
                     }
@@ -113,9 +95,7 @@ public class CaseOfBatchHandler implements Callable<String> {
         try {
             long s=System.currentTimeMillis();
             logger.info("执行的完整sql："+ fetchStr);
-            tFirstPageTestings= f.getTFirstpageTestingMapper(
-
-            ).findHitRecordByQueryStr(fetchStr.toString());
+            tFirstPageTestings= f.getTFirstpageTestingMapper().findHitRecordByQueryStr(fetchStr.toString());
             long e=System.currentTimeMillis();
             logger.info("批次" + (caseOfBatchRequest.getCurrentNum()+1) +"该命中函数所花时间为："+(e-s)+"ms"+",其语句为"+fetchStr.toString());
         }catch (Exception e){
