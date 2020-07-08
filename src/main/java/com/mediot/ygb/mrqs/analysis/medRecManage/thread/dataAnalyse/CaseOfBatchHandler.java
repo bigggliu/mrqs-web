@@ -2,10 +2,12 @@ package com.mediot.ygb.mrqs.analysis.medRecManage.thread.dataAnalyse;
 import com.google.common.collect.Lists;
 import com.mediot.ygb.mrqs.analysis.medRecManage.dto.ThreadStateDto;
 import com.mediot.ygb.mrqs.analysis.medRecManage.enumcase.AnalysisEnum;
+import com.mediot.ygb.mrqs.analysis.medRecManage.vo.MyErrorDetiVo;
 import com.mediot.ygb.mrqs.analysis.medRecManage.vo.ProgressVo;
 import com.mediot.ygb.mrqs.analysis.monitoringIndexManage.entity.TCheckCol;
 import com.mediot.ygb.mrqs.common.entity.dto.FileAnalysisDto;
 import com.mediot.ygb.mrqs.index.errorInfoManage.dao.TErrorDetailMapper;
+import com.mediot.ygb.mrqs.index.errorInfoManage.entity.MyErrorDetaEntity;
 import com.mediot.ygb.mrqs.index.errorInfoManage.entity.TErrorDetailEntity;
 import com.mediot.ygb.mrqs.index.indexInfoManage.entity.TFirstPageTesting;
 import org.slf4j.Logger;
@@ -91,17 +93,17 @@ public class CaseOfBatchHandler implements Callable<String> {
     }
 
     protected void setAnalysedInfo(FileAnalysisDto f,StringBuffer fetchStr,List<TCheckCol> tCheckCols,CaseOfBatchRequest caseOfBatchRequest,TCheckCol tCol){
-        List<TFirstPageTesting> tFirstPageTestings=Lists.newArrayList();
+        List<MyErrorDetiVo> myErrorDetiVos=Lists.newArrayList();
         try {
             long s=System.currentTimeMillis();
             logger.info("执行的完整sql："+ fetchStr);
-            tFirstPageTestings= f.getTFirstpageTestingMapper().findHitRecordByQueryStr(fetchStr.toString());
+            myErrorDetiVos= f.getMyErrorDetiVoMapper().findHitRecordByQueryStr(fetchStr.toString());
             long e=System.currentTimeMillis();
             logger.info("批次" + (caseOfBatchRequest.getCurrentNum()+1) +"该命中函数所花时间为："+(e-s)+"ms"+",其语句为"+fetchStr.toString());
         }catch (Exception e){
             logger.info("命中函数出错，原因是"+e.getMessage());
         }finally {
-            List<TErrorDetailEntity> tErrorDetails= Lists.newArrayList();
+            List<MyErrorDetaEntity> myErrorDetaEntityList= Lists.newArrayList();
             synchronized (object){
                 //
                 ProgressVo progressVo=new ProgressVo();
@@ -118,21 +120,27 @@ public class CaseOfBatchHandler implements Callable<String> {
                 //
                 f.setIndicators(tCheckCols.size());
                 //logger.info("累积后命中数目为："+f.getAnalysedNum());
-                tFirstPageTestings.stream().forEach(e->{
-                    TErrorDetailEntity t=new TErrorDetailEntity();
+                myErrorDetiVos.stream().forEach(e->{
+                    MyErrorDetaEntity t=new MyErrorDetaEntity();
                     t.setBatchId(f.getBatchId());
                     t.setCaseId(e.getCaseNo());
                     t.setColName(tCol.getColName());
                     t.setColComments(tCol.getColComments());
                     t.setErrorMessage(tCol.getRuleDescription());
                     t.setAnalyseType(f.getStandardCode());
-                    //t.setOutDtime(e.getOutDtime());
-                    tErrorDetails.add(t);
+                    t.setTFirstPageTestingId(e.getTFirstPageTestingId());
+                    t.setTFirstoutoperTestingId(e.getTFirstoutoperTestingId());
+                    t.setOperationType(e.getOperationType());
+                    t.setOperationOrder(e.getOperationOrder());
+                    t.setTFirstoutdiagTestingId(e.getTFirstoutdiagTestingId());
+                    t.setDiagType(e.getDiagType());
+                    t.setDiagOrder(e.getDiagOrder());
+                    myErrorDetaEntityList.add(t);
                 });
             }
             int num=0;
-            if(tErrorDetails.size()>0){
-                num=f.getTErrorDetailMapper().batchInsertTErrorDetails(tErrorDetails);
+            if(myErrorDetaEntityList.size()>0){
+                num=f.getMyErrorDetaMapper().batchInsertTErrorDetails(myErrorDetaEntityList);
             }
             logger.info("该批次下错误详细数目为："+num);
             //logger.info("当前批次为："+caseOfBatchRequest.getCountDownLatch().getCount());

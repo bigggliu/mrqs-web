@@ -1,5 +1,6 @@
 package com.mediot.ygb.mrqs.common.entity.dto;
 
+import com.mediot.ygb.mrqs.analysis.medRecManage.dao.MyErrorDetiVoMapper;
 import com.mediot.ygb.mrqs.analysis.medRecManage.dao.TDatacleanStandardMapper;
 import com.mediot.ygb.mrqs.analysis.medRecManage.entity.TDatacleanStandard;
 import com.mediot.ygb.mrqs.analysis.monitoringIndexManage.dao.TCheckColMapper;
@@ -7,6 +8,7 @@ import com.mediot.ygb.mrqs.analysis.monitoringIndexManage.dao.TCheckOrgMapper;
 import com.mediot.ygb.mrqs.dict.dao.TBaseDictMapper;
 import com.mediot.ygb.mrqs.dict.dao.TDiagDictMapper;
 import com.mediot.ygb.mrqs.dict.dao.TOperationDictMapper;
+import com.mediot.ygb.mrqs.index.errorInfoManage.dao.MyErrorDetaMapper;
 import com.mediot.ygb.mrqs.index.errorInfoManage.dao.TErrorDetailMapper;
 import com.mediot.ygb.mrqs.index.errorInfoManage.dao.TErrorMapper;
 import com.mediot.ygb.mrqs.index.indexInfoManage.dao.TFirstoutdiagTestingMapper;
@@ -53,6 +55,10 @@ public class FileAnalysisDto implements Serializable {
     private ConcurrentHashMap theadMaps;
 
     private TDatacleanStandardMapper tDatacleanStandardMapper;
+
+    private MyErrorDetiVoMapper myErrorDetiVoMapper;
+
+    private MyErrorDetaMapper myErrorDetaMapper;
 
     private TFirstoutdiagTestingMapper tFirstoutdiagTestingMapper;
 

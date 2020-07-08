@@ -17,8 +17,9 @@ public interface TFirstpageTestingMapper extends BaseMapper<TFirstPageTesting> {
 
     Integer selectCountByMap(Map<String, Object> queryMap);
 
-    @SelectProvider(type =TFirstpageTestingDao.class,method = "findHitRecordByQueryStr")
+    /*@SelectProvider(type =TFirstpageTestingDao.class,method = "findHitRecordByQueryStr")
     List<TFirstPageTesting> findHitRecordByQueryStr(String str);
+     */
 
     String selectFirstRowByParam(Map<String, Object> queryMap);
 
@@ -28,11 +29,12 @@ public interface TFirstpageTestingMapper extends BaseMapper<TFirstPageTesting> {
 
     List<TFirstPageTesting> selectBaseInfoOfCaseList(Map<String, Object> queryMap);
 
-    class TFirstpageTestingDao{
+    /*class TFirstpageTestingDao{
         public String findHitRecordByQueryStr(String str) {
             return str;
         }
     }
+     */
 
 
 }

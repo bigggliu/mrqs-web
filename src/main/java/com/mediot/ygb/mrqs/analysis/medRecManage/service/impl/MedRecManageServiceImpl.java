@@ -11,6 +11,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
+import com.mediot.ygb.mrqs.analysis.medRecManage.dao.MyErrorDetiVoMapper;
 import com.mediot.ygb.mrqs.analysis.medRecManage.dao.TDatacleanStandardMapper;
 import com.mediot.ygb.mrqs.analysis.monitoringIndexManage.dao.TCheckColMapper;
 import com.mediot.ygb.mrqs.analysis.monitoringIndexManage.dao.TCheckOrgMapper;
@@ -35,6 +36,7 @@ import com.mediot.ygb.mrqs.dict.dao.TDataStandardMapper;
 import com.mediot.ygb.mrqs.dict.dao.TDiagDictMapper;
 import com.mediot.ygb.mrqs.dict.dao.TOperationDictMapper;
 
+import com.mediot.ygb.mrqs.index.errorInfoManage.dao.MyErrorDetaMapper;
 import com.mediot.ygb.mrqs.index.errorInfoManage.dao.TErrorDetailMapper;
 import com.mediot.ygb.mrqs.index.errorInfoManage.dao.TErrorMapper;
 import com.mediot.ygb.mrqs.index.indexInfoManage.dao.TFirstoutdiagTestingMapper;
@@ -117,6 +119,11 @@ public class MedRecManageServiceImpl implements MedRecordManageService {
     @Autowired
     private TDataStandardMapper tDataStandardMapper;
 
+    @Autowired
+    private MyErrorDetiVoMapper myErrorDetiVoMapper;
+
+    @Autowired
+    private MyErrorDetaMapper myErrorDetaMapper;
 
     private List<FileUploadEntity> createAnalyseInfo(StringBuffer sb,List<FileUploadEntity> fileUploadEntityList,InitInfoVo initInfoVo,String preKey){
         StringBuffer errorSb=new StringBuffer();
@@ -582,6 +589,8 @@ public class MedRecManageServiceImpl implements MedRecordManageService {
             fa.setTErrorMapper(tErrorMapper);
             fa.setTErrorDetailMapper(tErrorDetailMapper);
             fa.setTFirstpageTestingMapper(tFirstpageTestingMapper);
+            fa.setMyErrorDetiVoMapper(myErrorDetiVoMapper);
+            fa.setMyErrorDetaMapper(myErrorDetaMapper);
             fa.setStandardCode(e.getStandardCode());
             fa.setUpOrgId(e.getOrgId());
             fa.setFileUploadMapper(fileUploadMapper);

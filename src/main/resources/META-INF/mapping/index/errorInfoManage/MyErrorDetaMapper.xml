@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mediot.ygb.mrqs.index.errorInfoManage.dao.MyErrorDetaMapper">
+
+    <insert id="batchInsertTErrorDetails" parameterType="java.util.List">
+        insert all
+        <trim suffix="SELECT 1 FROM DUAL">
+            <foreach collection="list" item="obj">
+                into T_ERROR_DETAIL (BATCH_ID,CASE_ID,COL_NAME,COL_COMMENTS,ERROR_MESSAGE,SCORE,MUST_FILL,ANALYSE_TYPE,
+                REMARK,OUT_DTIME,T_FIRST_PAGE_TESTING_ID,T_FIRSTOUTOPER_TESTING_ID,T_FIRSTOUTDIAG_TESTING_ID,
+                DIAG_TYPE,DIAG_ORDER,OPERATION_TYPE,OPERATION_ORDER) values
+                (#{obj.batchId,jdbcType=DECIMAL},
+                #{obj.caseId,jdbcType=VARCHAR},
+                #{obj.colName,jdbcType=VARCHAR},
+                #{obj.colComments,jdbcType=VARCHAR},
+                #{obj.errorMessage,jdbcType=VARCHAR},
+                #{obj.score,jdbcType=VARCHAR},
+                #{obj.mustFill,jdbcType=VARCHAR},
+                #{obj.analyseType,jdbcType=VARCHAR},
+                #{obj.remark,jdbcType=VARCHAR},
+                #{obj.outDtime,jdbcType=DATE},
+                #{obj.tFirstPageTestingId,jdbcType=DECIMAL},
+                #{obj.tFirstoutoperTestingId,jdbcType=DECIMAL},
+                #{obj.tFirstoutdiagTestingId,jdbcType=DECIMAL},
+                #{obj.diagType,jdbcType=VARCHAR},
+                #{obj.diagOrder,jdbcType=DECIMAL},
+                #{obj.operationType,jdbcType=VARCHAR},
+                #{obj.operationOrder,jdbcType=DECIMAL}
+                )
+            </foreach>
+        </trim>
+    </insert>
+</mapper>
