@@ -3031,7 +3031,8 @@ public class DataCleanUtils {
     private static void setTidBeforeInsertForOper(List<TFirstPageTesting> tFirstPageTestingList, List<TFirstoutoperTesting> tFirstoutoperTestings) {
         for(TFirstPageTesting t:tFirstPageTestingList){
             for(TFirstoutoperTesting o:tFirstoutoperTestings){
-                if(t.getTempSid().equals(o.getTempSid())){
+                //if(t.getTempSid().equals(o.getTempSid())){
+                if(t.getCaseNo().equals(o.getCaseId())){
                     o.setTFirstPageTestingId(t.getTFirstPageTestingId());
                 }
             }
