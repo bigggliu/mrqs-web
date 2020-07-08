@@ -16,4 +16,11 @@ public class ErrorDetailVo {
 
     private String total;
 
+    private String diagType;
+
+    private Integer diagOrder;
+
+    private String operationType;
+
+    private Integer operationOrder;
 }

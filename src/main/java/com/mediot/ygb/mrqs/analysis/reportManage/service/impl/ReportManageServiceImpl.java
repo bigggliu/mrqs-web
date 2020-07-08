@@ -486,13 +486,17 @@ public class ReportManageServiceImpl implements ReportManageService {
                 String[][] dDatas=new String[1+errorDetailVos.size()][4];
                 dDatas[0]=new String[]{"序号","字段描述","疑似问题数据说明","错误数量"};
                 for(int i=0;i<errorDetailVos.size();i++){
-                    String[] data=new String[]{
-                            String.valueOf(i+1),
-                            errorDetailVos.get(i).getColComments(),
-                            errorDetailVos.get(i).getErrorMessage(),
-                            errorDetailVos.get(i).getTotal(),
-                    };
-                    dDatas[i+1]=data;
+                    if(errorDetailVos.get(i).getColComments().equals("其他手术及操作编码1-10")){
+                        dDatas[i+1]=checkCol1(errorDetailVos.get(i),i);;
+                    }else {
+                        String[] data=new String[]{
+                                String.valueOf(i+1),
+                                errorDetailVos.get(i).getColComments(),
+                                errorDetailVos.get(i).getErrorMessage(),
+                                errorDetailVos.get(i).getTotal(),
+                        };
+                        dDatas[i+1]=data;
+                    }
                 }
                 for(int i = 0; i < dDatas.length; i++) {
                     for(int j = 0; j < dDatas[i].length; j++) {
@@ -518,5 +522,22 @@ public class ReportManageServiceImpl implements ReportManageService {
                 BaseFont.NOT_EMBEDDED);
         Font fontChinese = new Font(bfChinese, 12, Font.NORMAL);
         return fontChinese;
+    }
+
+    public String[] checkCol1(ErrorDetailVo errorDetailVo,int i){
+        String colComments = "";
+        if(errorDetailVo.getOperationType() != null && errorDetailVo.getOperationType().equals("01")){
+            colComments = "主要手术" + String.valueOf(errorDetailVo.getOperationOrder());
+        }
+        if(errorDetailVo.getOperationType() != null && errorDetailVo.getOperationType().equals("02")){
+            colComments = "次要手术" + String.valueOf(errorDetailVo.getOperationOrder());
+        }
+        String[] data=new String[]{
+                String.valueOf(i+1),
+                colComments,
+                errorDetailVo.getErrorMessage(),
+                errorDetailVo.getTotal(),
+        };
+        return data;
     }
 }
