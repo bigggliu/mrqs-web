@@ -2421,10 +2421,10 @@ public class DataCleanUtils {
                             }
                             return;
                         }
-                        if(dcName.equals("RYSJS")){
-                            tFirstPageTesting.setContactTel(dcVal);
-                            return;
-                        }
+//                        if(dcName.equals("RYSJS")){
+//                            tFirstPageTesting.setContactTel(dcVal);
+//                            return;
+//                        }
                         if(dcName.equals("RYKB")){
                             tFirstPageTesting.setInDeptCode(dcVal);
                             return;
@@ -2443,10 +2443,10 @@ public class DataCleanUtils {
                             }
                             return;
                         }
-                        if(dcName.equals("CYSJS")){
-                            tFirstPageTesting.setContactTel(dcVal);
-                            return;
-                        }
+//                        if(dcName.equals("CYSJS")){
+//                            tFirstPageTesting.setContactTel(dcVal);
+//                            return;
+//                        }
                         if(dcName.equals("CYKB")){
                             tFirstPageTesting.setOutDeptCode(dcVal);
                             return;

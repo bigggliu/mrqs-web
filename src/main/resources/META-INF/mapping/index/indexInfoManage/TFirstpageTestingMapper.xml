@@ -440,7 +440,7 @@
 
   <select id="selectBaseInfoOfCaseList" parameterType="java.util.Map" resultType="com.mediot.ygb.mrqs.index.indexInfoManage.entity.TFirstPageTesting">
     SELECT distinct
-    t.T_FIRST_PAGE_TESTING_ID，t.fname
+    t.T_FIRST_PAGE_TESTING_ID,t.fname
     ,t.org_id,t.org_name,t.card_no,t.medicare_card,t.pay_way_code,t.actual_in_days
     ,t.case_no,t.sex_code,t.create_time,t.out_dept_code,t.batch_id,b.dict_name
     FROM
