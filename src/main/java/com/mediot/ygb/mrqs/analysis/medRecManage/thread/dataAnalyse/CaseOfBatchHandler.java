@@ -74,7 +74,8 @@ public class CaseOfBatchHandler implements Callable<String> {
                         //标签值替换
                         String step1 = e.getVerificationLogic().replace("batchId_tag",f.getBatchId()+"");
                         String step2 = step1.replace("pageSet_tag",pageSet+"");
-                        String finalSQL = step2.replace("pageOff_tag", finalPageOff +"");
+                        String step3 = step2.replace("pageOff_tag", finalPageOff +"");
+                        String finalSQL = step3.replace("standardCode_tag",f.getStandardCode());
                         setAnalysedInfo(f,new StringBuffer(finalSQL),tCheckCols,caseOfBatchRequest,e);
                     }catch (Exception ex){
                         logger.info("逐条检测方法出错，原因是："+ex.getMessage());

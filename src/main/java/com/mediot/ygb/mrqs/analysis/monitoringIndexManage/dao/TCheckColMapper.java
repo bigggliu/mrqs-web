@@ -25,4 +25,6 @@ public interface TCheckColMapper extends BaseMapper<TCheckCol> {
     String getNumOfCurrentYear(Map<String, Object> queryMap);
 
     String getErrorNumOfCurrentYear(Map<String, Object> queryMap);
+
+    List<TCheckCol> selecAllCheckCol();
 }

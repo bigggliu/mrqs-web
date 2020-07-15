@@ -486,8 +486,8 @@ public class ReportManageServiceImpl implements ReportManageService {
                 String[][] dDatas=new String[1+errorDetailVos.size()][4];
                 dDatas[0]=new String[]{"序号","字段描述","疑似问题数据说明","错误数量"};
                 for(int i=0;i<errorDetailVos.size();i++){
-                    if(errorDetailVos.get(i).getColComments().equals("其他手术及操作编码1-10")){
-                        dDatas[i+1]=checkCol1(errorDetailVos.get(i),i);;
+                    if(checkByColName(dDatas,errorDetailVos,i)){
+                        continue;
                     }else {
                         String[] data=new String[]{
                                 String.valueOf(i+1),
@@ -524,13 +524,13 @@ public class ReportManageServiceImpl implements ReportManageService {
         return fontChinese;
     }
 
-    public String[] checkCol1(ErrorDetailVo errorDetailVo,int i){
+    public String[] sortByOperation(ErrorDetailVo errorDetailVo,int i){
         String colComments = "";
         if(errorDetailVo.getOperationType() != null && errorDetailVo.getOperationType().equals("01")){
-            colComments = "主要手术" + String.valueOf(errorDetailVo.getOperationOrder());
+            colComments = "主要手术" + String.valueOf(errorDetailVo.getOperationOrder()) + "," + errorDetailVo.getColComments();
         }
         if(errorDetailVo.getOperationType() != null && errorDetailVo.getOperationType().equals("02")){
-            colComments = "次要手术" + String.valueOf(errorDetailVo.getOperationOrder());
+            colComments = "其他手术" + String.valueOf(errorDetailVo.getOperationOrder()) + "," + errorDetailVo.getColComments();
         }
         String[] data=new String[]{
                 String.valueOf(i+1),
@@ -539,5 +539,116 @@ public class ReportManageServiceImpl implements ReportManageService {
                 errorDetailVo.getTotal(),
         };
         return data;
+    }
+
+    public String[] sortByDiagnosis(ErrorDetailVo errorDetailVo,int i){
+        String colComments = "";
+        if(errorDetailVo.getDiagType() != null && errorDetailVo.getDiagType().equals("01")){
+            colComments = "主要诊断" + String.valueOf(errorDetailVo.getDiagOrder()) + "," + errorDetailVo.getColComments();
+        }
+        if(errorDetailVo.getDiagType() != null && errorDetailVo.getDiagType().equals("02")){
+            colComments = "其他诊断" + String.valueOf(errorDetailVo.getDiagOrder()) + "," + errorDetailVo.getColComments();
+        }
+        if(errorDetailVo.getDiagType() != null && errorDetailVo.getDiagType().equals("03")){
+            colComments = "病理诊断" + String.valueOf(errorDetailVo.getDiagOrder()) + "," + errorDetailVo.getColComments();
+        }
+        if(errorDetailVo.getDiagType() != null && errorDetailVo.getDiagType().equals("04")){
+            colComments = "损伤、中毒的外部原因" + String.valueOf(errorDetailVo.getDiagOrder()) + "," + errorDetailVo.getColComments();
+        }
+        String[] data=new String[]{
+                String.valueOf(i+1),
+                colComments,
+                errorDetailVo.getErrorMessage(),
+                errorDetailVo.getTotal(),
+        };
+        return data;
+    }
+
+    public boolean checkByColName(String[][] dDatas,List<ErrorDetailVo> errorDetailVos,int i){
+        if(errorDetailVos.get(i).getColName().equals("ZY/QTZDRYBQQZFW")){
+            dDatas[i+1]=sortByDiagnosis(errorDetailVos.get(i),i);
+            return true;
+        }
+        if(errorDetailVos.get(i).getColName().equals("QKYHDJDMQZFW")){
+            dDatas[i+1]=sortByOperation(errorDetailVos.get(i),i);
+            return true;
+        }
+        if(errorDetailVos.get(i).getColName().equals("MZFSDMQZFW")){
+            dDatas[i+1]=sortByOperation(errorDetailVos.get(i),i);
+            return true;
+        }
+        if(errorDetailVos.get(i).getColName().equals("CYQKDMQZFW")){
+            dDatas[i+1]=sortByDiagnosis(errorDetailVos.get(i),i);
+            return true;
+        }
+        if(errorDetailVos.get(i).getColName().equals("SSJBDMQZFW")){
+            dDatas[i+1]=sortByOperation(errorDetailVos.get(i),i);
+            return true;
+        }
+        if(errorDetailVos.get(i).getColName().equals("FHCDDMQZFW")){
+            dDatas[i+1]=sortByDiagnosis(errorDetailVos.get(i),i);
+            return true;
+        }
+        if(errorDetailVos.get(i).getColName().equals("SSCZBWDMQZFW")){
+            dDatas[i+1]=sortByOperation(errorDetailVos.get(i),i);
+            return true;
+        }
+        if(errorDetailVos.get(i).getColName().equals("ZDRYBQ")){
+            dDatas[i+1]=sortByDiagnosis(errorDetailVos.get(i),i);
+            return true;
+        }
+        if(errorDetailVos.get(i).getColName().equals("ZDJBMS")){
+            dDatas[i+1]=sortByDiagnosis(errorDetailVos.get(i),i);
+            return true;
+        }
+        if(errorDetailVos.get(i).getColName().equals("SSXGXXWZX")){
+            dDatas[i+1]=sortByOperation(errorDetailVos.get(i),i);
+            return true;
+        }
+        if(errorDetailVos.get(i).getColName().equals("XSECSTZ&QTZDBM")){
+            dDatas[i+1]=sortByDiagnosis(errorDetailVos.get(i),i);
+            return true;
+        }
+        if(errorDetailVos.get(i).getColName().equals("SSJCZBM&MZYS")){
+            dDatas[i+1]=sortByOperation(errorDetailVos.get(i),i);
+            return true;
+        }
+        if(errorDetailVos.get(i).getColName().equals("MZFS&MZYS")){
+            dDatas[i+1]=sortByOperation(errorDetailVos.get(i),i);
+            return true;
+        }
+        if(errorDetailVos.get(i).getColName().equals("ZDXGXXWZX")){
+            dDatas[i+1]=sortByDiagnosis(errorDetailVos.get(i),i);
+            return true;
+        }
+        if(errorDetailVos.get(i).getColName().equals("MZFS&SSJCZBM")){
+            dDatas[i+1]=sortByOperation(errorDetailVos.get(i),i);
+            return true;
+        }
+        if(errorDetailVos.get(i).getColName().equals("BLZDJBBM")){
+            dDatas[i+1]=sortByDiagnosis(errorDetailVos.get(i),i);
+            return true;
+        }
+        if(errorDetailVos.get(i).getColName().equals("SSZDJBBM")){
+            dDatas[i+1]=sortByDiagnosis(errorDetailVos.get(i),i);
+            return true;
+        }
+        if(errorDetailVos.get(i).getColName().equals("12SJYXETCYSZD")){
+            dDatas[i+1]=sortByDiagnosis(errorDetailVos.get(i),i);
+            return true;
+        }
+        if(errorDetailVos.get(i).getColName().equals("MZFS&MZF")){
+            dDatas[i+1]=sortByOperation(errorDetailVos.get(i),i);
+            return true;
+        }
+        if(errorDetailVos.get(i).getColName().equals("ZDJBBMFW(A00A20)")){
+            dDatas[i+1]=sortByDiagnosis(errorDetailVos.get(i),i);
+            return true;
+        }
+        if(errorDetailVos.get(i).getColName().equals("SSJCZRQBNZY")){
+            dDatas[i+1]=sortByOperation(errorDetailVos.get(i),i);
+            return true;
+        }
+        return false;
     }
 }

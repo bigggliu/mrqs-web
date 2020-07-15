@@ -47,7 +47,7 @@
 
     <delete id="deleteBatchCheckColIds" parameterType="java.util.List">
         delete from T_CHECK_ORG a where a.CHECK_COL_ID in
-        <foreach collection="list" open="(" close=")" item="cid">
+        <foreach collection="list" open="(" close=")" item="cid" separator=",">
             #{cid}
         </foreach>
     </delete>

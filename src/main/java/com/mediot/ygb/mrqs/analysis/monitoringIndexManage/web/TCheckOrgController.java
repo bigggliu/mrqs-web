@@ -33,4 +33,8 @@ public class TCheckOrgController {
         return tCheckOrgService.setTCheckOrgUnRefTCheckCol(tCheckOrgDto);
     }
 
+    @RequestMapping("applyAllTCheckOrgRefTCheckCol")
+    public int applyAllTCheckOrgRefTCheckCol(TCheckOrgDto tCheckOrgDto){
+        return tCheckOrgService.setAllTCheckOrgRefTCheckCol(tCheckOrgDto);
+    }
 }

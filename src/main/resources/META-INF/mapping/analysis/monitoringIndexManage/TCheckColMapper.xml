@@ -119,4 +119,8 @@
         on a.CHECK_COL_ID=b.CHECK_COL_ID
         where b.ORG_ID=#{orgId}
     </select>
+
+    <select id="selecAllCheckCol" resultType="com.mediot.ygb.mrqs.analysis.monitoringIndexManage.entity.TCheckCol">
+        select <include refid="Base_Column_List"/> from t_check_col a
+    </select>
 </mapper>

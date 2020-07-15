@@ -142,4 +142,15 @@ public class TCheckOrgServiceImpl extends BaseServiceImpl<TCheckOrgMapper,TCheck
         }
         return tCheckOrgMapper.deleteBatchCheckColIds(Stream.of(tCheckColArr).collect(Collectors.toList()));
     }
+
+    @Override
+    public int setAllTCheckOrgRefTCheckCol(TCheckOrgDto tCheckOrgDto) {
+        List<TCheckCol> tCheckColList = tCheckColMapper.selecAllCheckCol();
+        TOrgsEntity tOrgsEntity=tOrgsMapper.selectById(tCheckOrgDto.getOrgId());
+        List<TCheckOrg> tCheckOrgList=tCheckColList.stream().map(e->JsonUtil.getJsonToBean(JsonUtil.getBeanToJson(e),TCheckOrg.class)).collect(Collectors.toList());
+        tCheckOrgList.stream().map(e->{e.setOrgId(tCheckOrgDto.getOrgId());e.setOrgName(tOrgsEntity.getOrgName());return e;}).collect(Collectors.toList());
+        return tCheckOrgMapper.batchInsertByMap(tCheckOrgList);
+    }
+
+
 }

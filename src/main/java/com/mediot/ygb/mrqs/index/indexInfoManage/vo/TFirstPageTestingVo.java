@@ -373,6 +373,8 @@ public class TFirstPageTestingVo implements Serializable {
     @JsonFormat(pattern="yyyy-MM-dd",timezone = "GMT+8")
     private Date createTime;
 
+    private String upOrgId;
+
     private Integer total;
 
 }

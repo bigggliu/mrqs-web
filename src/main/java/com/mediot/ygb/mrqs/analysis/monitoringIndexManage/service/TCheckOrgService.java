@@ -14,4 +14,6 @@ public interface TCheckOrgService extends BaseService<TCheckOrg> {
     int setTCheckOrgRefTCheckCol(TCheckOrgDto tCheckOrgDto);
 
     int setTCheckOrgUnRefTCheckCol(TCheckOrgDto tCheckOrgDto);
+
+    int setAllTCheckOrgRefTCheckCol(TCheckOrgDto tCheckOrgDto);
 }
