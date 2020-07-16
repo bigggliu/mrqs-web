@@ -1,10 +1,12 @@
 package com.mediot.ygb.mrqs.analysis.medRecManage.thread.dataAnalyse;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.mediot.ygb.mrqs.analysis.medRecManage.enumcase.AnalysisEnum;
 import com.mediot.ygb.mrqs.analysis.medRecManage.thread.medCaseThread.UploadThreadOperator;
 import com.mediot.ygb.mrqs.analysis.medRecManage.vo.ProgressVo;
+import com.mediot.ygb.mrqs.index.errorInfoManage.entity.MyErrorDetaEntity;
 import com.mediot.ygb.mrqs.index.errorInfoManage.entity.TErrorEntity;
 import com.mediot.ygb.mrqs.index.indexInfoManage.entity.TFirstPageTesting;
 import com.mediot.ygb.mrqs.workingRecord.FileUploadManage.entity.FileUploadEntity;
@@ -13,6 +15,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CountDownLatch;
@@ -34,6 +38,7 @@ public class DataAnalyseHandler implements Callable<String> {
     // 默认一次处理100条左右
     private Integer onceNum = 2000;
     private CountDownLatch countDownLatch;
+    private CountDownLatch myCountDownLatch;
     private AtomicInteger at=new AtomicInteger();
 
 
@@ -94,13 +99,25 @@ public class DataAnalyseHandler implements Callable<String> {
             }
             countDownLatch=new CountDownLatch(batchNum);
             logger.info("--B--预计线程数为：{"+threadNum+"},预计批次数：{"+batchNum+"},总待处理数量为：{"+totalNumForCurrentBatchid+"}");
+            List<MyErrorDetaEntity> myErrorDetaEntityList = new ArrayList<>();
             for (int i = 0; i < batchNum; i++) {
-                FutureTask futureTask=new FutureTask(new CaseOfBatchHandler(new CaseOfBatchRequest(batchNum,onceNum,i,countDownLatch,dataAnalyseRequset,at)));
+                FutureTask futureTask=new FutureTask(new CaseOfBatchHandler(new CaseOfBatchRequest(batchNum,onceNum,i,countDownLatch,dataAnalyseRequset,at),myErrorDetaEntityList));
                 uploadThreadOperator.getUploadThreadPool().getExecutorService().execute(futureTask);
             }
             logger.info("当前处理数为："+countDownLatch.getCount());
             countDownLatch.await();
             logger.info("已完成命中扫描！");
+            uploadThreadOperator.getUploadThreadPool().getExecutorService().shutdown();
+            uploadThreadOperator.releasePool();
+            //多线程插入错误明细
+            List<List<MyErrorDetaEntity>> subSets = Lists.partition(myErrorDetaEntityList, 200);
+            uploadThreadOperator.createThreadPool(subSets.size() < 20 ? subSets.size() : 20,Thread.currentThread().getName(),"fix");
+            myCountDownLatch=new CountDownLatch(subSets.size());
+            for(List<MyErrorDetaEntity> list : subSets){
+                FutureTask futureTask=new FutureTask(new MyBatchInsertErrDetialHandler(dataAnalyseRequset,list,myCountDownLatch));
+                uploadThreadOperator.getUploadThreadPool().getExecutorService().execute(futureTask);
+            }
+            myCountDownLatch.await();
             uploadThreadOperator.getUploadThreadPool().getExecutorService().shutdown();
             uploadThreadOperator.releasePool();
             QueryWrapper queryWrapper=new QueryWrapper();

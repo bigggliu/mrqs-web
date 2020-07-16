@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mediot.ygb.mrqs.index.errorInfoManage.dao.MyErrorDetaMapper">
 
-    <insert id="batchInsertTErrorDetails" parameterType="java.util.List">
+    <insert id="batchInsertTErrorDetails" parameterType="java.util.List" useGeneratedKeys="false">
         insert all
         <trim suffix="SELECT 1 FROM DUAL">
             <foreach collection="list" item="obj">

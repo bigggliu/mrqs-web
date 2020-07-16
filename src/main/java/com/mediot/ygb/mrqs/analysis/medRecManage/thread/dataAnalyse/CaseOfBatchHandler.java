@@ -29,9 +29,12 @@ public class CaseOfBatchHandler implements Callable<String> {
 
     private static Object object=new Object();
 
+    private List<MyErrorDetaEntity> myErrorDetaEntityList;
 
-    public CaseOfBatchHandler(CaseOfBatchRequest caseOfBatchRequest){
+
+    public CaseOfBatchHandler(CaseOfBatchRequest caseOfBatchRequest,List<MyErrorDetaEntity> myErrorDetaEntityList){
         this.caseOfBatchRequest=caseOfBatchRequest;
+        this.myErrorDetaEntityList=myErrorDetaEntityList;
     }
 
     @Override
@@ -104,7 +107,6 @@ public class CaseOfBatchHandler implements Callable<String> {
         }catch (Exception e){
             logger.info("命中函数出错，原因是"+e.getMessage());
         }finally {
-            List<MyErrorDetaEntity> myErrorDetaEntityList= Lists.newArrayList();
             synchronized (object){
                 //
                 ProgressVo progressVo=new ProgressVo();
@@ -114,7 +116,7 @@ public class CaseOfBatchHandler implements Callable<String> {
                 Integer pn=caseOfBatchRequest.getAt().incrementAndGet();
                 //logger.info("批次数为"+caseOfBatchRequest.getBatchNum()+"命中函数数量为："+tCheckCols.size()+"当前进度数为："+caseOfBatchRequest.getAt().get());
                 logger.info("批次数为"+(caseOfBatchRequest.getCurrentNum()+1)+"命中函数数量为："+tCheckCols.size()+"当前进度数为："+caseOfBatchRequest.getAt().get());
-                pg = (float)pn/(caseOfBatchRequest.getBatchNum()*tCheckCols.size());
+                pg = (float)(pn/(caseOfBatchRequest.getBatchNum()*tCheckCols.size())) - 0.01;
                 progressVo.setAnalysisStatus(true);
                 progressVo.setProgress(pg);
                 f.getRedisTemplate().opsForValue().set(f.getFileId()+"$"+AnalysisEnum.getValue(AnalysisEnum.DATA_ANALYSE),progressVo);
@@ -139,11 +141,11 @@ public class CaseOfBatchHandler implements Callable<String> {
                     myErrorDetaEntityList.add(t);
                 });
             }
-            int num=0;
-            if(myErrorDetaEntityList.size()>0){
-                num=f.getMyErrorDetaMapper().batchInsertTErrorDetails(myErrorDetaEntityList);
-            }
-            logger.info("该批次下错误详细数目为："+num);
+//            int num=0;
+//            if(myErrorDetaEntityList.size()>0){
+//                num=f.getMyErrorDetaMapper().batchInsertTErrorDetails(myErrorDetaEntityList);
+//            }
+//            logger.info("该批次下错误详细数目为："+num);
             //logger.info("当前批次为："+caseOfBatchRequest.getCountDownLatch().getCount());
         }
     }

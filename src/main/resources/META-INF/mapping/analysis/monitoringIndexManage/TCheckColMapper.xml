@@ -83,7 +83,7 @@
 
 
     <select id="getNumOfErrorFileds" parameterType="java.util.Map" resultType="String">
-        select count(DISTINCT e.col_comments) FROM
+        select count(DISTINCT e.ERROR_MESSAGE) FROM
         t_error_detail e LEFT JOIN t_firstpage_testing f
         on
         e.case_id=f.case_no
