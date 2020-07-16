@@ -116,7 +116,7 @@ public class CaseOfBatchHandler implements Callable<String> {
                 Integer pn=caseOfBatchRequest.getAt().incrementAndGet();
                 //logger.info("批次数为"+caseOfBatchRequest.getBatchNum()+"命中函数数量为："+tCheckCols.size()+"当前进度数为："+caseOfBatchRequest.getAt().get());
                 logger.info("批次数为"+(caseOfBatchRequest.getCurrentNum()+1)+"命中函数数量为："+tCheckCols.size()+"当前进度数为："+caseOfBatchRequest.getAt().get());
-                pg = (float)(pn/(caseOfBatchRequest.getBatchNum()*tCheckCols.size())) - 0.01;
+                pg = (float)pn/((caseOfBatchRequest.getBatchNum()*tCheckCols.size()) + 1);
                 progressVo.setAnalysisStatus(true);
                 progressVo.setProgress(pg);
                 f.getRedisTemplate().opsForValue().set(f.getFileId()+"$"+AnalysisEnum.getValue(AnalysisEnum.DATA_ANALYSE),progressVo);
