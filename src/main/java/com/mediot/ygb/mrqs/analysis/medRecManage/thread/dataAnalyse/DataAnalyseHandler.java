@@ -1,10 +1,13 @@
 package com.mediot.ygb.mrqs.analysis.medRecManage.thread.dataAnalyse;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.mediot.ygb.mrqs.analysis.medRecManage.enumcase.AnalysisEnum;
 import com.mediot.ygb.mrqs.analysis.medRecManage.thread.medCaseThread.UploadThreadOperator;
 import com.mediot.ygb.mrqs.analysis.medRecManage.vo.ProgressVo;
+import com.mediot.ygb.mrqs.analysis.monitoringIndexManage.entity.TCheckCol;
+import com.mediot.ygb.mrqs.index.errorInfoManage.entity.MyErrorDetaEntity;
 import com.mediot.ygb.mrqs.index.errorInfoManage.entity.TErrorEntity;
 import com.mediot.ygb.mrqs.index.indexInfoManage.entity.TFirstPageTesting;
 import com.mediot.ygb.mrqs.workingRecord.FileUploadManage.entity.FileUploadEntity;
@@ -13,11 +16,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Callable;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.FutureTask;
+import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class DataAnalyseHandler implements Callable<String> {
@@ -28,7 +30,7 @@ public class DataAnalyseHandler implements Callable<String> {
 
     //数据总数
     private Integer totalNumForCurrentBatchid;
-    private Integer threadNum = 100;
+    private Integer threadNum = 10;
     private Integer batchNum = 1;
     private Integer maxThreadNum = 50;
     // 默认一次处理100条左右
@@ -64,45 +66,28 @@ public class DataAnalyseHandler implements Callable<String> {
             FileUploadEntity f=dataAnalyseRequset.getFileAnalysisDto().getFileUploadMapper().selectFileUpload(m);
             f.setState(String.valueOf(AnalysisEnum.getValue(AnalysisEnum.DATA_ANALYSE)));
             dataAnalyseRequset.getFileAnalysisDto().getFileUploadMapper().updateById(f);
-            if(totalNumForCurrentBatchid<100){
-                batchNum = 1;
-                uploadThreadOperator.createThreadPool(1,Thread.currentThread().getName(),"fix");
-            }else if(100 < totalNumForCurrentBatchid && totalNumForCurrentBatchid <= 10000){
-                if(totalNumForCurrentBatchid %onceNum!=0){
-                    batchNum=totalNumForCurrentBatchid /onceNum+1;
-                }else {
-                    batchNum = totalNumForCurrentBatchid/onceNum;
-                }
-                uploadThreadOperator.createThreadPool(batchNum,Thread.currentThread().getName(),"fix");
-            }else{
-                // 计划每批次500条左右
-                //onceNum = 500;
-                // 批次数计算
-                if(totalNumForCurrentBatchid %onceNum!=0){
-                    batchNum=totalNumForCurrentBatchid/onceNum+1;
-                }else {
-                    batchNum = totalNumForCurrentBatchid/onceNum;
-                }
-                if (batchNum > maxThreadNum) {
-                    // 设置固定线程数100
-                    threadNum = maxThreadNum;
-                } else {
-                    // 线程数等于批次数
-                    threadNum = batchNum;
-                }
-                uploadThreadOperator.createThreadPool(threadNum,Thread.currentThread().getName(),"fix");
-            }
-            countDownLatch=new CountDownLatch(batchNum);
-            logger.info("--B--预计线程数为：{"+threadNum+"},预计批次数：{"+batchNum+"},总待处理数量为：{"+totalNumForCurrentBatchid+"}");
-            for (int i = 0; i < batchNum; i++) {
-                FutureTask futureTask=new FutureTask(new CaseOfBatchHandler(new CaseOfBatchRequest(batchNum,onceNum,i,countDownLatch,dataAnalyseRequset,at)));
-                uploadThreadOperator.getUploadThreadPool().getExecutorService().execute(futureTask);
+            //查询应用的检测规则
+            Map<String,Object> queryMap1=new HashMap<>();
+            queryMap1.put("orgId",dataAnalyseRequset.getFileAnalysisDto().getUpOrgId());
+            List<TCheckCol> tCheckCols=dataAnalyseRequset.getFileAnalysisDto().getTCheckColMapper().selectTCheckColsByOrgId(queryMap1);
+            //将规则20个分一组
+            List<List<TCheckCol>> tCheckColsubLists =  Lists.partition(tCheckCols,20);
+            threadNum = tCheckColsubLists.size() > 10 ? 10 : tCheckColsubLists.size();
+            ExecutorService tCheckpool = Executors.newFixedThreadPool(threadNum);
+            countDownLatch=new CountDownLatch(tCheckColsubLists.size());
+            List<MyErrorDetaEntity> myErrorDetaEntityList= Lists.newArrayList();
+            logger.info("--B--预计线程数为：{"+threadNum+"},预计批次数：{"+tCheckColsubLists.size()+"},总待处理数量为：{"+tCheckCols.size()+"}");
+            for(List<TCheckCol> list : tCheckColsubLists){
+                int currentBatchNum = 1;
+                FutureTask futureTask = new FutureTask(new MyCheckHandler(dataAnalyseRequset,countDownLatch,list,currentBatchNum,myErrorDetaEntityList,at,tCheckCols.size()));
+                tCheckpool.execute(futureTask);
+                currentBatchNum++;
             }
             logger.info("当前处理数为："+countDownLatch.getCount());
             countDownLatch.await();
             logger.info("已完成命中扫描！");
-            uploadThreadOperator.getUploadThreadPool().getExecutorService().shutdown();
-            uploadThreadOperator.releasePool();
+            tCheckpool.shutdown();
+            //多线程插入错误明细
             QueryWrapper queryWrapper=new QueryWrapper();
             queryWrapper.eq("BATCH_ID",dataAnalyseRequset.getFileAnalysisDto().getBatchId());
             TErrorEntity tErrorEntity=dataAnalyseRequset.getFileAnalysisDto().getTErrorMapper().selectOne(queryWrapper);
