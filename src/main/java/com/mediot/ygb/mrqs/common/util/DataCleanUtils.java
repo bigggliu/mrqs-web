@@ -2998,9 +2998,12 @@ public class DataCleanUtils {
                 System.out.println("该批次出现病案信息为空的异常,开始数据为:"+resultList.get(0).toString());
             }
             if(tFirstPageTestingList!=null){
-                int i=fileAnalysisDto.getTFirstpageTestingMapper().batchInsertTFInfo(tFirstPageTestingList);
-                System.out.println("该批次以已入基本信息个数为:"+i);
-                if(i>0){
+                //int i=fileAnalysisDto.getTFirstpageTestingMapper().batchInsertTFInfo(tFirstPageTestingList);
+                for(TFirstPageTesting t : tFirstPageTestingList){
+                    fileAnalysisDto.getTFirstpageTestingMapper().insert(t);
+                }
+                //System.out.println("该批次以已入基本信息个数为:"+i);
+               // if(i>0){
                     //插入诊断信息
                     List<TFirstoutdiagTesting> tFirstoutdiagTestings=(List<TFirstoutdiagTesting>)fianlResultMap.get("diagInfo");
                     if(tFirstoutdiagTestings!=null){
@@ -3021,7 +3024,7 @@ public class DataCleanUtils {
                             fileAnalysisDto.getTFirstoutoperTestingMapper().batchInsertOutOper(tFirstoutoperTestings);
                         }
                     }
-                }
+             //   }
             }
         }catch (Exception e){
             System.out.println("批量插入方法里失败！原因是："+e.getMessage());
