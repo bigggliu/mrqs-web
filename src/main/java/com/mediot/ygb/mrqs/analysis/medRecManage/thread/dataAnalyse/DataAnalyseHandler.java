@@ -78,8 +78,8 @@ public class DataAnalyseHandler implements Callable<String> {
             countDownLatch=new CountDownLatch(tCheckColsubLists.size());
             List<MyErrorDetaEntity> myErrorDetaEntityList= Lists.newArrayList();
             logger.info("--B--预计线程数为：{"+threadNum+"},预计批次数：{"+tCheckColsubLists.size()+"},总待处理数量为：{"+tCheckCols.size()+"}");
+            int currentBatchNum = 1;
             for(List<TCheckCol> list : tCheckColsubLists){
-                int currentBatchNum = 1;
                 FutureTask futureTask = new FutureTask(new MyCheckHandler(dataAnalyseRequset,countDownLatch,list,currentBatchNum,myErrorDetaEntityList,at,tCheckCols.size()));
                 tCheckpool.execute(futureTask);
                 currentBatchNum++;
