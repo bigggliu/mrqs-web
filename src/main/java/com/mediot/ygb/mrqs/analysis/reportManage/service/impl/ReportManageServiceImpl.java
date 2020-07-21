@@ -40,6 +40,7 @@ import org.springframework.stereotype.Service;
 import java.io.*;
 import java.math.BigDecimal;
 import java.net.URLEncoder;
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
@@ -433,7 +434,8 @@ public class ReportManageServiceImpl implements ReportManageService {
                 e.setTotalStandards(tDataStandardMapper.selectOne(queryWrapper).getTotalNumber());
                 float fn=Float.parseFloat(e.getErrorFileds())/Float.parseFloat(e.getTotalStandards());
                 Double d=new BigDecimal(fn).setScale(4, BigDecimal.ROUND_HALF_UP).doubleValue();
-                e.setProportionOfError(String.valueOf(d*100)+"%");
+                DecimalFormat df = new DecimalFormat("#.00");
+                e.setProportionOfError(df.format(d)+"%");
             });
             //表格
             PdfPTable table = new PdfPTable(columnWidths);
