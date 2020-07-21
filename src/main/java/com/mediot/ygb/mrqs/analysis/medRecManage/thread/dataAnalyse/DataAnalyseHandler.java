@@ -103,7 +103,7 @@ public class DataAnalyseHandler implements Callable<String> {
             TErrorEntity tErrorEntity=dataAnalyseRequset.getFileAnalysisDto().getTErrorMapper().selectOne(queryWrapper);
             tErrorEntity.setBatchId(dataAnalyseRequset.getFileAnalysisDto().getBatchId());
             tErrorEntity.setTotal(String.valueOf(totalNumForCurrentBatchid));
-            int analysedNum=dataAnalyseRequset.getFileAnalysisDto().getTErrorDetailMapper().selectCount(queryWrapper);
+            int analysedNum=dataAnalyseRequset.getFileAnalysisDto().getMyErrorDetaMapper().selectErrorCount(dataAnalyseRequset.getFileAnalysisDto().getBatchId());
             tErrorEntity.setHitDataVolume(String.valueOf(analysedNum));
             tErrorEntity.setNumberOfTestIndicators(String.valueOf(dataAnalyseRequset.getFileAnalysisDto().getIndicators()));
             tErrorEntity.setTotalNumberOfFields(dataAnalyseRequset.getFileAnalysisDto().getTotalStandards());

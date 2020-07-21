@@ -93,7 +93,7 @@ public class MyCheckHandler implements Callable<String> {
                double pg;
                Integer pn=at.incrementAndGet();
                logger.info("当前进度数为："+at.get());
-               pg = (float)pn/totalTcheckNum;
+               pg = (float)pn/(totalTcheckNum+1);
                progressVo.setAnalysisStatus(true);
                progressVo.setProgress(pg);
                dataAnalyseRequset.getFileAnalysisDto().getRedisTemplate().opsForValue().set(dataAnalyseRequset.getFileAnalysisDto().getFileId()+"$"+AnalysisEnum.getValue(AnalysisEnum.DATA_ANALYSE),progressVo);
@@ -113,6 +113,7 @@ public class MyCheckHandler implements Callable<String> {
                    t.setTFirstoutdiagTestingId(e.getTFirstoutdiagTestingId());
                    t.setDiagType(e.getDiagType());
                    t.setDiagOrder(e.getDiagOrder());
+                   t.setIsMultiTableQuery(tCheckCol.getIsMultiTableQuery());
                    myErrorDetaEntityList.add(t);
                });
            }

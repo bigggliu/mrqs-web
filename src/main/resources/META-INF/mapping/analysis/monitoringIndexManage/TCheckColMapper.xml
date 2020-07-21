@@ -38,13 +38,13 @@
             count(*)
                 as total,t.col_name,t.col_comments,t.error_message,t.OPERATION_TYPE,t.OPERATION_ORDER,t.DIAG_TYPE,t.DIAG_ORDER
         FROM
-            (select t.batch_id,t.case_id,t.col_name,t.col_comments,t.error_message,t.OPERATION_TYPE,t.OPERATION_ORDER,t.DIAG_TYPE,t.DIAG_ORDER from t_error_detail t where t.batch_id=#{batchId}) t
+            (select t.batch_id,t.case_id,t.col_name,t.col_comments,t.error_message,t.IS_MULTI_TABLE_QUERY,t.OPERATION_TYPE,t.OPERATION_ORDER,t.DIAG_TYPE,t.DIAG_ORDER from t_error_detail t where t.batch_id=#{batchId}) t
                 INNER join
             (
                 select DISTINCT t.batch_id,t.case_no from t_firstpage_testing t where t.batch_id=#{batchId} and to_char(t.out_dtime,'yyyy')=#{year}) f
             on t.batch_id=f.batch_id
                 and t.case_id=f.case_no
-        GROUP by t.col_name,t.col_comments,t.error_message,t.OPERATION_TYPE,t.OPERATION_ORDER,t.DIAG_TYPE,t.DIAG_ORDER order by t.COL_NAME
+        GROUP by t.col_name,t.col_comments,t.error_message,t.IS_MULTI_TABLE_QUERY,t.OPERATION_TYPE,t.OPERATION_ORDER,t.DIAG_TYPE,t.DIAG_ORDER order by t.IS_MULTI_TABLE_QUERY,t.COL_NAME
     </select>
 
 
@@ -53,12 +53,11 @@
             count(*)
 
         FROM
-            (select t.batch_id,t.case_id,t.col_name,t.col_comments,t.error_message from t_error_detail t where t.batch_id=#{batchId}) t
+            (select DISTINCT t.T_FIRST_PAGE_TESTING_ID,t.BATCH_ID from t_error_detail t where t.batch_id=#{batchId}) t
                 INNER join
             (
-                select DISTINCT t.batch_id,t.case_no from t_firstpage_testing t where t.batch_id=#{batchId} and to_char(t.out_dtime,'yyyy')=#{year}) f
-            on t.batch_id=f.batch_id
-                and t.case_id=f.case_no
+                select DISTINCT t.T_FIRST_PAGE_TESTING_ID,t.BATCH_ID from t_firstpage_testing t where t.batch_id=#{batchId} and to_char(t.out_dtime,'yyyy')=#{year}) f
+                on t.T_FIRST_PAGE_TESTING_ID=f.T_FIRST_PAGE_TESTING_ID
     </select>
 
     <select id="getRptListByBatchId" parameterType="java.util.Map" resultType="com.mediot.ygb.mrqs.common.entity.vo.ReportManageVo">

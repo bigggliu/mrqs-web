@@ -41,4 +41,6 @@ public class MyErrorDetaEntity {
     private String diagType;
 
     private Integer diagOrder;
+
+    private Integer isMultiTableQuery;
 }

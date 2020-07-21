@@ -433,7 +433,7 @@ public class ReportManageServiceImpl implements ReportManageService {
                 e.setTotalStandards(tDataStandardMapper.selectOne(queryWrapper).getTotalNumber());
                 float fn=Float.parseFloat(e.getErrorFileds())/Float.parseFloat(e.getTotalStandards());
                 Double d=new BigDecimal(fn).setScale(4, BigDecimal.ROUND_HALF_UP).doubleValue();
-                e.setProportionOfError(String.valueOf(d));
+                e.setProportionOfError(String.valueOf(d*100)+"%");
             });
             //表格
             PdfPTable table = new PdfPTable(columnWidths);
@@ -527,10 +527,10 @@ public class ReportManageServiceImpl implements ReportManageService {
     public String[] sortByOperation(ErrorDetailVo errorDetailVo,int i){
         String colComments = "";
         if(errorDetailVo.getOperationType() != null && errorDetailVo.getOperationType().equals("01")){
-            colComments = "主要手术" + String.valueOf(errorDetailVo.getOperationOrder()) + "," + errorDetailVo.getColComments();
+            colComments = "主要手术及操作" + "," + errorDetailVo.getColComments();
         }
         if(errorDetailVo.getOperationType() != null && errorDetailVo.getOperationType().equals("02")){
-            colComments = "其他手术" + String.valueOf(errorDetailVo.getOperationOrder()) + "," + errorDetailVo.getColComments();
+            colComments = "其他手术及操作" + String.valueOf(errorDetailVo.getOperationOrder()) + "," + errorDetailVo.getColComments();
         }
         String[] data=new String[]{
                 String.valueOf(i+1),

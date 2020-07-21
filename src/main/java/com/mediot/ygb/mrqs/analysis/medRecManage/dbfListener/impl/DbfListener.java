@@ -53,7 +53,7 @@ public class DbfListener implements DBFListener {
 
     private FetchFileRequest fetchFileRequest;
 
-    private final static ExecutorService service = Executors.newFixedThreadPool(25);
+    //private final static ExecutorService service = Executors.newFixedThreadPool(25);
 
     public DbfListener(FileAnalysisDto fileAnalysisDto,FetchFileRequest fetchFileRequest){
         this.fileAnalysisDto=fileAnalysisDto;
@@ -190,6 +190,7 @@ public class DbfListener implements DBFListener {
 
     public void batchInsertResult(String key,Long totalNum,FileAnalysisDto fileAnalysisDto){
         int cycleNum=(int)Math.ceil((float)totalNum / BATCH_INSERT_COUNT);
+        ExecutorService service = Executors.newFixedThreadPool(20);
         for(int i=0;i<cycleNum;i++){
             if(i==cycleNum-1){
                 List resultList=fileAnalysisDto.getRedisTemplate().opsForList().range(key,i*BATCH_INSERT_COUNT,totalNum);
@@ -201,6 +202,7 @@ public class DbfListener implements DBFListener {
                 service.execute(futureTask);
             }
         }
+        service.shutdown();
     }
 
 }
