@@ -544,7 +544,7 @@ public class ReportManageServiceImpl implements ReportManageService {
     public String[] sortByDiagnosis(ErrorDetailVo errorDetailVo,int i){
         String colComments = "";
         if(errorDetailVo.getDiagType() != null && errorDetailVo.getDiagType().equals("01")){
-            colComments = "主要诊断" + String.valueOf(errorDetailVo.getDiagOrder()) + "," + errorDetailVo.getColComments();
+            colComments = "主要诊断" + "," + errorDetailVo.getColComments();
         }
         if(errorDetailVo.getDiagType() != null && errorDetailVo.getDiagType().equals("02")){
             colComments = "其他诊断" + String.valueOf(errorDetailVo.getDiagOrder()) + "," + errorDetailVo.getColComments();
