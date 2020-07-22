@@ -434,8 +434,7 @@ public class ReportManageServiceImpl implements ReportManageService {
                 e.setTotalStandards(tDataStandardMapper.selectOne(queryWrapper).getTotalNumber());
                 float fn=Float.parseFloat(e.getErrorFileds())/Float.parseFloat(e.getTotalStandards());
                 Double d=new BigDecimal(fn).setScale(4, BigDecimal.ROUND_HALF_UP).doubleValue();
-                DecimalFormat df = new DecimalFormat("#.00");
-                e.setProportionOfError(df.format(d)+"%");
+                e.setProportionOfError(String.format("%.2f",d*100)+"%");
             });
             //表格
             PdfPTable table = new PdfPTable(columnWidths);
@@ -477,7 +476,7 @@ public class ReportManageServiceImpl implements ReportManageService {
                 Paragraph text = PdfFontUtils.getFont(5, reportManageVos.get(k).getYear()+"("
                         +reportManageVos.get(k).getStartTime()+"至"+reportManageVos.get(k).getEndTime()+")年度病案首页检测结果汇总");
                 doc.add(text);
-                float[] dColumnWidths = {80,150,150,150};//表格每一列的宽度
+                float[] dColumnWidths = {40,100,150,150,40};//表格每一列的宽度
                 PdfPTable tab = new PdfPTable(dColumnWidths);
                 tab.setTotalWidth(530);
                 tab.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -486,13 +485,14 @@ public class ReportManageServiceImpl implements ReportManageService {
                 qm.put("year",reportManageVos.get(k).getYear());
                 List<ErrorDetailVo> errorDetailVos= tCheckColMapper.selectErrorDetailByYear(qm);
                 String[][] dDatas=new String[1+errorDetailVos.size()][4];
-                dDatas[0]=new String[]{"序号","字段描述","疑似问题数据说明","错误数量"};
+                dDatas[0]=new String[]{"序号","信息分类","字段描述","疑似问题数据说明","错误数量"};
                 for(int i=0;i<errorDetailVos.size();i++){
                     if(checkByColName(dDatas,errorDetailVos,i)){
                         continue;
                     }else {
                         String[] data=new String[]{
                                 String.valueOf(i+1),
+                                getInformationClass(errorDetailVos.get(i)),
                                 errorDetailVos.get(i).getColComments(),
                                 errorDetailVos.get(i).getErrorMessage(),
                                 errorDetailVos.get(i).getTotal(),
@@ -532,10 +532,11 @@ public class ReportManageServiceImpl implements ReportManageService {
             colComments = "主要手术及操作" + "," + errorDetailVo.getColComments();
         }
         if(errorDetailVo.getOperationType() != null && errorDetailVo.getOperationType().equals("02")){
-            colComments = "其他手术及操作" + String.valueOf(errorDetailVo.getOperationOrder()) + "," + errorDetailVo.getColComments();
+            colComments = "其他手术及操作" + String.valueOf(errorDetailVo.getOperationOrder() - 1) + "," + errorDetailVo.getColComments();
         }
         String[] data=new String[]{
                 String.valueOf(i+1),
+                getInformationClass(errorDetailVo),
                 colComments,
                 errorDetailVo.getErrorMessage(),
                 errorDetailVo.getTotal(),
@@ -559,6 +560,7 @@ public class ReportManageServiceImpl implements ReportManageService {
         }
         String[] data=new String[]{
                 String.valueOf(i+1),
+                getInformationClass(errorDetailVo),
                 colComments,
                 errorDetailVo.getErrorMessage(),
                 errorDetailVo.getTotal(),
@@ -652,5 +654,21 @@ public class ReportManageServiceImpl implements ReportManageService {
             return true;
         }
         return false;
+    }
+
+    public String getInformationClass(ErrorDetailVo errorDetailVo){
+        if(errorDetailVo.getInformationClass() != null && errorDetailVo.getInformationClass().equals("1")){
+            return "患者基本信息";
+        }
+        if(errorDetailVo.getInformationClass() != null && errorDetailVo.getInformationClass().equals("2")){
+            return "住院过程信息";
+        }
+        if(errorDetailVo.getInformationClass() != null && errorDetailVo.getInformationClass().equals("3")){
+            return "诊疗信息";
+        }
+        if(errorDetailVo.getInformationClass() != null && errorDetailVo.getInformationClass().equals("4")){
+            return "费用信息";
+        }
+        return "";
     }
 }

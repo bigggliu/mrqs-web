@@ -113,7 +113,7 @@ public class MyCheckHandler implements Callable<String> {
                    t.setTFirstoutdiagTestingId(e.getTFirstoutdiagTestingId());
                    t.setDiagType(e.getDiagType());
                    t.setDiagOrder(e.getDiagOrder());
-                   t.setIsMultiTableQuery(tCheckCol.getIsMultiTableQuery());
+                   t.setInformationClass(tCheckCol.getInformationClass());
                    myErrorDetaEntityList.add(t);
                });
            }

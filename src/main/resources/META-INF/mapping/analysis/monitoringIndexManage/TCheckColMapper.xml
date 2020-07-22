@@ -36,15 +36,15 @@
     <select id="selectErrorDetailByYear" parameterType="java.util.Map" resultType="com.mediot.ygb.mrqs.common.entity.vo.ErrorDetailVo">
         SELECT
             count(*)
-                as total,t.col_name,t.col_comments,t.error_message,t.OPERATION_TYPE,t.OPERATION_ORDER,t.DIAG_TYPE,t.DIAG_ORDER
+                as total,t.col_name,t.col_comments,t.error_message,t.INFORMATION_CLASS,t.OPERATION_TYPE,t.OPERATION_ORDER,t.DIAG_TYPE,t.DIAG_ORDER
         FROM
-            (select t.batch_id,t.case_id,t.col_name,t.col_comments,t.error_message,t.IS_MULTI_TABLE_QUERY,t.OPERATION_TYPE,t.OPERATION_ORDER,t.DIAG_TYPE,t.DIAG_ORDER from t_error_detail t where t.batch_id=#{batchId}) t
+            (select t.batch_id,t.case_id,t.col_name,t.col_comments,t.error_message,t.INFORMATION_CLASS,t.OPERATION_TYPE,t.OPERATION_ORDER,t.DIAG_TYPE,t.DIAG_ORDER from t_error_detail t where t.batch_id=#{batchId}) t
                 INNER join
             (
                 select DISTINCT t.batch_id,t.case_no from t_firstpage_testing t where t.batch_id=#{batchId} and to_char(t.out_dtime,'yyyy')=#{year}) f
             on t.batch_id=f.batch_id
                 and t.case_id=f.case_no
-        GROUP by t.col_name,t.col_comments,t.error_message,t.IS_MULTI_TABLE_QUERY,t.OPERATION_TYPE,t.OPERATION_ORDER,t.DIAG_TYPE,t.DIAG_ORDER order by t.IS_MULTI_TABLE_QUERY,t.COL_NAME
+        GROUP by t.col_name,t.col_comments,t.error_message,t.INFORMATION_CLASS,t.OPERATION_TYPE,t.OPERATION_ORDER,t.DIAG_TYPE,t.DIAG_ORDER order by t.INFORMATION_CLASS,t.COL_NAME
     </select>
 
 

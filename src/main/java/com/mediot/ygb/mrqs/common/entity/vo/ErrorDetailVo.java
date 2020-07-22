@@ -1,6 +1,7 @@
 package com.mediot.ygb.mrqs.common.entity.vo;
 
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
 
 @Data
@@ -23,4 +24,6 @@ public class ErrorDetailVo {
     private String operationType;
 
     private Integer operationOrder;
+
+    private String informationClass;
 }

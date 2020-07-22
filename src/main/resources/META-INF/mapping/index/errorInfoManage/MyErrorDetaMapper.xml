@@ -8,7 +8,7 @@
             <foreach collection="list" item="obj">
                 into T_ERROR_DETAIL (BATCH_ID,CASE_ID,COL_NAME,COL_COMMENTS,ERROR_MESSAGE,SCORE,MUST_FILL,ANALYSE_TYPE,
                 REMARK,OUT_DTIME,T_FIRST_PAGE_TESTING_ID,T_FIRSTOUTOPER_TESTING_ID,T_FIRSTOUTDIAG_TESTING_ID,
-                DIAG_TYPE,DIAG_ORDER,OPERATION_TYPE,OPERATION_ORDER,IS_MULTI_TABLE_QUERY) values
+                DIAG_TYPE,DIAG_ORDER,OPERATION_TYPE,OPERATION_ORDER,INFORMATION_CLASS) values
                 (#{obj.batchId,jdbcType=DECIMAL},
                 #{obj.caseId,jdbcType=VARCHAR},
                 #{obj.colName,jdbcType=VARCHAR},
@@ -26,7 +26,7 @@
                 #{obj.diagOrder,jdbcType=DECIMAL},
                 #{obj.operationType,jdbcType=VARCHAR},
                 #{obj.operationOrder,jdbcType=DECIMAL},
-                #{obj.isMultiTableQuery,jdbcType=DECIMAL}
+                #{obj.informationClass,jdbcType=VARCHAR}
                 )
             </foreach>
         </trim>

@@ -2,6 +2,7 @@ package com.mediot.ygb.mrqs.index.errorInfoManage.entity;
 
 
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
 
 import java.util.Date;
@@ -42,5 +43,5 @@ public class MyErrorDetaEntity {
 
     private Integer diagOrder;
 
-    private Integer isMultiTableQuery;
+    private String informationClass;
 }

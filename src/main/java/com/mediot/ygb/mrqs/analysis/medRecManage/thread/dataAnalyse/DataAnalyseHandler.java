@@ -89,15 +89,17 @@ public class DataAnalyseHandler implements Callable<String> {
             logger.info("已完成命中扫描！");
             tCheckpool.shutdown();
             //多线程插入错误明细
-            List<List<MyErrorDetaEntity>> subSets = Lists.partition(myErrorDetaEntityList, 200);
-            ExecutorService myerrorDetaEntityPool = Executors.newFixedThreadPool(subSets.size() < 20 ? subSets.size() : 20);
-            myCountDownLatch=new CountDownLatch(subSets.size());
-            for(List<MyErrorDetaEntity> list : subSets){
-                FutureTask futureTask=new FutureTask(new MyBatchInsertErrDetialHandler(dataAnalyseRequset,list,myCountDownLatch));
-                myerrorDetaEntityPool.execute(futureTask);
+            if(myErrorDetaEntityList.size() > 0) {
+                List<List<MyErrorDetaEntity>> subSets = Lists.partition(myErrorDetaEntityList, 200);
+                ExecutorService myerrorDetaEntityPool = Executors.newFixedThreadPool(subSets.size() < 20 ? subSets.size() : 20);
+                myCountDownLatch = new CountDownLatch(subSets.size());
+                for (List<MyErrorDetaEntity> list : subSets) {
+                    FutureTask futureTask = new FutureTask(new MyBatchInsertErrDetialHandler(dataAnalyseRequset, list, myCountDownLatch));
+                    myerrorDetaEntityPool.execute(futureTask);
+                }
+                myCountDownLatch.await();
+                myerrorDetaEntityPool.shutdown();
             }
-            myCountDownLatch.await();
-            myerrorDetaEntityPool.shutdown();
             QueryWrapper queryWrapper=new QueryWrapper();
             queryWrapper.eq("BATCH_ID",dataAnalyseRequset.getFileAnalysisDto().getBatchId());
             TErrorEntity tErrorEntity=dataAnalyseRequset.getFileAnalysisDto().getTErrorMapper().selectOne(queryWrapper);

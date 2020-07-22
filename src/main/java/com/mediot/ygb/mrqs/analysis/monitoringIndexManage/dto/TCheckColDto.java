@@ -38,6 +38,8 @@ public class TCheckColDto implements Serializable {
 
     private String gradingLevel;
 
+    private String qualityClass;
+
     private String informationClass;
 
     @ExcelField(title="验证逻辑", align=2, sort=1)

@@ -80,6 +80,8 @@ public class TCheckColServiceImpl extends BaseServiceImpl<TCheckColMapper, TChec
             LocalAssert.notNull(tCheckColDto.getCmisChoice(),"是否可用不能为空");
             LocalAssert.notNull(tCheckColDto.getEmrChoice(),"是否邮箱验证不能为空");
             LocalAssert.notNull(tCheckColDto.getRuleDescription(),"指标描述不能为空");
+            //LocalAssert.notNull(tCheckColDto.getInformationClass(),"信息分类不能为空");
+            //LocalAssert.notNull(tCheckColDto.getQualityClass(),"质量分类不能为空");
             //LocalAssert.notNull(tCheckColDto.getRuleType(),"验证逻辑不能为空");
             //LocalAssert.notNull(tCheckColDto.getColComments(),"错误提示不能为空");
         }
