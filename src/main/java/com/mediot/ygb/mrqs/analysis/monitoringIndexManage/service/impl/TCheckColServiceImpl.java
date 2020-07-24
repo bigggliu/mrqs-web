@@ -55,9 +55,12 @@ public class TCheckColServiceImpl extends BaseServiceImpl<TCheckColMapper, TChec
         Page<TCheckCol> page=PageHelper.startPage(tCheckColDto.getPageNum(),tCheckColDto.getPageSize());
         List<TCheckCol> tCheckColList;
         if(StringUtils.isNotBlank(tCheckColDto.getQueryStr())){
+            queryMap.put("cmisChoice",null);
             tCheckColList=tCheckColMapper.selectTCheckColList(queryMap);
         }else {
-            tCheckColList=tCheckColMapper.selectTCheckColListWithOutQs();
+            Map<String,Object> queryMap1=Maps.newHashMap();
+            queryMap1.put("cmisChoice",null);
+            tCheckColList=tCheckColMapper.selectTCheckColListWithOutQs(queryMap1);
         }
         List<TCheckColVo> tCheckColVoVoList = tCheckColList.stream().map(e -> JsonUtil.
                 getJsonToBean(JsonUtil.getBeanToJson(e), TCheckColVo.class)).

@@ -102,6 +102,11 @@
                                                       or b.ORG_NAME like concat(concat('%',#{queryStr}),'%')
                                          )         n GROUP BY n.CHECK_COL_ID
                                      ) s         on a.CHECK_COL_ID=s.CHECK_COL_ID
+        <where>
+            <if test="cmisChoice!=null">
+                a.CMIS_CHOICE=#{cmisChoice}
+            </if>
+        </where>
     </select>
 
     <select id="selectTCheckColListWithOutQs" resultMap="BaseResultMap">
@@ -109,14 +114,20 @@
         from t_check_col a left join
         T_CHECK_ORG b
         on a.CHECK_COL_ID=b.CHECK_COL_ID
-        GROUP BY a.COL_NAME) s INNER JOIN t_check_col a on s.col_name=a.col_name  order by s.ORG_NAMES
+        GROUP BY a.COL_NAME) s INNER JOIN t_check_col a on s.col_name=a.col_name
+        <where>
+            <if test="cmisChoice!=null">
+                a.CMIS_CHOICE=#{cmisChoice}
+            </if>
+        </where>
+         order by s.ORG_NAMES
     </select>
 
     <select id="selectTCheckColsByOrgId" parameterType="java.util.Map" resultType="com.mediot.ygb.mrqs.analysis.monitoringIndexManage.entity.TCheckCol">
         select a.* from t_check_col a
         left join T_CHECK_ORG b
         on a.CHECK_COL_ID=b.CHECK_COL_ID
-        where b.ORG_ID=#{orgId}
+        where b.ORG_ID=#{orgId} and a.CMIS_CHOICE = '1'
     </select>
 
     <select id="selecAllCheckCol" resultType="com.mediot.ygb.mrqs.analysis.monitoringIndexManage.entity.TCheckCol">

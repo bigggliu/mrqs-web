@@ -605,7 +605,19 @@ public class ReportManageServiceImpl implements ReportManageService {
             dDatas[i+1]=sortByDiagnosis(errorDetailVos.get(i),i);
             return true;
         }
-        if(errorDetailVos.get(i).getColName().equals("SSXGXXWZX")){
+        if(errorDetailVos.get(i).getColName().equals("SSXGXXWZX1")){
+            dDatas[i+1]=sortByOperation(errorDetailVos.get(i),i);
+            return true;
+        }
+        if(errorDetailVos.get(i).getColName().equals("SSXGXXWZX2")){
+            dDatas[i+1]=sortByOperation(errorDetailVos.get(i),i);
+            return true;
+        }
+        if(errorDetailVos.get(i).getColName().equals("SSJCZBM&SSJB")){
+            dDatas[i+1]=sortByOperation(errorDetailVos.get(i),i);
+            return true;
+        }
+        if(errorDetailVos.get(i).getColName().equals("SSJCZBM&YHDJ")){
             dDatas[i+1]=sortByOperation(errorDetailVos.get(i),i);
             return true;
         }

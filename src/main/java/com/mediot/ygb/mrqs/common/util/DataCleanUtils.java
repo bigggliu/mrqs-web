@@ -2005,7 +2005,11 @@ public class DataCleanUtils {
                 orderSTArr[1]=new String[]{"JBMM","BLZD","BLH"};
                 orderSTArr[2]=new String[]{"BLZDBM2","BLZDMC2","BLH2"};
                 orderSTArr[3]=new String[]{"BLZDBM3","BLZDMC3","BLH3"};
-                orderSTArr[4]=new String[]{"WBYY","WBYYBM"};
+                if(outDiagMap.containsKey("WBYYBM")){
+                    orderSTArr[4]=new String[]{"WBYYBM","WBYY"};
+                }else {
+                    orderSTArr[4]=new String[]{"H23","WBYY"};
+                }
                 orderSTArr[5]=new String[]{"WBYSBM2","WBYSMC2"};
                 orderSTArr[6]=new String[]{"WBYSBM3","WBYSBM3"};
                 for(int i=1;i<=15;i++){
@@ -2056,7 +2060,7 @@ public class DataCleanUtils {
                             tFirstoutdiagTestingList.add(t);
                             return;
                         }
-                    }else if(e[0].equals("WBYY")||e[0].equals("WBYSBM2")||e[0].equals("WBYSBM3")){
+                    }else if(e[0].equals("WBYYBM")||e[0].equals("H23")||e[0].equals("WBYSBM2")||e[0].equals("WBYSBM3")){
                         if(StringUtils.isNotBlank((String)outDiagMap.get(e[0]))){
                             TFirstoutdiagTesting t=new TFirstoutdiagTesting();
                             t.setTempSid(tFirstPageTesting.getTempSid());
@@ -2065,7 +2069,7 @@ public class DataCleanUtils {
                             t.setDiagnosisCode((String)outDiagMap.get(e[0]));
                             t.setDiagnosisName((String)outDiagMap.get(e[1]));
                             t.setCaseId(tFirstPageTesting.getCaseNo());
-                            if(e[0].equals("WBYY")){
+                            if(e[0].equals("WBYYBM")||e[0].equals("H23")){
                                 t.setDiagOrder(1);
                             }else if(e[0].equals("WBYSBM2")){
                                 t.setDiagOrder(2);
@@ -2171,15 +2175,35 @@ public class DataCleanUtils {
             List<TFirstoutoperTesting> tFirstoutoperTestingList=Lists.newArrayList();
             Map<String,Object> outDiagMap=Maps.newHashMap();
             //构造有序集合
-            String[] diagInfoArr=new String[]{
-                    "JBDM","ZYZD","RYBQ","ZYZDCYQK",
-                    "JBMM","BLZD","BLH",
-                    "BLZDBM2","BLZDMC2","BLH2",
-                    "BLZDBM3","BLZDMC3","BLH3",
-                    "WBYY","WBYYBM",
-                    "WBYSBM2","WBYSMC2",
-                    "WBYSBM3","WBYSBM3"
-            };
+            String[] diagInfoArr;
+            boolean flag = true;
+            for(String cellName : fileAnalysisDto.getCellNameList()){
+                if(cellName.equals("H23")){
+                    flag = false;
+                    break;
+                }
+            }
+            if(flag){
+                diagInfoArr=new String[]{
+                        "JBDM","ZYZD","RYBQ","ZYZDCYQK",
+                        "JBMM","BLZD","BLH",
+                        "BLZDBM2","BLZDMC2","BLH2",
+                        "BLZDBM3","BLZDMC3","BLH3",
+                        "WBYYBM","WBYY",
+                        "WBYSBM2","WBYSMC2",
+                        "WBYSBM3","WBYSBM3"
+                };
+            }else {
+                diagInfoArr=new String[]{
+                        "JBDM","ZYZD","RYBQ","ZYZDCYQK",
+                        "JBMM","BLZD","BLH",
+                        "BLZDBM2","BLZDMC2","BLH2",
+                        "BLZDBM3","BLZDMC3","BLH3",
+                        "H23","WBYY",
+                        "WBYSBM2","WBYSMC2",
+                        "WBYSBM3","WBYSBM3"
+                };
+            }
             List<String> dlist=Stream.of(diagInfoArr).collect(Collectors.toList());
             for(int i=1;i<=15;i++){
                 StringBuffer sb1=new StringBuffer();
@@ -2265,9 +2289,9 @@ public class DataCleanUtils {
                         if(dcVal==null){
                             dcVal="";
                         }
-                        if(dcVal.equals("-")){
-                            dcVal="";
-                        }
+                        //if(dcVal.equals("-")){
+                        //    dcVal="";
+                        //}
                         tFirstPageTesting.setBatchId(fileAnalysisDto.getBatchId());
                         tFirstPageTesting.setUpOrgId(fileAnalysisDto.getUpOrgId());
                         if(dcName.equals("USERNAME")){

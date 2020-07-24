@@ -64,9 +64,12 @@ public class TCheckOrgServiceImpl extends BaseServiceImpl<TCheckOrgMapper,TCheck
             if(StringUtils.isNotBlank(tCheckOrgDto.getQueryStr())){
                 Map<String,Object> queryMap=Maps.newHashMap();
                 queryMap.put("queryStr",tCheckOrgDto.getQueryStr());
+                queryMap.put("cmisChoice","1");
                 tCheckColList=tCheckColMapper.selectTCheckColList(queryMap);
             }else {
-                tCheckColList=tCheckColMapper.selectTCheckColListWithOutQs();
+                Map<String,Object> queryMap=Maps.newHashMap();
+                queryMap.put("cmisChoice","1");
+                tCheckColList=tCheckColMapper.selectTCheckColListWithOutQs(queryMap);
             }
             tCheckOrgList=tCheckColList.stream().map(e->JsonUtil.getJsonToBean(JsonUtil.getBeanToJson(e),TCheckOrg.class)).collect(Collectors.toList());
         }

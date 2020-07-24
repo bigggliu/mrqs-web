@@ -12,7 +12,7 @@ public interface TCheckColMapper extends BaseMapper<TCheckCol> {
 
     List<TCheckCol> selectTCheckColList(Map<String, Object> queryMap);
 
-    List<TCheckCol> selectTCheckColListWithOutQs();
+    List<TCheckCol> selectTCheckColListWithOutQs(Map<String, Object> queryMap);
 
     List<TCheckCol> selectTCheckColsByOrgId(Map<String, Object> queryMap);
 
