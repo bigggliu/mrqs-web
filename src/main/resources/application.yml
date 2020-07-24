@@ -88,9 +88,9 @@ usercenter:
   LoginFilter:
     enable: true
 fileUpload:
-  path: C:\Users\Administrator\Desktop\file_test
+  path: G:\file\file_test
   tempPath: \temp\
-  basePath: C:\Users\Administrator\Desktop\
+  basePath: G:\file\
   unZipPath: \unZip\
-  pdfPath: C:\Users\Administrator\Desktop\pdf\
-  excelPath: C:\Users\Administrator\Desktop\excel\
+  pdfPath: G:\file\pdf\
+  excelPath: G:\file\excel\
