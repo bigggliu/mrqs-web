@@ -6,6 +6,7 @@ import com.mediot.ygb.mrqs.system.dao.UserRoleDao;
 import com.mediot.ygb.mrqs.system.pojo.Role;
 import com.mediot.ygb.mrqs.system.pojo.User;
 import com.mediot.ygb.mrqs.system.pojo.UserRole;
+import com.mediot.ygb.mrqs.system.vo.UserVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -58,6 +59,13 @@ public class UserService {
         return userDao.selectUserListByroleId(role.getRoleId());
     }
 
+    public User selectByUserNameAndPassWord(UserVo userVo){
+        Map<String,Object> queryMap = new HashMap<>();
+        queryMap.put("username",userVo.getUsername());
+        queryMap.put("password",userVo.getPassword());
+        return userDao.selectByUserNameAndPassWord(queryMap);
+    }
+
     public void validationUser(User user){
         LocalAssert.notNull(user.getUsername(),"用户名不能为空");
         LocalAssert.notNull(user.getPassword(),"密码不能为空");
@@ -65,7 +73,9 @@ public class UserService {
     }
 
     public void checkUserExist(User user) throws Exception {
-        if(userDao.selectUserByUserName(user.getUsername()).size() > 0){
+        Map<String,Object> queryMap = new HashMap<>();
+        queryMap.put("USERNAME",user.getUsername());
+        if(userDao.selectByMap(queryMap).size() > 0){
             throw new Exception("用户名已存在");
         }
     }

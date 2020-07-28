@@ -1,6 +1,6 @@
 package com.mediot.ygb.mrqs.system.controller;
 
-import com.mediot.ygb.mrqs.system.Vo.RoleMenuVo;
+import com.mediot.ygb.mrqs.system.vo.RoleMenuVo;
 import com.mediot.ygb.mrqs.system.service.RoleMenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;

@@ -1,4 +1,4 @@
-package com.mediot.ygb.mrqs.system.Vo;
+package com.mediot.ygb.mrqs.system.vo;
 
 import com.mediot.ygb.mrqs.system.pojo.Org;
 import lombok.Data;

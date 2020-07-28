@@ -1,7 +1,7 @@
 package com.mediot.ygb.mrqs.system.service;
 
 import com.mediot.ygb.mrqs.common.core.util.LocalAssert;
-import com.mediot.ygb.mrqs.system.Vo.OrgTree;
+import com.mediot.ygb.mrqs.system.vo.OrgTree;
 import com.mediot.ygb.mrqs.system.dao.OrgDao;
 import com.mediot.ygb.mrqs.system.dao.UserDao;
 import com.mediot.ygb.mrqs.system.pojo.Org;

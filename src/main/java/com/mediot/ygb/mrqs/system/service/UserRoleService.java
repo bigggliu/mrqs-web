@@ -1,6 +1,6 @@
 package com.mediot.ygb.mrqs.system.service;
 
-import com.mediot.ygb.mrqs.system.Vo.UserRoleVo;
+import com.mediot.ygb.mrqs.system.vo.UserRoleVo;
 import com.mediot.ygb.mrqs.system.dao.UserRoleDao;
 import com.mediot.ygb.mrqs.system.pojo.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;

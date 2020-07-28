@@ -1,9 +1,8 @@
 package com.mediot.ygb.mrqs.system.controller;
 
-import com.mediot.ygb.mrqs.system.Vo.MenuTree;
+import com.mediot.ygb.mrqs.system.vo.MenuTree;
 import com.mediot.ygb.mrqs.system.pojo.Menu;
 import com.mediot.ygb.mrqs.system.pojo.Role;
-import com.mediot.ygb.mrqs.system.pojo.User;
 import com.mediot.ygb.mrqs.system.service.MenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;

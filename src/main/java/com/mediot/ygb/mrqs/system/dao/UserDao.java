@@ -5,11 +5,12 @@ import com.mediot.ygb.mrqs.system.pojo.User;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public interface UserDao extends BaseMapper<User> {
 
     List<User> userListFuzzyQuery(String queryStr);
-    List<User> selectUserByUserName(String username);
+    User selectByUserNameAndPassWord(Map<String,Object> querMap);
     List<User> selectUserListByroleId(Long roleId);
 }

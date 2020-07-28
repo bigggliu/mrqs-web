@@ -64,6 +64,10 @@ public class RoleService {
         return roleDao.selectById(role);
     }
 
+    public List<Role> selectRoleListByUserId(User user){
+        return roleDao.selectRoleListByUserId(user.getUserId());
+    }
+
     public void validationRole(Role role){
         LocalAssert.notNull(role.getRoleName(),"角色名不能为空");
     }

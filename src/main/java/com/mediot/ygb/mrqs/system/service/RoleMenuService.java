@@ -1,7 +1,7 @@
 package com.mediot.ygb.mrqs.system.service;
 
 
-import com.mediot.ygb.mrqs.system.Vo.RoleMenuVo;
+import com.mediot.ygb.mrqs.system.vo.RoleMenuVo;
 import com.mediot.ygb.mrqs.system.dao.RoleMenuDao;
 import com.mediot.ygb.mrqs.system.pojo.RoleMenu;
 import org.springframework.beans.factory.annotation.Autowired;

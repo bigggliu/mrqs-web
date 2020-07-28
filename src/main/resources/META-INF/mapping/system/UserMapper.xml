@@ -29,8 +29,8 @@
         order by a.UPDATE_TIME desc
     </select>
 
-    <select id="selectUserByUserName" resultMap="BaseResultMap">
-        select <include refid="Base_Column"/> from SYS_USER a where a.username = #{username}
+    <select id="selectByUserNameAndPassWord" resultMap="BaseResultMap">
+        select <include refid="Base_Column"/> from SYS_USER a where a.username = #{username} and a.password = #{password}
     </select>
 
     <select id="selectUserListByroleId" resultMap="BaseResultMap">

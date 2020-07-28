@@ -3,7 +3,7 @@ package com.mediot.ygb.mrqs.system.service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.mediot.ygb.mrqs.common.core.util.LocalAssert;
 import com.mediot.ygb.mrqs.common.core.util.StringUtils;
-import com.mediot.ygb.mrqs.system.Vo.MenuTree;
+import com.mediot.ygb.mrqs.system.vo.MenuTree;
 import com.mediot.ygb.mrqs.system.dao.MenuDao;
 import com.mediot.ygb.mrqs.system.dao.RoleMenuDao;
 import com.mediot.ygb.mrqs.system.pojo.Menu;

@@ -1,8 +1,7 @@
 package com.mediot.ygb.mrqs.system.controller;
 
-import com.mediot.ygb.mrqs.system.Vo.OrgTree;
+import com.mediot.ygb.mrqs.system.vo.OrgTree;
 import com.mediot.ygb.mrqs.system.pojo.Org;
-import com.mediot.ygb.mrqs.system.pojo.User;
 import com.mediot.ygb.mrqs.system.service.OrgService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
