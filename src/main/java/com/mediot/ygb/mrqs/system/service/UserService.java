@@ -1,6 +1,8 @@
 package com.mediot.ygb.mrqs.system.service;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.mediot.ygb.mrqs.common.core.util.LocalAssert;
+import com.mediot.ygb.mrqs.common.core.util.StringUtils;
 import com.mediot.ygb.mrqs.system.dao.UserDao;
 import com.mediot.ygb.mrqs.system.dao.UserRoleDao;
 import com.mediot.ygb.mrqs.system.pojo.Role;
@@ -11,6 +13,7 @@ import com.mediot.ygb.mrqs.system.vo.UserVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Wrapper;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -51,7 +54,12 @@ public class UserService {
     }
 
     public List<User> userListFuzzyQuery(String queryStr){
-        return userDao.userListFuzzyQuery(queryStr);
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.orderByDesc("UPDATE_TIME");
+        if(StringUtils.isNotBlank(queryStr)){
+            queryWrapper.like("USERNAME",queryStr).or().like("PHONE",queryStr).or().like("EMAIL",queryStr);
+        }
+        return userDao.selectList(queryWrapper);
     }
 
     public List<User> userListFuzzyQueryWithOutRole(UserRoleVo userRoleVo){
@@ -63,8 +71,9 @@ public class UserService {
         return userDao.selectById(user);
     }
 
-    public List<User> selectUserListByroleId(Role role){
-        return userDao.selectUserListByroleId(role.getRoleId());
+    public List<User> userListFuzzyQueryByroleId(UserRoleVo userRoleVo){
+
+        return userDao.userListFuzzyQueryByroleId(userRoleVo);
     }
 
     public User selectByUserNameAndPassWord(UserVo userVo){

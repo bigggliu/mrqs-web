@@ -10,5 +10,4 @@ import java.util.List;
 @Repository
 public interface OrgDao extends BaseMapper<Org> {
 
-    List<Org> orgListFuzzyQuery(String queryStr);
 }

@@ -1,6 +1,8 @@
 package com.mediot.ygb.mrqs.system.service;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.mediot.ygb.mrqs.common.core.util.LocalAssert;
+import com.mediot.ygb.mrqs.common.core.util.StringUtils;
 import com.mediot.ygb.mrqs.system.vo.OrgTree;
 import com.mediot.ygb.mrqs.system.dao.OrgDao;
 import com.mediot.ygb.mrqs.system.dao.UserDao;
@@ -61,7 +63,12 @@ public class OrgService {
     }
 
     public List<Org> orgListFuzzyQuery(String queryStr){
-        return orgDao.orgListFuzzyQuery(queryStr);
+        QueryWrapper<Org> queryWrapper = new QueryWrapper<>();
+        queryWrapper.orderByDesc("UPDATE_TIME");
+        if(StringUtils.isNotBlank(queryStr)){
+            queryWrapper.like("ORG_NAME",queryStr).or().like("ORG_CODE",queryStr);
+        }
+        return orgDao.selectList(queryWrapper);
     }
 
     public Org selectById(Org org){

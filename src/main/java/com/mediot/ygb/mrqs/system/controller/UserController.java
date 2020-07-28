@@ -38,9 +38,9 @@ public class UserController {
         return userService.delete(user);
     }
 
-    @RequestMapping("/selectUserListByroleId")
-    public List<User> selectUserListByroleId(Role role){
-        return userService.selectUserListByroleId(role);
+    @RequestMapping("/userListFuzzyQueryByroleId")
+    public List<User> userListFuzzyQueryByroleId(UserRoleVo userRoleVo){
+        return userService.userListFuzzyQueryByroleId(userRoleVo);
     }
 
     @RequestMapping("/selectById")

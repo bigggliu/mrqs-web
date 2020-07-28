@@ -11,8 +11,7 @@ import java.util.Map;
 @Repository
 public interface UserDao extends BaseMapper<User> {
 
-    List<User> userListFuzzyQuery(String queryStr);
     User selectByUserNameAndPassWord(Map<String,Object> querMap);
-    List<User> selectUserListByroleId(Long roleId);
+    List<User> userListFuzzyQueryByroleId(UserRoleVo userRoleVo);
     List<User> userListFuzzyQueryWithOutRole(UserRoleVo userRoleVo);
 }
