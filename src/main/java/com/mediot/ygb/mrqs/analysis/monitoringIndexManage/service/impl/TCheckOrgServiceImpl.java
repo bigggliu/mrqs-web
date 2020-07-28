@@ -19,8 +19,8 @@ import com.mediot.ygb.mrqs.common.core.service.impl.BaseServiceImpl;
 import com.mediot.ygb.mrqs.common.core.util.LocalAssert;
 import com.mediot.ygb.mrqs.common.core.util.StringUtils;
 import com.mediot.ygb.mrqs.common.util.JsonUtil;
-import com.mediot.ygb.mrqs.org.dao.TOrgsMapper;
-import com.mediot.ygb.mrqs.org.entity.TOrgsEntity;
+import com.mediot.ygb.mrqs.system.dao.OrgDao;
+import com.mediot.ygb.mrqs.system.pojo.Org;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -41,7 +41,7 @@ public class TCheckOrgServiceImpl extends BaseServiceImpl<TCheckOrgMapper,TCheck
     TCheckColMapper tCheckColMapper;
 
     @Autowired
-    TOrgsMapper tOrgsMapper;
+    OrgDao orgDao;
 
     @Override
     public Map<String, Object> queryTCheckOrgsByParam(TCheckOrgDto tCheckOrgDto) {
@@ -93,7 +93,7 @@ public class TCheckOrgServiceImpl extends BaseServiceImpl<TCheckOrgMapper,TCheck
         LocalAssert.notNull(tCheckOrgDto.getCheckColIds(),"检测指标ids不能为空");
         String[] tCheckColArr=tCheckOrgDto.getCheckColIds().split(",");
         QueryWrapper<TCheckCol> queryWrapper=new QueryWrapper<>();
-        TOrgsEntity tOrgsEntity=tOrgsMapper.selectById(tCheckOrgDto.getOrgId());
+        Org tOrgsEntity=orgDao.selectById(tCheckOrgDto.getOrgId());
         //去掉可能在数据库中存在的记录
         List<TCheckOrg> existTCheckOrgList= Lists.newArrayList();
         existTCheckOrgList=IntStream.range(0,tCheckColArr.length).mapToObj(i->{
@@ -149,7 +149,7 @@ public class TCheckOrgServiceImpl extends BaseServiceImpl<TCheckOrgMapper,TCheck
     @Override
     public int setAllTCheckOrgRefTCheckCol(TCheckOrgDto tCheckOrgDto) {
         List<TCheckCol> tCheckColList = tCheckColMapper.selecAllCheckCol();
-        TOrgsEntity tOrgsEntity=tOrgsMapper.selectById(tCheckOrgDto.getOrgId());
+        Org tOrgsEntity=orgDao.selectById(tCheckOrgDto.getOrgId());
         List<TCheckOrg> tCheckOrgList=tCheckColList.stream().map(e->JsonUtil.getJsonToBean(JsonUtil.getBeanToJson(e),TCheckOrg.class)).collect(Collectors.toList());
         tCheckOrgList.stream().map(e->{e.setOrgId(tCheckOrgDto.getOrgId());e.setOrgName(tOrgsEntity.getOrgName());return e;}).collect(Collectors.toList());
         return tCheckOrgMapper.batchInsertByMap(tCheckOrgList);

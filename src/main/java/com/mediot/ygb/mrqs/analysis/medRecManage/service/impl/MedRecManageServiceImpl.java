@@ -43,9 +43,8 @@ import com.mediot.ygb.mrqs.index.indexInfoManage.dao.TFirstoutdiagTestingMapper;
 import com.mediot.ygb.mrqs.index.indexInfoManage.dao.TFirstoutoperTestingMapper;
 import com.mediot.ygb.mrqs.index.indexInfoManage.dao.TFirstpageTestingMapper;
 
-import com.mediot.ygb.mrqs.org.dao.TOrgsMapper;
 
-
+import com.mediot.ygb.mrqs.system.dao.OrgDao;
 import com.mediot.ygb.mrqs.workingRecord.FileUploadManage.enumcase.StateEnum;
 import com.mediot.ygb.mrqs.workingRecord.FileUploadManage.dao.FileUploadMapper;
 import com.mediot.ygb.mrqs.workingRecord.FileUploadManage.entity.FileUploadEntity;
@@ -99,7 +98,7 @@ public class MedRecManageServiceImpl implements MedRecordManageService {
     private TDiagDictMapper tDiagDictMapper;
 
     @Autowired
-    private TOrgsMapper tOrgsMapper;
+    private OrgDao orgDao;
 
     @Autowired
     private TOperationDictMapper tOperationDictMapper;
@@ -283,7 +282,7 @@ public class MedRecManageServiceImpl implements MedRecordManageService {
                 fileAnalysisDto.setFileUploadMapper(fileUploadMapper);
                 fileAnalysisDto.setTOperationDictMapper(tOperationDictMapper);
                 fileAnalysisDto.setStandardCode(e.getStandardCode());
-                fileAnalysisDto.setTOrgsMapper(tOrgsMapper);
+                fileAnalysisDto.setOrgDao(orgDao);
                 fileAnalysisDtoList.add(fileAnalysisDto);
             }
             sb.setLength(0);

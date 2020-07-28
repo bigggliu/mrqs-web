@@ -9,7 +9,7 @@ mybatis-plus:
   mapper-locations: classpath*:META-INF/mapping/*.xml,META-INF/mapping/**/*.xml
   configuration:
     map-underscore-to-camel-case: true
-    call-setters-on-nulls: false
+    call-setters-on-nulls: true
     cache-enabled: false
     #log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   global-config:

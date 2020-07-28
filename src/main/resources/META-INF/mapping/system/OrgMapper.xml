@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mediot.ygb.mrqs.system.dao.OrgDao">
+    <resultMap id="BaseResultMap" type="com.mediot.ygb.mrqs.system.pojo.Org">
+        <id column="ORG_ID" property="orgId" jdbcType="DECIMAL"/>
+        <result column="ORG_NAME" property="orgName" jdbcType="VARCHAR"/>
+        <result column="PARENT_ID" property="parentId" jdbcType="DECIMAL"/>
+        <result column="ORG_CODE" property="orgCode" jdbcType="VARCHAR"/>
+        <result column="ORG_PROVINCE" property="orgProvince" jdbcType="VARCHAR"/>
+        <result column="STANDARD_CODE" property="standardCode" jdbcType="VARCHAR"/>
+        <result column="SOURCE_CODE" property="sourceCode" jdbcType="VARCHAR"/>
+        <result column="CREATE_TIME" property="createTime" jdbcType="DATE"/>
+        <result column="UPDATE_TIME" property="updateTime" jdbcType="DATE"/>
+        <result column="REMARK" property="remark" jdbcType="VARCHAR"/>
+        <result column="STATE" property="state" jdbcType="DECIMAL"/>
+    </resultMap>
+
+    <sql id="Base_Column">
+        a.ORG_ID,a.ORG_NAME,a.PARENT_ID,a.ORG_CODE,a.ORG_PROVINCE,a.STANDARD_CODE,a.SOURCE_CODE,a.CREATE_TIME,a.UPDATE_TIME,a.REMARK,a.STATE
+    </sql>
+
+    <select id="orgListFuzzyQuery" resultMap="BaseResultMap">
+        select <include refid="Base_Column"/> from SYS_ORG a where 1=1
+        <if test="queryStr != null and queryStr != ''">
+            and (a.ORG_NAME like CONCAT(concat('%',#{queryStr}),'%')
+            or a.ORG_CODE like CONCAT(concat('%',#{queryStr}),'%'))
+        </if>
+        order by a.UPDATE_TIME desc
+    </select>
+</mapper>

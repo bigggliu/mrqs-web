@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mediot.ygb.mrqs.system.dao.MenuDao">
+
+    <resultMap id="BaseResultMap" type="com.mediot.ygb.mrqs.system.pojo.Menu">
+        <id column="MENU_ID" property="menuId" jdbcType="DECIMAL"/>
+        <result column="MENU_NAME" property="menuName" jdbcType="VARCHAR"/>
+        <result column="PARENT_ID" property="parentId" jdbcType="DECIMAL"/>
+        <result column="SORT" property="sort" jdbcType="DECIMAL"/>
+        <result column="MENU_URL" property="menuUrl" jdbcType="VARCHAR"/>
+        <result column="CREATE_TIME" property="createTime" jdbcType="DATE"/>
+        <result column="UPDATE_TIME" property="updateTime" jdbcType="DATE"/>
+        <result column="REMARK" property="remark" jdbcType="VARCHAR"/>
+        <result column="STATE" property="state" jdbcType="DECIMAL"/>
+    </resultMap>
+
+    <sql id="Base_Column">
+        a.MENU_ID,a.MENU_NAME,a.PARENT_ID,a.SORT,a.MENU_URL,a.CREATE_TIME,a.UPDATE_TIME,a.REMARK,a.STATE
+    </sql>
+
+    <select id="selectMenuListByRoleId" resultMap="BaseResultMap">
+        select <include refid="Base_Column"></include> from SYS_MENU a,SYS_ROLE_MENU b
+        where b.MENU_ID = a.MENU_ID and b.ROLE_ID = #{roleId}
+    </select>
+
+    <select id="selectMenuListByParentIdAndUserId" resultMap="BaseResultMap">
+        select DISTINCT <include refid="Base_Column"></include> from SYS_MENU a,SYS_ROLE_MENU b,SYS_USER_ROLE c
+        where c.ROLE_ID = b.ROLE_ID and b.MENU_ID = a.MENU_ID and c.USER_ID = #{userId} and a.PARENT_ID = #{parentId}
+    </select>
+</mapper>

@@ -14,7 +14,7 @@ import com.mediot.ygb.mrqs.index.errorInfoManage.dao.TErrorMapper;
 import com.mediot.ygb.mrqs.index.indexInfoManage.dao.TFirstoutdiagTestingMapper;
 import com.mediot.ygb.mrqs.index.indexInfoManage.dao.TFirstoutoperTestingMapper;
 import com.mediot.ygb.mrqs.index.indexInfoManage.dao.TFirstpageTestingMapper;
-import com.mediot.ygb.mrqs.org.dao.TOrgsMapper;
+import com.mediot.ygb.mrqs.system.dao.OrgDao;
 import com.mediot.ygb.mrqs.workingRecord.FileUploadManage.dao.FileUploadMapper;
 import lombok.Data;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -72,7 +72,7 @@ public class FileAnalysisDto implements Serializable {
 
     private FileUploadMapper fileUploadMapper;
 
-    private TOrgsMapper tOrgsMapper;
+    private OrgDao orgDao;
 
     private TOperationDictMapper tOperationDictMapper;
 

@@ -30,8 +30,8 @@ import com.mediot.ygb.mrqs.index.indexInfoManage.dao.TFirstoutdiagTestingMapper;
 import com.mediot.ygb.mrqs.index.indexInfoManage.dao.TFirstoutoperTestingMapper;
 import com.mediot.ygb.mrqs.index.indexInfoManage.dao.TFirstpageTestingMapper;
 import com.mediot.ygb.mrqs.index.indexInfoManage.entity.TFirstPageTesting;
-import com.mediot.ygb.mrqs.org.dao.TOrgsMapper;
-import com.mediot.ygb.mrqs.org.entity.TOrgsEntity;
+import com.mediot.ygb.mrqs.system.dao.OrgDao;
+import com.mediot.ygb.mrqs.system.pojo.Org;
 import com.mediot.ygb.mrqs.workingRecord.FileUploadManage.entity.FileUploadEntity;
 import com.mediot.ygb.mrqs.workingRecord.FileUploadManage.dao.FileUploadMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,7 +64,7 @@ public class ReportManageServiceImpl implements ReportManageService {
     private TDataStandardMapper tDataStandardMapper;
 
     @Autowired
-    private TOrgsMapper tOrgsMapper;
+    private OrgDao orgDao;
 
     @Autowired
     private TFirstpageTestingMapper tFirstpageTestingMapper;
@@ -249,7 +249,7 @@ public class ReportManageServiceImpl implements ReportManageService {
             TDataStandard ts=tDataStandardMapper.selectOne(queryWrapper);
             QueryWrapper qw=new QueryWrapper();
             qw.eq("ORG_ID",f.getOrgId());
-            TOrgsEntity o=tOrgsMapper.selectOne(qw);
+            Org o=orgDao.selectOne(qw);
             StringBuffer fileName =new StringBuffer();
             fileName.append(f.getStartTime())
                     .append("-")
@@ -320,7 +320,7 @@ public class ReportManageServiceImpl implements ReportManageService {
             TDataStandard ts=tDataStandardMapper.selectOne(queryWrapper);
             QueryWrapper qw=new QueryWrapper();
             qw.eq("ORG_ID",file.getOrgId());
-            TOrgsEntity o=tOrgsMapper.selectOne(qw);
+            Org o=orgDao.selectOne(qw);
             StringBuffer fileName =new StringBuffer();
             fileName.append(file.getStartTime())
                     .append("-")

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mediot.ygb.mrqs.system.dao.UserDao">
+
+    <resultMap id="BaseResultMap" type="com.mediot.ygb.mrqs.system.pojo.User">
+        <id column="USER_ID" property="userId" jdbcType="DECIMAL"/>
+        <result column="USERNAME" property="username" jdbcType="VARCHAR"/>
+        <result column="PASSWORD" property="password" jdbcType="VARCHAR"/>
+        <result column="ORG_ID" property="orgId" jdbcType="DECIMAL"/>
+        <result column="EMAIL" property="email" jdbcType="VARCHAR"/>
+        <result column="PHONE" property="phone" jdbcType="VARCHAR"/>
+        <result column="CREATE_TIME" property="createTime" jdbcType="DATE"/>
+        <result column="UPDATE_TIME" property="updateTime" jdbcType="DATE"/>
+        <result column="REMARK" property="remark" jdbcType="VARCHAR"/>
+        <result column="STATE" property="state" jdbcType="DECIMAL"/>
+    </resultMap>
+
+    <sql id="Base_Column">
+     a.USER_ID,a.PASSWORD,a.ORG_ID,a.EMAIL,a.PHONE,a.CREATE_TIME,a.UPDATE_TIME,a.REMARK,a.STATE
+    </sql>
+
+    <select id="userListFuzzyQuery" resultMap="BaseResultMap">
+        select <include refid="Base_Column"/> from SYS_USER a where 1=1
+        <if test="queryStr != null and queryStr != ''">
+            and (a.username like CONCAT(concat('%',#{queryStr}),'%')
+              or a.phone like CONCAT(concat('%',#{queryStr}),'%')
+              or a.email like CONCAT(concat('%',#{queryStr}),'%'))
+        </if>
+        order by a.UPDATE_TIME desc
+    </select>
+
+    <select id="selectUserByUserName" resultMap="BaseResultMap">
+        select <include refid="Base_Column"/> from SYS_USER a where a.username = #{username}
+    </select>
+
+    <select id="selectUserListByroleId" resultMap="BaseResultMap">
+        select <include refid="Base_Column"/> from SYS_USER a,SYS_USER_ROLE b
+        where b.USER_ID = a.USER_ID and b.ROLE_ID = #{roleId}
+    </select>
+
+</mapper>

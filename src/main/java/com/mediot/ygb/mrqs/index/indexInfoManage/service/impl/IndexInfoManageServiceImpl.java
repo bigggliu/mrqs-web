@@ -31,8 +31,6 @@ import com.mediot.ygb.mrqs.index.indexInfoManage.entity.TFirstoutoperTesting;
 import com.mediot.ygb.mrqs.index.indexInfoManage.service.IndexInfoManageService;
 import com.mediot.ygb.mrqs.index.indexInfoManage.vo.TFirstPageTestingVo;
 
-import com.mediot.ygb.mrqs.org.dao.TOrgRelationshipMapper;
-import com.mediot.ygb.mrqs.system.user.vo.UserInfoVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -63,8 +61,8 @@ public class IndexInfoManageServiceImpl extends BaseServiceImpl<TFirstpageTestin
     @Autowired
     TBaseMapper tBaseMapper;
 
-    @Autowired
-    TOrgRelationshipMapper tOrgRelationshipMapper;
+//    @Autowired
+//    TOrgRelationshipMapper tOrgRelationshipMapper;
 
     @Override
     public TFirstPageTesting insertAndUpdate(TFirstPageTestingDto tFirstPageTestingDto) {
@@ -108,23 +106,23 @@ public class IndexInfoManageServiceImpl extends BaseServiceImpl<TFirstpageTestin
         queryMap.put("diagnosisCode",tFirstPageTestingDto.getDiagnosisCode());
         queryMap.put("operationCode",tFirstPageTestingDto.getOperationCode());
         queryMap.put("outDeptName",tFirstPageTestingDto.getOutDeptName());
-        UserInfoVo userInfoVo = WebUtils.getSessionAttribute(CustomConst.LoginUser.SESSION_USER_INFO);
-        if(StringUtils.isNotEmpty(userInfoVo.getOrgId())){
-            if(!userInfoVo.getOrgId().equals("1266216344326770690")){//测试用，可以删除
-                List<String> orgIds=Lists.newArrayList();
-                if(StringUtils.isNotBlank(tFirstPageTestingDto.getOrgId())){
-                    orgIds.add(tFirstPageTestingDto.getOrgId());
-                }else {
-                    orgIds.add(userInfoVo.getOrgId());
-                    Map<String,Object> qm= Maps.newHashMap();
-                    qm.put("pid",userInfoVo.getOrgId());
-                    tOrgRelationshipMapper.selectRefOrgList(qm).stream().forEach(e->{
-                        orgIds.add(e.getOrgId());
-                    });
-                }
-                queryMap.put("orgIds",orgIds);
-            }
-        }
+//        UserInfoVo userInfoVo = WebUtils.getSessionAttribute(CustomConst.LoginUser.SESSION_USER_INFO);
+//        if(StringUtils.isNotEmpty(userInfoVo.getOrgId())){
+//            if(!userInfoVo.getOrgId().equals("1266216344326770690")){//测试用，可以删除
+//                List<String> orgIds=Lists.newArrayList();
+//                if(StringUtils.isNotBlank(tFirstPageTestingDto.getOrgId())){
+//                    orgIds.add(tFirstPageTestingDto.getOrgId());
+//                }else {
+//                    orgIds.add(userInfoVo.getOrgId());
+//                    Map<String,Object> qm= Maps.newHashMap();
+//                    qm.put("pid",userInfoVo.getOrgId());
+//                    tOrgRelationshipMapper.selectRefOrgList(qm).stream().forEach(e->{
+//                        orgIds.add(e.getOrgId());
+//                    });
+//                }
+//                queryMap.put("orgIds",orgIds);
+//            }
+//        }
         Page page= PageHelper.startPage(tFirstPageTestingDto.getPageNum(),tFirstPageTestingDto.getPageSize());
         List<TFirstPageTesting> tFirstPageTestingList=Lists.newArrayList();
         if(StringUtils.isBlank(tFirstPageTestingDto.getDiagnosisCode())&&StringUtils.isBlank(tFirstPageTestingDto.getOperationCode())){
