@@ -32,9 +32,12 @@ public class MenuService {
 
     public int update(Menu menu) throws Exception {
         validationMenu(menu);
-        checkMenuExist(menu);
+        Menu tempMenu = menuDao.selectById(menu.getMenuId());
+        if(!tempMenu.getMenuName().equals(menu.getMenuName())){
+            checkMenuExist(menu);
+        }
         menu.setUpdateTime(new Date());
-        return menuDao.insert(menu);
+        return menuDao.updateById(menu);
     }
 
     public int delete(Menu menu) throws Exception {
@@ -73,9 +76,9 @@ public class MenuService {
      */
     public List<MenuTree> getMenuTree(){
         //获取顶级列表
-        Map<String,Object> queryMap = new HashMap<>();
-        queryMap.put("PARENT_ID",0);
-        List<Menu> topList = menuDao.selectByMap(queryMap);
+        QueryWrapper<Menu> queryWrapper = new QueryWrapper();
+        queryWrapper.eq("PARENT_ID",0).orderByAsc("SORT");
+        List<Menu> topList = menuDao.selectList(queryWrapper);
         List<MenuTree> menuTrees = new ArrayList<>();
         menuTrees = getTree(topList,menuTrees,null);
         return menuTrees;
@@ -94,15 +97,16 @@ public class MenuService {
             menuTree.setRemark(menu.getRemark());
             menuTree.setState(menu.getState());
             List<MenuTree> tempMenuTrees = new ArrayList<>();
-            Map<String,Object> queryMap = new HashMap<>();
             List<Menu> tempTopList = new ArrayList<>();
             if(user != null){
+                Map<String,Object> queryMap = new HashMap<>();
                 queryMap.put("parentId",menu.getMenuId());
                 queryMap.put("userId",user.getUserId());
                 tempTopList= menuDao.selectMenuListByParentIdAndUserId(queryMap);
             }else {
-                queryMap.put("PARENT_ID", menu.getMenuId());
-                tempTopList = menuDao.selectByMap(queryMap);
+                QueryWrapper<Menu> queryWrapper = new QueryWrapper();
+                queryWrapper.eq("PARENT_ID",menu.getMenuId()).orderByAsc("SORT");
+                tempTopList = menuDao.selectList(queryWrapper);
             }
             getTree(tempTopList,tempMenuTrees,user);
             menuTree.setChildren(tempMenuTrees);

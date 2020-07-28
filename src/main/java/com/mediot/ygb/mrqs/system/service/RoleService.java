@@ -35,9 +35,12 @@ public class RoleService {
 
     public int update(Role role) throws Exception {
         validationRole(role);
-        checkRoleExist(role);
+        Role tempRole = roleDao.selectById(role.getRoleId());
+        if(!tempRole.getRoleName().equals(role.getRoleName())){
+            checkRoleExist(role);
+        }
         role.setUpdateTime(new Date());
-        return roleDao.insert(role);
+        return roleDao.updateById(role);
     }
 
     public int delete(Role role){

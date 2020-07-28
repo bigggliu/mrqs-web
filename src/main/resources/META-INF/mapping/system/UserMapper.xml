@@ -16,7 +16,7 @@
     </resultMap>
 
     <sql id="Base_Column">
-     a.USER_ID,a.PASSWORD,a.ORG_ID,a.EMAIL,a.PHONE,a.CREATE_TIME,a.UPDATE_TIME,a.REMARK,a.STATE
+     a.USER_ID,a.USERNAME,a.PASSWORD,a.ORG_ID,a.EMAIL,a.PHONE,a.CREATE_TIME,a.UPDATE_TIME,a.REMARK,a.STATE
     </sql>
 
     <select id="userListFuzzyQuery" resultMap="BaseResultMap">
@@ -36,6 +36,17 @@
     <select id="selectUserListByroleId" resultMap="BaseResultMap">
         select <include refid="Base_Column"/> from SYS_USER a,SYS_USER_ROLE b
         where b.USER_ID = a.USER_ID and b.ROLE_ID = #{roleId}
+    </select>
+
+    <select id="userListFuzzyQueryWithOutRole" resultMap="BaseResultMap">
+        select <include refid="Base_Column"/> from SYS_USER a where 1=1
+        <if test="queryStr != null and queryStr != ''">
+            and (a.username like CONCAT(concat('%',#{queryStr}),'%')
+            or a.phone like CONCAT(concat('%',#{queryStr}),'%')
+            or a.email like CONCAT(concat('%',#{queryStr}),'%'))
+        </if>
+        and not exists(select USER_ID from SYS_USER_ROLE b where b.USER_ID = a.USER_ID and b.ROLE_ID = #{roleId})
+        order by a.UPDATE_TIME desc
     </select>
 
 </mapper>

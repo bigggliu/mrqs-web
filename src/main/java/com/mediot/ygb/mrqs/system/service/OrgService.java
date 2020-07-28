@@ -23,7 +23,8 @@ public class OrgService {
 
     public int insert(Org org) throws Exception {
         validationOrg(org);
-        checkOrgExist(org);
+        checkOrgExistByName(org);
+        checkOrgExistByCode(org);
         org.setCreateTime(new Date());
         org.setUpdateTime(new Date());
         return orgDao.insert(org);
@@ -31,7 +32,13 @@ public class OrgService {
 
     public int update(Org org) throws Exception {
         validationOrg(org);
-        checkOrgExist(org);
+        Org tempOrg = orgDao.selectById(org.getOrgId());
+        if(!tempOrg.getOrgName().equals(org.getOrgName())){
+            checkOrgExistByName(org);
+        }
+        if(!tempOrg.getOrgCode().equals(org.getOrgCode())){
+            checkOrgExistByCode(org);
+        }
         org.setUpdateTime(new Date());
         return orgDao.updateById(org);
     }
@@ -84,6 +91,8 @@ public class OrgService {
             orgTree.setOrgId(org.getOrgId());
             orgTree.setOrgName(org.getOrgName());
             orgTree.setOrgCode(org.getOrgCode());
+            orgTree.setSourceCode(org.getSourceCode());
+            orgTree.setStandardCode(org.getStandardCode());
             orgTree.setRemark(org.getRemark());
             orgTree.setState(org.getState());
             List<OrgTree> tempOrgTrees = new ArrayList<>();
@@ -104,14 +113,19 @@ public class OrgService {
         LocalAssert.notNull(org.getOrgCode(),"机构代码不能为空");
         LocalAssert.notNull(org.getStandardCode(),"编码格式不能为空");
         LocalAssert.notNull(org.getSourceCode(),"编码来源不能为空");
+        LocalAssert.notNull(org.getParentId(),"机构状态不能为空");
     }
 
-    public void checkOrgExist(Org org) throws Exception {
+    public void checkOrgExistByName(Org org) throws Exception {
         Map<String,Object> orgNameQueryMap = new HashMap<>();
         orgNameQueryMap.put("ORG_NAME",org.getOrgName());
         if(orgDao.selectByMap(orgNameQueryMap).size() > 0){
             throw new Exception("机构名称已存在");
         }
+
+    }
+
+    public void checkOrgExistByCode(Org org) throws Exception {
         Map<String,Object> orgCodeQueryMap = new HashMap<>();
         orgCodeQueryMap.put("ORG_CODE",org.getOrgCode());
         if(orgDao.selectByMap(orgCodeQueryMap).size() > 0){

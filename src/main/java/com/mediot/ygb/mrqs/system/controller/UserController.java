@@ -2,7 +2,9 @@ package com.mediot.ygb.mrqs.system.controller;
 
 import com.mediot.ygb.mrqs.system.pojo.Role;
 import com.mediot.ygb.mrqs.system.pojo.User;
+import com.mediot.ygb.mrqs.system.pojo.UserRole;
 import com.mediot.ygb.mrqs.system.service.UserService;
+import com.mediot.ygb.mrqs.system.vo.UserRoleVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -44,5 +46,10 @@ public class UserController {
     @RequestMapping("/selectById")
     public User selectById(User user){
         return userService.selectById(user);
+    }
+
+    @RequestMapping("/userListFuzzyQueryWithOutRole")
+    public List<User> userListFuzzyQueryWithOutRole(UserRoleVo userRoleVo){
+        return userService.userListFuzzyQueryWithOutRole(userRoleVo);
     }
 }

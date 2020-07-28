@@ -45,8 +45,8 @@ public class FileUploadEntity implements Serializable {
     @TableField("CHUNK")
     private Integer chunk;
 
-    @TableField("SIZE")
-    private Long size;
+//    @TableField("SIZE")
+//    private Long size;
 
     @TableField("STATE")
     private String state;

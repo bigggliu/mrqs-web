@@ -31,7 +31,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("/login")
+@RequestMapping("/sys")
 public class LoginController {
 
     @Autowired

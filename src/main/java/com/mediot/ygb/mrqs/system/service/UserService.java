@@ -6,6 +6,7 @@ import com.mediot.ygb.mrqs.system.dao.UserRoleDao;
 import com.mediot.ygb.mrqs.system.pojo.Role;
 import com.mediot.ygb.mrqs.system.pojo.User;
 import com.mediot.ygb.mrqs.system.pojo.UserRole;
+import com.mediot.ygb.mrqs.system.vo.UserRoleVo;
 import com.mediot.ygb.mrqs.system.vo.UserVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,7 +34,10 @@ public class UserService {
 
     public int update(User user) throws Exception {
             validationUser(user);
-            checkUserExist(user);
+            User tempUser = userDao.selectById(user.getUserId());
+            if(!tempUser.getUsername().equals(user.getUsername())){
+                checkUserExist(user);
+            }
             user.setUpdateTime(new Date());
             return userDao.updateById(user);
     }
@@ -48,6 +52,10 @@ public class UserService {
 
     public List<User> userListFuzzyQuery(String queryStr){
         return userDao.userListFuzzyQuery(queryStr);
+    }
+
+    public List<User> userListFuzzyQueryWithOutRole(UserRoleVo userRoleVo){
+       return userDao.userListFuzzyQueryWithOutRole(userRoleVo);
     }
 
     public User selectById(User user){

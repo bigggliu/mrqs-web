@@ -7,4 +7,5 @@ public class UserRoleVo {
 
     private String userIds;
     private Long roleId;
+    private String queryStr;
 }
