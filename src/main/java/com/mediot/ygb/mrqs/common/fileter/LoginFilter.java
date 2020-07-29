@@ -1,5 +1,6 @@
 package com.mediot.ygb.mrqs.common.fileter;
 
+import com.mediot.ygb.mrqs.common.core.util.JSONUtils;
 import com.mediot.ygb.mrqs.common.util.WebUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -13,8 +14,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 登录认证检查
@@ -67,10 +71,31 @@ public class LoginFilter implements Filter {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
 //
-//        String requestUri = request.getRequestURI();
-//        String contextPath = request.getContextPath();
-//        String serviceName = request.getServerName();
+        String requestUri = request.getRequestURI();
+        String contextPath = request.getContextPath();
+        String serviceName = request.getServerName();
         WebUtils.bindRequestAndResponse(request, response);
+            if (requestUri.matches(contextPath + "/sys/ajaxLogin") || (serviceName.matches("/sys/ajaxLogin"))) {
+                filterChain.doFilter(request, response);
+                return;
+            }
+        HttpSession session = request.getSession(false);
+        if(session == null){
+            Map<String,Object> resultMap = new HashMap<>();
+            resultMap.put("uri",request.getRequestURI());
+            resultMap.put("result",null);
+            resultMap.put("status",505);
+            resultMap.put("msg","session失效,请重新登录");
+            resultMap.put("time",new Date());
+            resultMap.put("during","");
+            resultMap.put("failCount","");
+            resultMap.put("version","");
+            response.setContentType("application/json;charset=UTF-8");
+            PrintWriter out = response.getWriter();
+            out.print(JSONUtils.toPrettyJson(resultMap));
+            out.close();
+            return;
+        }
 //        log.debug("ServiceName={}，RequestUri={}, ContextPath={}", serviceName, requestUri, contextPath);
 //        //添加到白名单的URL放行
 //        for (String url : excludeUrls) {
