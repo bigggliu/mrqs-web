@@ -24,7 +24,8 @@
     </select>
 
     <select id="selectMenuListByParentIdAndUserId" resultMap="BaseResultMap">
-        select DISTINCT <include refid="Base_Column"></include> from SYS_MENU a,SYS_ROLE_MENU b,SYS_USER_ROLE c
-        where c.ROLE_ID = b.ROLE_ID and b.MENU_ID = a.MENU_ID and c.USER_ID = #{userId} and a.PARENT_ID = #{parentId} and a.STATE = 1 order by a.SORT
+        select DISTINCT <include refid="Base_Column"></include> from SYS_MENU a,SYS_ROLE_MENU b,SYS_USER_ROLE c,SYS_ROLE d
+        where c.ROLE_ID = b.ROLE_ID and b.MENU_ID = a.MENU_ID and c.ROLE_ID = d.ROLE_ID
+        and c.USER_ID = #{userId} and a.PARENT_ID = #{parentId} and a.STATE = 1  and d.STATE = 1 order by a.SORT
     </select>
 </mapper>

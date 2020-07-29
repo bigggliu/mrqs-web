@@ -1,5 +1,6 @@
 package com.mediot.ygb.mrqs.system.service;
 
+import com.mediot.ygb.mrqs.common.core.util.StringUtils;
 import com.mediot.ygb.mrqs.system.vo.UserRoleVo;
 import com.mediot.ygb.mrqs.system.dao.UserRoleDao;
 import com.mediot.ygb.mrqs.system.pojo.UserRole;
@@ -16,11 +17,13 @@ public class UserRoleService {
     private UserRoleDao userRoleDao;
 
     public int insertUserRoleByUserIds(UserRoleVo userRoleVo){
-        String[] uids = userRoleVo.getUserIds().split(",");
         int num = 0;
-        for(String userId : uids){
-            UserRole userRole = new UserRole(Long.valueOf(userId),userRoleVo.getRoleId());
-            num = num + userRoleDao.insert(userRole);
+        if(StringUtils.isNotBlank(userRoleVo.getUserIds())){
+            String[] uids = userRoleVo.getUserIds().split(",");
+            for(String userId : uids){
+                UserRole userRole = new UserRole(Long.valueOf(userId),userRoleVo.getRoleId());
+                num = num + userRoleDao.insert(userRole);
+            }
         }
         return num;
     }

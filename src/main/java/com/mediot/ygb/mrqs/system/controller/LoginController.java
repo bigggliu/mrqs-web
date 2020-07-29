@@ -48,7 +48,7 @@ public class LoginController {
         LocalAssert.notNull(userVo, "登录对象不能为空");
         LocalAssert.notBlank(userVo.getUsername(), "用户名，不能为空！");
         LocalAssert.notBlank(userVo.getPassword(), "密码，不能为空！");
-        LocalAssert.notBlank(userVo.getImageCode(), "验证码，不能为空！");
+        //LocalAssert.notBlank(userVo.getImageCode(), "验证码，不能为空！");
         HttpSession session = request.getSession();
         if (!session.isNew()) {
             response.setHeader(YgbConfig.HTTP_SESSION_ID, session.getId());
@@ -71,12 +71,12 @@ public class LoginController {
         List<Role> roleList = roleService.selectRoleListByUserId(user);
         List<MenuTree> menuTrees = menuService.getMenuTreeByUser(user);
         UserVo loginUser = new UserVo();
-        BeanUtils.copyProperties(user, loginUser);
+        BeanUtils.copyProperties(loginUser, user);
         loginUser.setOrg(org);
         loginUser.setMenuTrees(menuTrees);
         loginUser.setRoleList(roleList);
         session.setAttribute(CustomConst.LoginUser.SESSION_USER_INFO, loginUser);
-        session.removeAttribute("imageCode");
+        //session.removeAttribute("imageCode");
         return loginUser;
     }
 
