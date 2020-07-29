@@ -74,7 +74,7 @@ public class LoginFilter implements Filter {
 //        String requestUri = request.getRequestURI();
 //        String contextPath = request.getContextPath();
 //        String serviceName = request.getServerName();
-//        WebUtils.bindRequestAndResponse(request, response);
+        WebUtils.bindRequestAndResponse(request, response);
 //        HttpSession session = request.getSession(false);
 //        if(session == null){
 //            Map<String,Object> resultMap = new HashMap<>();
