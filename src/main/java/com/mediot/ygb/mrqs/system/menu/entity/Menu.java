@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -33,8 +34,9 @@ public class Menu implements Serializable {
     /**
      * 菜单编码（唯一）
      */
-    @TableId(value = "menu_code" , type = IdType.UUID)
-    private String menuCode;
+    @TableId(value = "menu_code")
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
+    private Long menuCode;
 
     /**
      * 菜单名称

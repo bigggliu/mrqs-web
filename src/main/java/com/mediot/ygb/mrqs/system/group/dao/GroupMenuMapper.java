@@ -20,12 +20,13 @@ import java.util.Set;
 public interface GroupMenuMapper extends BaseMapper<GroupMenu> {
 
     /**
-     * 查询组菜单权限
-     * @param groupId
-     * @param platformSystemId
+     * 查询用户权限菜单
+     *
      * @return
      */
-    List<MenuVo> getGroupMenuList(@Param("groupId") String groupId);
+    List<MenuVo> getGroupMenuList(@Param("userId") String userId,@Param("platformSystemId") String platformSystemId);
+
+    List<MenuVo> getGroupMenuListIsSelect(@Param("groupId") String groupId,@Param("platformSystemId") String platformSystemId);
 
     /*List<Map<String, Object>> selectSubMenusByParentId(Pager pager);*/
 

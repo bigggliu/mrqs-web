@@ -16,23 +16,41 @@
 
     <!-- 查询菜单列表(一级菜单) -->
     <select id="getGroupMenuList" resultType="com.mediot.ygb.mrqs.system.menu.vo.MenuVo">
-        SELECT
+        SELECT DISTINCT
             m.fsort ,
             m.menu_code "menuCode",
-            m.node_level "level",
+            m.node_level "nodeLevel",
             m.menu_name "menuName",
             m.parent_code "parentCode",
             m.url "url",
             m.remark "remark",
             m.fstate "fstate",
-            m.fstate "mfstate",
-            gm.group_menu_id "groupMenuId"
+            m.fstate "mfstate"
         FROM
-            ts_system_menu t
-            LEFT JOIN ts_menu m ON m.menu_code = t.menu_code
-            LEFT JOIN ts_group_menus gm ON gm.menu_code = t.menu_code AND gm.group_id = #{groupId, jdbcType=VARCHAR}
-        WHERE
-            m.fstate= 1
+            ts_menu m,ts_system_menu t,ts_group_menus gm,TS_GROUP_USERS tgu
+            where m.menu_code = t.menu_code and  m.menu_code = gm.menu_code
+            AND gm.group_id = tgu.GROUP_ID and tgu.USER_ID = #{userId,jdbcType=VARCHAR}
+            and t.SYSTEM_CODE = #{platformSystemId,jdbcType=VARCHAR}
+            and m.fstate= 1
+        ORDER BY
+            m.node_level,
+            m.fsort ASC
+    </select>
+
+    <select id="getGroupMenuListIsSelect" resultType="com.mediot.ygb.mrqs.system.menu.vo.MenuVo">
+      select
+        m.fsort ,
+            m.menu_code "menuCode",
+            m.node_level "nodeLevel",
+            m.menu_name "menuName",
+            m.parent_code "parentCode",
+            m.url "url",
+            m.remark "remark",
+            m.fstate "fstate",
+            m.fstate "mfstate"
+      from
+        ts_menu m
+        where  m.fstate= 1
         ORDER BY
             m.node_level,
             m.fsort ASC

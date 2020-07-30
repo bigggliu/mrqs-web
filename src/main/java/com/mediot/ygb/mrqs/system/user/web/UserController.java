@@ -12,6 +12,7 @@ import com.mediot.ygb.mrqs.common.core.util.StringUtils;
 import com.mediot.ygb.mrqs.common.util.WebUtils;
 import com.mediot.ygb.mrqs.org.entity.TOrgsEntity;
 import com.mediot.ygb.mrqs.org.service.TOrgsService;
+import com.mediot.ygb.mrqs.system.group.service.GroupService;
 import com.mediot.ygb.mrqs.system.menu.service.SystemMenuService;
 import com.mediot.ygb.mrqs.system.menu.vo.MenuVo;
 import com.mediot.ygb.mrqs.system.user.entity.UserInfo;
@@ -44,6 +45,9 @@ public class UserController {
 
     @Autowired
     TOrgsService tOrgsService;
+
+    @Autowired
+    GroupService groupService;
 
     /**
      * 分页查询用户信息
@@ -118,9 +122,7 @@ public class UserController {
                 new MediotException("该用户不存在这样的系统!");
             };
             sessionUser.setCurrentSystemCode(systemCode);
-            Map<String,Object> queryMap= Maps.newHashMap();
-            queryMap.put("systemCode",systemCode);
-            List<MenuVo> menuVoList=systemMenuService.selectMenuVoList(queryMap);
+            List<MenuVo> menuVoList=groupService.getGroupMenuList(sessionUser.getUserId(),sessionUser.getCurrentSystemCode());
             sessionUser.setMenuList(menuVoList);
             //根据平台系统信息填充用户扩展信息
             //userService.fillUserInfoVoByPlatformSystem(sessionUser, targetPlatformSystem);

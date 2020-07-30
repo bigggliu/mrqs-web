@@ -39,5 +39,7 @@ public class GroupVo implements Serializable {
      */
     private String remark;
 
+    private String groupIds;
+
 
 }

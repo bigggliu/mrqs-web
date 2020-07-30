@@ -38,7 +38,7 @@ public interface SystemMenuService extends BaseService<SystemMenu> {
      * 新增或编辑菜单
      * @param menu
      */
-    String addOrUpdateSystemMenu(SystemMenuDto menu);
+    Long addOrUpdateSystemMenu(SystemMenuDto menu);
 
     /**
      * 查询某个“系统管理员”的菜单权限集合

@@ -3,6 +3,7 @@ package com.mediot.ygb.mrqs.system.group.service;
 
 import com.mediot.ygb.mrqs.common.core.service.BaseService;
 import com.mediot.ygb.mrqs.system.group.entity.Group;
+import com.mediot.ygb.mrqs.system.group.vo.GroupVo;
 import com.mediot.ygb.mrqs.system.menu.vo.MenuVo;
 
 
@@ -47,7 +48,7 @@ public interface GroupService extends BaseService<Group> {
      * @param pager
      * @return
      */
-    Map<String, Object> getUnGroupUserList(Map<String, Object> queryMap,Integer pageSize);
+    Map<String, Object> getUnGroupUserList(Map<String, Object> queryMap,Integer pageSize,Integer pageNum);
 
     /**
      * 添加组成员
@@ -74,7 +75,7 @@ public interface GroupService extends BaseService<Group> {
      * @param platformSystemId
      * @return
      */
-    List<MenuVo> getGroupMenuList(String groupId);
+    List<MenuVo> getGroupMenuList(String userId,String platformSystemId);
 
     /**
      * 保存组菜单权限配置
@@ -84,4 +85,6 @@ public interface GroupService extends BaseService<Group> {
     void insertGroupMenus(String groupId, Set<String> menuCodeList);
 
     Map<String, Object> findPageListByParam(String name, Integer pageNum, Integer pageSize);
+
+    List<MenuVo> getGroupMenuListIsSelect(GroupVo groupVo);
 }

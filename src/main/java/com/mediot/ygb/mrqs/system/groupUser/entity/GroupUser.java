@@ -40,8 +40,9 @@ public class GroupUser implements Serializable {
     @TableField(value = "user_id")
     private Long userId;
 
+    @TableField(exist = false)
     private String userName;
-
+    @TableField(exist = false)
     private String userNo;
 
 }

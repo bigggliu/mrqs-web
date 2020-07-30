@@ -77,29 +77,9 @@ public class SystemMenuServiceImpl extends BaseServiceImpl<SystemMenuMapper, Sys
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public String addOrUpdateSystemMenu(SystemMenuDto menu) {
-        String menuCode = "";
-        LocalAssert.notNull(menu,"菜单信息为空，请填写菜单信息！");
-        LocalAssert.notBlank(menu.getSystemCode(), "请选择系统！");
-        LocalAssert.notBlank(menu.getParentCode(), "请选择上级菜单！");
-        LocalAssert.notBlank(menu.getMenuName(), "请输入菜单名称！");
-        LocalAssert.notBlank(menu.getType(), "请明确当前操作方式！");
+    public Long addOrUpdateSystemMenu(SystemMenuDto menu) {
+        Long menuCode = 0L;
         if(CustomConst.OperateType.INSERT.equals(menu.getType())){//新增菜单
-            //校验菜单编码
-            LocalAssert.notBlank(menu.getMenuCode(), "请输入纯数字菜单编码，一级菜单为3位，二级菜单为6位！");
-            if(!"0".equals(menu.getParentCode())){//二级菜单
-                if(!menu.getMenuCode().matches("^[0-9]{6}$")){
-                    throw new ValidationException("菜单编码格式不正确，请输入6位纯数字菜单编码！");
-                }
-            }else{//一级菜单
-                if(!menu.getMenuCode().matches("^[0-9]{3}$")){
-                    throw new ValidationException("菜单编码格式不正确，请输入3位纯数字菜单编码！");
-                }
-            }
-            //校验新生成的菜单编码在数据库中是否重复
-            int count = systemMenuMapper.selectMenuCodeCount(menu.getMenuCode(),menu.getSystemCode(),menu.getParentCode());
-            LocalAssert.intLessEqual(count, 0, "菜单编码重复了，请重新输入！");
-
             Menu entity = new Menu();
             entity.setParentCode(menu.getParentCode());
             entity.setNodeLevel("0".equals(menu.getParentCode())?1:2);
@@ -108,8 +88,6 @@ public class SystemMenuServiceImpl extends BaseServiceImpl<SystemMenuMapper, Sys
             entity.setFsort(menu.getFsort());
             entity.setFstate(menu.getFstate());
             entity.setRemark(menu.getRemark());
-            String code = menu.getMenuCode();
-            entity.setMenuCode(code);
             menuMapper.insert(entity);//新增菜单
             SystemMenu systemMenu = new SystemMenu();
             systemMenu.setSystemCode(Long.valueOf(menu.getSystemCode()));
@@ -143,33 +121,33 @@ public class SystemMenuServiceImpl extends BaseServiceImpl<SystemMenuMapper, Sys
      * 自动生成系统编码
      * @return
      */
-    public String getMenuCode(String systemCode,String parentCode) {
-        String beforeCode = systemMenuMapper.getMenuCode(systemCode,parentCode);
-        LocalAssert.notBlank(beforeCode, "数据错误：系统编码生成错误！");
-        String afterCode = null;
-        if("0".equals(parentCode)){
-            afterCode = String.format("%03d", new BigDecimal(beforeCode).add(new BigDecimal("1")).intValue());
-            LocalAssert.notBlank(afterCode, "数据错误：菜单编码无法自动生成！");
-            LocalAssert.intEqual(afterCode.length(), 3, "数据错误：一级菜单编码为3位数，生成错误！");
-        }else{
-            Menu entity = menuMapper.selectById(parentCode);
-            LocalAssert.notNull(entity,"上级菜单不存在，请重新选择！");
-            String exCode = entity.getMenuCode();//上级菜单的编码
-            LocalAssert.notBlank(exCode, "数据错误：上级菜单没有编码！");
-            if(beforeCode.length()>3){
-                beforeCode = beforeCode.substring(3);
-            }
-            String newCode = String.format("%03d", new BigDecimal(beforeCode).add(new BigDecimal("1")).intValue());
-            LocalAssert.notBlank(newCode, "数据错误：无法生成菜单编码！");
-            afterCode = new StringBuffer(exCode).append(newCode).toString();
-        }
-        LocalAssert.notBlank(afterCode, "数据错误：菜单编码无法自动生成！");
-        LocalAssert.intLessEqual(afterCode.length(), 6, "数据错误：菜单编码最长不超过6位数，生成错误！");
-        //校验新生成的菜单编码在数据库中是否重复
-        int count = systemMenuMapper.selectMenuCodeCount(afterCode,systemCode,parentCode);
-        LocalAssert.intLessEqual(count, 0, "生成的系统编码重复了，请重新操作！");
-        return afterCode;
-    }
+//    public String getMenuCode(String systemCode,String parentCode) {
+//        String beforeCode = systemMenuMapper.getMenuCode(systemCode,parentCode);
+//        LocalAssert.notBlank(beforeCode, "数据错误：系统编码生成错误！");
+//        String afterCode = null;
+//        if("0".equals(parentCode)){
+//            afterCode = String.format("%03d", new BigDecimal(beforeCode).add(new BigDecimal("1")).intValue());
+//            LocalAssert.notBlank(afterCode, "数据错误：菜单编码无法自动生成！");
+//            LocalAssert.intEqual(afterCode.length(), 3, "数据错误：一级菜单编码为3位数，生成错误！");
+//        }else{
+//            Menu entity = menuMapper.selectById(parentCode);
+//            LocalAssert.notNull(entity,"上级菜单不存在，请重新选择！");
+//            String exCode = entity.getMenuCode();//上级菜单的编码
+//            LocalAssert.notBlank(exCode, "数据错误：上级菜单没有编码！");
+//            if(beforeCode.length()>3){
+//                beforeCode = beforeCode.substring(3);
+//            }
+//            String newCode = String.format("%03d", new BigDecimal(beforeCode).add(new BigDecimal("1")).intValue());
+//            LocalAssert.notBlank(newCode, "数据错误：无法生成菜单编码！");
+//            afterCode = new StringBuffer(exCode).append(newCode).toString();
+//        }
+//        LocalAssert.notBlank(afterCode, "数据错误：菜单编码无法自动生成！");
+//        LocalAssert.intLessEqual(afterCode.length(), 6, "数据错误：菜单编码最长不超过6位数，生成错误！");
+//        //校验新生成的菜单编码在数据库中是否重复
+//        int count = systemMenuMapper.selectMenuCodeCount(afterCode,systemCode,parentCode);
+//        LocalAssert.intLessEqual(count, 0, "生成的系统编码重复了，请重新操作！");
+//        return afterCode;
+//    }
 
     /**
      * 查询某个“系统管理员”的菜单权限集合

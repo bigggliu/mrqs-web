@@ -104,21 +104,21 @@ public class SystemServiceImpl extends BaseServiceImpl<SystemMapper, System> imp
     public Map<String, Object> querySystemMenuList(Map<String, Object> queryMap,Integer pageSize,Integer pageNum) {
         LocalAssert.notNull(pageNum,"pageNum不能为空");
         LocalAssert.notNull(pageSize,"pageSize不能为空");
-        Page page= PageHelper.startPage(pageNum,pageSize);
+        //Page page= PageHelper.startPage(pageNum,pageSize);
         List<MenuVo> list=systemMenuMapper.querySystemMenuList(queryMap);
         Map<String, Object> jsonMap = new HashMap<String, Object>();
         List<MenuVo> menuVoList=list.stream().map(e -> JsonUtil.
                 getJsonToBean(JsonUtil.getBeanToJson(e), MenuVo.class)).
                 collect(Collectors.toList()); ;
         List<MenuVo> finalList=treeList(menuVoList, "0");
-        //
-        PageInfo<MenuVo> pageInfo = new PageInfo<>(finalList);
-        pageInfo.setPages(page.getPages());//总页数
-        pageInfo.setTotal(page.getTotal());//总条数
-        jsonMap.put("data",finalList);//数据结果
-        jsonMap.put("total", pageInfo.getTotal());//获取数据总数
-        jsonMap.put("pageSize", pageInfo.getPageSize());//获取长度
-        jsonMap.put("pageNum", pageInfo.getPageNum());//获取当前页数
+        //PageInfo<MenuVo> pageInfo = new PageInfo<>(finalList);
+        //pageInfo.setPages(page.getPages());//总页数
+        //pageInfo.setTotal(page.getTotal());//总条数
+        List<List<MenuVo>> subList = Lists.partition(finalList,pageSize);
+        jsonMap.put("data",subList.get(pageNum-1));//数据结果
+        jsonMap.put("total", finalList.size());//获取数据总数
+        jsonMap.put("pageSize", pageSize);//获取长度
+        jsonMap.put("pageNum", pageNum);//获取当前页数
         return jsonMap;
     }
 

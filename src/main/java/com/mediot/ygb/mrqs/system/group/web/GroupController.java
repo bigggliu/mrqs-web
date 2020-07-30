@@ -11,6 +11,7 @@ import com.mediot.ygb.mrqs.system.group.entity.Group;
 import com.mediot.ygb.mrqs.system.group.service.GroupMenuService;
 import com.mediot.ygb.mrqs.system.group.service.GroupService;
 import com.mediot.ygb.mrqs.system.group.service.GroupUserService;
+import com.mediot.ygb.mrqs.system.group.vo.GroupVo;
 import com.mediot.ygb.mrqs.system.menu.service.MenuService;
 
 import com.mediot.ygb.mrqs.system.groupUser.entity.GroupUser;
@@ -128,14 +129,14 @@ public class GroupController {
     @RequestMapping("/getUnGroupUserList")
     public Map<String, Object> getUnGroupUserList(String groupId,
                                                       String searchName,
-                                                      Integer pageSize) {
+                                                      Integer pageSize,
+                                                  Integer pageNum) {
         LocalAssert.notBlank(groupId, "用户组主键，不能为空！");
-        pageSize = (pageSize==null||pageSize>50)?50:pageSize;
         Map<String,Object> queryMap= Maps.newHashMap();
         //查询条件
         queryMap.put("groupId", groupId);
         queryMap.put("searchName", searchName);
-        return groupService.getUnGroupUserList(queryMap,pageSize);
+        return groupService.getUnGroupUserList(queryMap,pageSize,pageNum);
     }
 
     /**
@@ -190,18 +191,26 @@ public class GroupController {
         groupService.addGroupMenusClone(group);
     }
 
-    /**
-     * 查询组菜单
-     * @param groupId
-     * @param platformSystemId
-     * @param request
-     * @return
-     */
+//    /**
+//     * 查询组菜单
+//     * @param groupId
+//     * @param platformSystemId
+//     * @param request
+//     * @return
+//     */
+//    @RequestMapping("/getGroupMenuList")
+//    public List<MenuVo> getGroupMenuList(
+//            GroupVo groupVo, HttpServletRequest request){
+//        LocalAssert.notNull(groupVo, "请选择用户组！");
+//        List<MenuVo> list = groupService.getGroupMenuList(groupVo);
+//        return list;
+//    }
+
     @RequestMapping("/getGroupMenuList")
-    public List<MenuVo> getGroupMenuList(
-            String groupId , HttpServletRequest request){
-        LocalAssert.notBlank(groupId, "请选择用户组！");
-        List<MenuVo> list = groupService.getGroupMenuList(groupId);
+    public List<MenuVo> getGroupMenuListIsSelect(
+            GroupVo groupVo, HttpServletRequest request){
+        LocalAssert.notBlank(groupVo.getGroupId(), "请选择用户组！");
+        List<MenuVo> list = groupService.getGroupMenuListIsSelect(groupVo);
         return list;
     }
 

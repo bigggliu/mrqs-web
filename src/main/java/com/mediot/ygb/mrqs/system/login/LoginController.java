@@ -14,6 +14,10 @@ import com.mediot.ygb.mrqs.common.util.VerifyUtil;
 import com.mediot.ygb.mrqs.org.entity.TOrgsEntity;
 import com.mediot.ygb.mrqs.org.service.TOrgsService;
 
+import com.mediot.ygb.mrqs.system.group.entity.Group;
+import com.mediot.ygb.mrqs.system.group.service.GroupService;
+import com.mediot.ygb.mrqs.system.group.service.GroupUserService;
+import com.mediot.ygb.mrqs.system.groupUser.entity.GroupUser;
 import com.mediot.ygb.mrqs.system.menu.entity.System;
 import com.mediot.ygb.mrqs.system.menu.service.SystemMenuService;
 import com.mediot.ygb.mrqs.system.menu.service.SystemService;
@@ -43,7 +47,10 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
+
+import static com.dyuproject.protostuff.MapSchema.MessageFactories.HashMap;
 
 
 /**
@@ -79,9 +86,12 @@ class LoginController {
 
     @Autowired
     private SystemService systemService;
-    
 
+    @Autowired
+    private GroupService groupService;
 
+    @Autowired
+    private GroupUserService groupUserService;
 
 
 
@@ -128,13 +138,27 @@ class LoginController {
             log.error(baseUserInfo.getUserNo() + ":账号已经停用");
             throw new MediotException("账号已经停用");
         }
+        UserInfoVo userInfoVo = new UserInfoVo();
+        BeanUtils.copyProperties(baseUserInfo, userInfoVo);
+        userInfoVo.setUserId(String.valueOf(baseUserInfo.getUserId()));
+        userInfoVo.setSessionId(session.getId());
+        if(StringUtils.isNotBlank(Long.toString(baseUserInfo.getOrgId()))){
+            userInfoVo.setOrgId(String.valueOf(baseUserInfo.getOrgId()));
+            //查找机构
+            TOrgsEntity tOrgsEntity=tOrgsService.selectById(baseUserInfo.getOrgId());
+            if(tOrgsEntity == null){
+                throw new MediotException("机构不存在");
+            }
+            userInfoVo.setOrgName(tOrgsEntity.getOrgName());
+            userInfoVo.setAppCode(tOrgsEntity.getAppCode());
+            userInfoVo.setFqun(tOrgsEntity.getFqun());
+        }
         //根据用户获取平台系统列表
         List<MenuVo> menuList= Lists.newArrayList();
         List<SystemVo> systemVoList=Lists.newArrayList();
         List<MenuOfSystemVo> menuOfSystemVoList=Lists.newArrayList();
         if(StringUtils.isNotBlank(baseUserInfo.getSystemCodes())){
             String systemCodeArr[] =baseUserInfo.getSystemCodes().split(",");
-            String defaultCodeArr[]=new String[]{systemCodeArr[0]};
             //
             QueryWrapper queryWrapper=new QueryWrapper();
             queryWrapper.in("SYSTEM_CODE", systemCodeArr);
@@ -147,28 +171,17 @@ class LoginController {
                     JsonUtil.getJsonToBean(JsonUtil.getBeanToJson(e),MenuOfSystemVo.class)
             ).collect(Collectors.toList());
             menuOfSystemVoList.stream().forEach(e->{
-                String currentSystemCodeArr[]=new String[]{e.getSystemCode()};
-                List<MenuVo> baseMenuList=systemMenuService.selectListByArray(currentSystemCodeArr);
+                QueryWrapper<GroupUser> queryWrapper1 = new QueryWrapper<>();
+                queryWrapper1.eq("USER_ID",baseUserInfo.getUserId());
+                List<GroupUser> groupUserList = groupUserService.selectList(queryWrapper1);
+                if(groupUserList.size() == 0){
+                    throw new MediotException("账号未设置角色");
+                }
+                List<MenuVo> baseMenuList=groupService.getGroupMenuList(userInfoVo.getUserId(),e.getSystemCode());
                 List<MenuVo> finalMenuList=systemService.treeList(baseMenuList,"0");
                 e.setMenuList(finalMenuList);
             });
-            List<MenuVo> baseMenuList=systemMenuService.selectListByArray(defaultCodeArr);
-            menuList=systemService.treeList(baseMenuList,"0");
-        }
-        //List<Menu> menuList=
-        //List<Map<String, Object>> platformSystemList = groupMenuService.getPlatformSystemByUserId(baseUserInfo.getUserId());
-        //LocalAssert.isNotEmpty(platformSystemList, "温馨提示：该账号没有对应科室工作站或精细化管理系统!");
-        UserInfoVo userInfoVo = new UserInfoVo();
-        BeanUtils.copyProperties(baseUserInfo, userInfoVo);
-        userInfoVo.setUserId(String.valueOf(baseUserInfo.getUserId()));
-        userInfoVo.setSessionId(session.getId());
-        if(StringUtils.isNotBlank(Long.toString(baseUserInfo.getOrgId()))){
-            userInfoVo.setOrgId(String.valueOf(baseUserInfo.getOrgId()));
-            //查找机构
-            TOrgsEntity tOrgsEntity=tOrgsService.selectById(baseUserInfo.getOrgId());
-            userInfoVo.setOrgName(tOrgsEntity.getOrgName());
-            userInfoVo.setAppCode(tOrgsEntity.getAppCode());
-            userInfoVo.setFqun(tOrgsEntity.getFqun());
+            menuList = groupService.getGroupMenuList(userInfoVo.getUserId(),systemCodeArr[0]);
         }
         if(StringUtils.isNotBlank(baseUserInfo.getSystemCodes())){
             userInfoVo.setCurrentSystemCode(baseUserInfo.getSystemCodes().split(",")[0]);
@@ -176,39 +189,6 @@ class LoginController {
         userInfoVo.setMenuList(menuList);
         userInfoVo.setSystemList(systemVoList);
         userInfoVo.setUserMenuOfSystemList(menuOfSystemVoList);
-        //TOrgsEntity tOrgsEntity = tOrgsService.selectById(userInfoVo.getOrgId());
-        //userInfoVo.setDepositBankAddr(orgInfo.getDepositBankAddr());
-        //userInfoVo.setDepositBankAccount(orgInfo.getDepositBankAccount());
-//        if (CollectionUtils.isNotEmpty(platformSystemList)) {
-//            //获取可使用的资源
-//            List<Map<String, Object>> newPlatformSystemList = userService.getNewPlatformSystemList(platformSystemList);
-//            List<Map<String, Object>> systemList = Lists.newArrayList();
-//            List<Map<String, Object>> menuAllList = Lists.newArrayList();
-//            //默认选中用户第一个系统
-//            Map<String, Object> firstPlatSys = null;
-//
-//            for(Map<String, Object> dataMap : newPlatformSystemList){
-//                Integer psFstate =  Integer.valueOf(dataMap.get("psFstate").toString());
-//                if(psFstate == CustomConst.Fstate.USABLE){
-//                    firstPlatSys = dataMap;
-//                    break;
-//                }
-//            }
-//
-//            newPlatformSystemList.forEach((Map<String, Object> platSys) -> {
-//                Map<String, Object> sys = Maps.newHashMap();
-//                sys.put("platformSystemId", platSys.get("platformSystemId"));
-//                sys.put("systemAlias", platSys.get("systemAlias"));
-//                systemList.add(sys);
-//                menuAllList.add(platSys);
-//            });
-//
-//            userInfoVo.setUserSystemList(menuAllList);
-//            userInfoVo.setSystemList(systemList);
-//            userInfoVo.setMenuList(firstPlatSys);
-//            //根据平台系统信息填充用户扩展信息
-//            userService.fillUserInfoVoByPlatformSystem(userInfoVo, firstPlatSys);
-//        }
         //缓存当前用户信息及用户扩展信息（所有子系统信息，子系统对应菜单信息）
         session.setAttribute(CustomConst.LoginUser.SESSION_USER_INFO, userInfoVo);
         session.removeAttribute("imageCode");

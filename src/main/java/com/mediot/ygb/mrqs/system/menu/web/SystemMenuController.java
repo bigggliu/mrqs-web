@@ -55,12 +55,11 @@ public class SystemMenuController {
      * @param request
      */
     @RequestMapping("/addOrUpdateSystemMenu")
-    public String addOrUpdateSystemMenu(
+    public void addOrUpdateSystemMenu(
+
             SystemMenuDto menu , HttpServletRequest request){
         LocalAssert.notNull(menu,"菜单信息为空，请填写菜单信息！");
         LocalAssert.notBlank(menu.getSystemCode(), "请选择系统！");
-        //LocalAssert.notBlank(menu.getParentCode(), "请选择上级菜单！");
-        LocalAssert.notBlank(menu.getMenuCode(), "菜单编码，不能为空！");
         LocalAssert.notBlank(menu.getType(), "请明确当前操作方式！");
         if(!"0".equals(menu.getParentCode())){//二级菜单，路径必填
             LocalAssert.notBlank(menu.getUrl(), "请填写菜单路径！");
@@ -90,6 +89,6 @@ public class SystemMenuController {
         if(StringUtils.isNotBlank(menu.getRemark())){
             LocalAssert.intLessEqual(menu.getRemark().length(), 127, "备注不能超过127个字符！");
         }
-        return systemMenuService.addOrUpdateSystemMenu(menu);
+        systemMenuService.addOrUpdateSystemMenu(menu);
     }
 }

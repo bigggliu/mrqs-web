@@ -120,13 +120,13 @@ public class GroupServiceImpl extends BaseServiceImpl<GroupMapper, Group> implem
     }
 
     @Override
-    public Map<String, Object> getUnGroupUserList(Map<String, Object> queryMap,Integer pageSize) {
-        Page page=PageHelper.startPage(1,pageSize);
+    public Map<String, Object> getUnGroupUserList(Map<String, Object> queryMap,Integer pageSize,Integer pageNum) {
+        Page page=PageHelper.startPage(pageNum,pageSize);
         Map<String, Object> jsonMap = new HashMap<String, Object>();
         List<UserInfo> userInfoList= groupUserMapper.getUnGroupUserList(queryMap);
         PageInfo<UserInfo> pageInfo = new PageInfo<>(userInfoList);
-        pageInfo.setPages(page.getPages());//总页数
-        pageInfo.setTotal(page.getTotal());//总条数
+        //pageInfo.setPages(page.getPages());//总页数
+        //pageInfo.setTotal(page.getTotal());//总条数
         jsonMap.put("data",userInfoList);//数据结果
         jsonMap.put("total", pageInfo.getTotal());//获取数据总数
         jsonMap.put("pageSize", pageInfo.getPageSize());//获取长度
@@ -185,11 +185,9 @@ public class GroupServiceImpl extends BaseServiceImpl<GroupMapper, Group> implem
     }
 
     @Override
-    public List<MenuVo> getGroupMenuList(String groupId) {
-        LocalAssert.notBlank(groupId, "请选择用户组！");
-        //LocalAssert.notBlank(platformSystemId, "平台系统主键，不能为空！");
-        List<MenuVo> list=groupMenuMapper.getGroupMenuList(groupId);
-        return systemService.treeList(list, "0",groupId);
+    public List<MenuVo> getGroupMenuList(String userId,String platformSystemId) {
+        List<MenuVo> list=groupMenuMapper.getGroupMenuList(userId,platformSystemId);
+        return list;
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -237,5 +235,11 @@ public class GroupServiceImpl extends BaseServiceImpl<GroupMapper, Group> implem
         jsonMap.put("size", pageInfo.getPageSize());//获取长度
         jsonMap.put("pages",pageInfo.getPages());//获取当前页数
         return jsonMap;
+    }
+
+    @Override
+    public List<MenuVo> getGroupMenuListIsSelect(GroupVo groupVo) {
+        List<MenuVo> list=groupMenuMapper.getGroupMenuListIsSelect(groupVo.getGroupId(),groupVo.getPlatformSystemId());
+        return systemService.treeList(list, "0",groupVo.getGroupId());
     }
 }
