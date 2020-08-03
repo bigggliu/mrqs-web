@@ -15,6 +15,7 @@ import com.mediot.ygb.mrqs.analysis.medRecManage.dao.MyErrorDetiVoMapper;
 import com.mediot.ygb.mrqs.analysis.medRecManage.dao.TDatacleanStandardMapper;
 import com.mediot.ygb.mrqs.analysis.monitoringIndexManage.dao.TCheckColMapper;
 import com.mediot.ygb.mrqs.analysis.monitoringIndexManage.dao.TCheckOrgMapper;
+import com.mediot.ygb.mrqs.analysis.monitoringIndexManage.entity.TCheckCol;
 import com.mediot.ygb.mrqs.common.core.util.LocalAssert;
 import com.mediot.ygb.mrqs.common.entity.dto.FileAnalysisDto;
 import com.mediot.ygb.mrqs.analysis.medRecManage.dto.MedRecDto;
@@ -545,6 +546,15 @@ public class MedRecManageServiceImpl implements MedRecordManageService {
         if(fileUploadEntityList.size()==0){
             return  res.msg("该文件不存在！").code(ResultCodeEnum.getCode(ResultCodeEnum.FAIL));
         }else {
+            for(FileUploadEntity fileUploadEntity : fileUploadEntityList){
+                //查询应用的检测规则
+                Map<String,Object> queryMap1=new HashMap<>();
+                queryMap1.put("orgId",fileUploadEntity.getOrgId());
+                List<TCheckCol> tCheckCols=tCheckColMapper.selectTCheckColsByOrgId(queryMap1);
+                if(tCheckCols.size() == 0){
+                    return res.code(ResultCodeEnum.getCode(ResultCodeEnum.FAIL)).msg(fileUploadEntity.getFileName()+"的检测机构未设置应用规则");
+                }
+            }
             StringBuffer rtMsg=new StringBuffer();
             fileUploadEntityList.stream().forEach(e->{
                 if(!e.getState().equals(String.valueOf(AnalysisEnum.getValue(AnalysisEnum.ENTRYSTORE)))){

@@ -109,9 +109,8 @@ public class IndexInfoManageServiceImpl extends BaseServiceImpl<TFirstpageTestin
         queryMap.put("operationCode",tFirstPageTestingDto.getOperationCode());
         queryMap.put("outDeptName",tFirstPageTestingDto.getOutDeptName());
         UserInfoVo userInfoVo = WebUtils.getSessionAttribute(CustomConst.LoginUser.SESSION_USER_INFO);
-        if(StringUtils.isNotEmpty(userInfoVo.getOrgId())){
-            if(!userInfoVo.getOrgId().equals("1266216344326770690")){//测试用，可以删除
-                List<String> orgIds=Lists.newArrayList();
+        if(userInfoVo != null && StringUtils.isNotBlank(userInfoVo.getOrgId())){
+            List<String> orgIds=Lists.newArrayList();
                 if(StringUtils.isNotBlank(tFirstPageTestingDto.getOrgId())){
                     orgIds.add(tFirstPageTestingDto.getOrgId());
                 }else {
@@ -123,8 +122,23 @@ public class IndexInfoManageServiceImpl extends BaseServiceImpl<TFirstpageTestin
                     });
                 }
                 queryMap.put("orgIds",orgIds);
-            }
         }
+//        if(StringUtils.isNotEmpty(userInfoVo.getOrgId())){
+//            if(!userInfoVo.getOrgId().equals("1266216344326770690")){//测试用，可以删除
+//                List<String> orgIds=Lists.newArrayList();
+//                if(StringUtils.isNotBlank(tFirstPageTestingDto.getOrgId())){
+//                    orgIds.add(tFirstPageTestingDto.getOrgId());
+//                }else {
+//                    orgIds.add(userInfoVo.getOrgId());
+//                    Map<String,Object> qm= Maps.newHashMap();
+//                    qm.put("pid",userInfoVo.getOrgId());
+//                    tOrgRelationshipMapper.selectRefOrgList(qm).stream().forEach(e->{
+//                        orgIds.add(e.getOrgId());
+//                    });
+//                }
+//                queryMap.put("orgIds",orgIds);
+//            }
+//        }
         Page page= PageHelper.startPage(tFirstPageTestingDto.getPageNum(),tFirstPageTestingDto.getPageSize());
         List<TFirstPageTesting> tFirstPageTestingList=Lists.newArrayList();
         if(StringUtils.isBlank(tFirstPageTestingDto.getDiagnosisCode())&&StringUtils.isBlank(tFirstPageTestingDto.getOperationCode())){

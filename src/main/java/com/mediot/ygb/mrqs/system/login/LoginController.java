@@ -181,10 +181,8 @@ class LoginController {
                 List<MenuVo> finalMenuList=systemService.treeList(baseMenuList,"0");
                 e.setMenuList(finalMenuList);
             });
-            menuList = groupService.getGroupMenuList(userInfoVo.getUserId(),systemCodeArr[0]);
-        }
-        if(StringUtils.isNotBlank(baseUserInfo.getSystemCodes())){
-            userInfoVo.setCurrentSystemCode(baseUserInfo.getSystemCodes().split(",")[0]);
+            menuList = groupService.getGroupMenuList(userInfoVo.getUserId(),String.valueOf(systemList.get(0).getSystemCode()));
+            userInfoVo.setCurrentSystemCode(String.valueOf(systemList.get(0).getSystemCode()));
         }
         userInfoVo.setMenuList(menuList);
         userInfoVo.setSystemList(systemVoList);

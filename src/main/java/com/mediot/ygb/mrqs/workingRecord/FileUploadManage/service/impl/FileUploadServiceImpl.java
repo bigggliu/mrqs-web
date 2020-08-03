@@ -1,10 +1,10 @@
 package com.mediot.ygb.mrqs.workingRecord.FileUploadManage.service.impl;
 
+import com.mediot.ygb.mrqs.common.constant.CustomConst;
 import com.mediot.ygb.mrqs.common.core.service.impl.BaseServiceImpl;
 import com.mediot.ygb.mrqs.common.core.util.LocalAssert;
 import com.mediot.ygb.mrqs.common.core.util.StringUtils;
-import com.mediot.ygb.mrqs.common.util.DateUtils;
-import com.mediot.ygb.mrqs.common.util.FileUtils;
+import com.mediot.ygb.mrqs.common.util.*;
 import com.mediot.ygb.mrqs.index.errorInfoManage.dao.TErrorDetailMapper;
 import com.mediot.ygb.mrqs.index.errorInfoManage.entity.TErrorEntity;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -14,15 +14,13 @@ import com.google.common.collect.Maps;
 
 import com.mediot.ygb.mrqs.common.enumcase.ResultCodeEnum;
 
-import com.mediot.ygb.mrqs.common.util.JsonUtil;
-import com.mediot.ygb.mrqs.common.util.ResultUtil;
-
 import com.mediot.ygb.mrqs.config.FileUploadConfig;
 import com.mediot.ygb.mrqs.index.errorInfoManage.dao.TErrorMapper;
 
 import com.mediot.ygb.mrqs.index.indexInfoManage.dao.TFirstoutdiagTestingMapper;
 import com.mediot.ygb.mrqs.index.indexInfoManage.dao.TFirstoutoperTestingMapper;
 import com.mediot.ygb.mrqs.index.indexInfoManage.dao.TFirstpageTestingMapper;
+import com.mediot.ygb.mrqs.system.user.vo.UserInfoVo;
 import com.mediot.ygb.mrqs.workingRecord.FileUploadManage.dto.FileUploadDto;
 import com.mediot.ygb.mrqs.workingRecord.FileUploadManage.entity.FileUploadEntity;
 import com.mediot.ygb.mrqs.workingRecord.FileUploadManage.enumcase.StateEnum;
@@ -408,6 +406,10 @@ public class FileUploadServiceImpl extends BaseServiceImpl<FileUploadMapper, Fil
         }
         if(fileUploadDto.getState()!=null){
             queryMap.put("state",fileUploadDto.getState());
+        }
+        UserInfoVo userInfoVo = WebUtils.getSessionAttribute(CustomConst.LoginUser.SESSION_USER_INFO);
+        if(userInfoVo != null && StringUtils.isNotBlank(userInfoVo.getOrgId())){
+            queryMap.put("orgId",userInfoVo.getOrgId());
         }
         List<FileUploadEntity> fileUploadEntityList=fileUploadMapper.selectListByParam(queryMap);
         List<FileUploadVo> fileUploadVoList=Lists.newArrayList();
