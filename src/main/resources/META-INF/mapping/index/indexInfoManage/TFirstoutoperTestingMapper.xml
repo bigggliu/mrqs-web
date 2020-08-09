@@ -38,7 +38,7 @@
     where T_FIRSTOUTOPER_TESTING_ID = #{tFirstoutoperTestingId,jdbcType=VARCHAR}
   </select>
 
-  <delete id="batchDelOutDiagByMap" parameterType="java.util.Map">
+  <delete id="batchDelOutOperByMap" parameterType="java.util.Map">
     delete from T_FIRSTOUTOPER_TESTING a
     <where>
       <if test="batchId!=null">

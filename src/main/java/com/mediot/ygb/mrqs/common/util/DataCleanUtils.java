@@ -2011,7 +2011,7 @@ public class DataCleanUtils {
                     orderSTArr[4]=new String[]{"H23","WBYY"};
                 }
                 orderSTArr[5]=new String[]{"WBYSBM2","WBYSMC2"};
-                orderSTArr[6]=new String[]{"WBYSBM3","WBYSBM3"};
+                orderSTArr[6]=new String[]{"WBYSBM3","WBYSMC3"};
                 for(int i=1;i<=15;i++){
                     String[] orderData=new String[4];
                     StringBuffer sb1=new StringBuffer();

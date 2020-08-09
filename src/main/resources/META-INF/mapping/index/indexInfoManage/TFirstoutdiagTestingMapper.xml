@@ -39,7 +39,7 @@
   </delete>
 
   <delete id="batchDelOutDiag" parameterType="java.util.List">
-    delete from T_FIRSTOUTOPER_TESTING a where (a.BATCH_ID,a.CASE_ID)
+    delete from T_FIRSTOUTDIAG_TESTING a where (a.BATCH_ID,a.CASE_ID)
     in
     <foreach collection="list" open="(" close=")" item="obj" separator=",">
       (#{obj.batchId},#{obj.caseId})

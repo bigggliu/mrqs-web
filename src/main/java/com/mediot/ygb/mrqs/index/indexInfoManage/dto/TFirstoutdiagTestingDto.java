@@ -1,5 +1,6 @@
 package com.mediot.ygb.mrqs.index.indexInfoManage.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -14,7 +15,9 @@ public class TFirstoutdiagTestingDto implements Serializable {
     private static final long serialVersionUID = -1077097669479455164L;
 
     private String tFirstoutdiagTestingId;
-
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
+    private Long tFirstPageTestingId;
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     private Long batchId;
 
     private Long caseId;

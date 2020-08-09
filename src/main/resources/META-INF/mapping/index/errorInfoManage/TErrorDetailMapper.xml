@@ -66,4 +66,16 @@
         </trim>
     </insert>
 
+    <select id="selectErrorDetailExportVoList" resultType="com.mediot.ygb.mrqs.index.errorInfoManage.vo.ErrorDetailExportVo">
+     select a.T_FIRST_PAGE_TESTING_ID,a.CATALOGER,a.CASE_NO,a.IN_HOSPITAL_TIMES,a.FNAME,a.SEX_CODE,a.IN_DTIME,a.OUT_DTIME,a.OUT_DEPT_CODE,a.OUT_DEPT_ROOM,a.IN_CHARGE_DOCTOR,a.RESIDENT_DOCTOR,a.FEE_TOTAL,wmsys.wm_concat(ERROR_MESSAGE) errorInfos
+     from T_FIRSTPAGE_TESTING a,T_ERROR_DETAIL b
+     where a.T_FIRST_PAGE_TESTING_ID = b.T_FIRST_PAGE_TESTING_ID
+     and b.BATCH_ID = #{batchId}
+     and to_char(a.out_dtime,'yyyy') = #{year}
+     GROUP BY a.T_FIRST_PAGE_TESTING_ID,a.CATALOGER,a.CASE_NO,a.IN_HOSPITAL_TIMES,a.FNAME,a.SEX_CODE,a.IN_DTIME,a.OUT_DTIME,a.OUT_DEPT_CODE,a.OUT_DEPT_ROOM,a.IN_CHARGE_DOCTOR,a.RESIDENT_DOCTOR,a.FEE_TOTAL
+    </select>
+
+    <select id="selectYearsByBatchId" resultType="java.lang.String">
+        SELECT to_char(out_dtime,'yyyy') as year FROM T_FIRSTPAGE_TESTING where BATCH_ID = #{batchId} GROUP BY to_char(out_dtime,'yyyy')
+    </select>
 </mapper>

@@ -2,6 +2,7 @@ package com.mediot.ygb.mrqs.dict.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.mediot.ygb.mrqs.common.core.service.impl.BaseServiceImpl;
+import com.mediot.ygb.mrqs.common.core.util.LocalAssert;
 import com.mediot.ygb.mrqs.dict.entity.TDiagDict;
 import com.mediot.ygb.mrqs.dict.dao.TDiagDictMapper;
 import com.mediot.ygb.mrqs.dict.service.TDiagDictService;
@@ -26,6 +27,7 @@ public class TDiagDictServiceImpl extends BaseServiceImpl<TDiagDictMapper, TDiag
 
     @Override
     public List<TDiagDict> findtDiagDictList(String queryStr) {
+        LocalAssert.notBlank(queryStr,"请输入关键字");
         QueryWrapper queryWrapper=new QueryWrapper();
         queryWrapper.like("DICT_NAME",queryStr);
         return tDiagDictMapper.selectList(queryWrapper);

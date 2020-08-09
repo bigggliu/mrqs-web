@@ -15,8 +15,9 @@ public class TFirstPageTestingVo implements Serializable {
 
     private static final long serialVersionUID = 4650613492714136083L;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     private String tFirstPageTestingId;
-
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     private Long batchId;
 
     private String caseId;
@@ -376,5 +377,9 @@ public class TFirstPageTestingVo implements Serializable {
     private String upOrgId;
 
     private Integer total;
+
+    private String orgCode;
+
+    private String standardCode;
 
 }

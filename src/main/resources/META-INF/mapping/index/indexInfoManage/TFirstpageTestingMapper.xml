@@ -475,4 +475,43 @@
     </where>
   </select>
 
+  <select id="queryFirstPageList" parameterType="java.util.Map" resultType="com.mediot.ygb.mrqs.index.indexInfoManage.entity.TFirstPageTesting">
+    select DISTINCT a.BATCH_ID,a.T_FIRST_PAGE_TESTING_ID,a.CASE_NO,a.UP_ORG_ID,a.SEX_CODE,a.ORG_NAME,a.FNAME,a.CARD_NO,a.PAY_WAY_CODE,a.IN_HOSPITAL_TIMES,a.CREATE_TIME,a.OUT_DEPT_CODE from
+    T_FIRSTPAGE_TESTING a
+    <if test="diagnosisCode!=null and diagnosisCode != ''">
+    ,T_FIRSTOUTDIAG_TESTING b
+    </if>
+    <if test="operationCode!=null and operationCode != ''">
+    ,T_FIRSTOUTOPER_TESTING c
+    </if>
+    where 1=1
+    <if test="diagnosisCode!=null and diagnosisCode != ''">
+    and a.T_FIRST_PAGE_TESTING_ID = b.T_FIRST_PAGE_TESTING_ID
+    </if>
+    <if test="operationCode!=null and operationCode != ''">
+    and a.T_FIRST_PAGE_TESTING_ID = c.T_FIRST_PAGE_TESTING_ID
+    </if>
+    <if test="diagnosisCode!=null and diagnosisCode != ''">
+    and b.DIAGNOSIS_CODE = #{diagnosisCode}
+    </if>
+    <if test="operationCode!=null and operationCode != ''">
+    and c.OPERATION_CODE = #{operationCode}
+    </if>
+    <if test="orgIds!=null">
+    and a.UP_ORG_ID in
+      <foreach collection="orgIds" item="obj" separator="," open="(" close=")">
+        #{obj}
+      </foreach>
+    </if>
+    <if test="fname!=null and fname != ''">
+      and a.fname like concat(concat('%',#{fname}),'%')
+    </if>
+    <if test="caseNo!=null and caseCode != ''">
+      and a.case_no like concat(concat('%',#{caseNo}),'%')
+    </if>
+    <if test="outDeptName!=null and outDeptName != ''">
+    and EXISTS (select m.DICT_CODE from T_BASE_DICT m where m.DICT_CODE = a.OUT_DEPT_CODE and m.BASE_CODE like '028%' and m.DICT_NAME like concat(concat('%',#{outDeptName}),'%'))
+    </if>
+  </select>
+
 </mapper>

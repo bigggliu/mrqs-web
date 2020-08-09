@@ -47,4 +47,23 @@ public class TErrorDetailEntity {
 
     @TableField("OUT_DTIME")
     private Date outDtime;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
+    private Long tFirstPageTestingId;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
+    private Long tFirstoutoperTestingId;
+
+    private String operationType;
+
+    private Integer operationOrder;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
+    private Long tFirstoutdiagTestingId;
+
+    private String diagType;
+
+    private Integer diagOrder;
+
+    private String informationClass;
 }

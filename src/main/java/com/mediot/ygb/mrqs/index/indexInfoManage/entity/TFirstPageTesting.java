@@ -28,6 +28,7 @@ public class TFirstPageTesting implements Serializable {
 
     private String orgName;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     private Long batchId;
 
     private String caseId;

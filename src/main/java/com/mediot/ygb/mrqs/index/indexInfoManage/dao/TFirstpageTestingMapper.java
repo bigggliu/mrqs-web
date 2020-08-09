@@ -36,5 +36,7 @@ public interface TFirstpageTestingMapper extends BaseMapper<TFirstPageTesting> {
     }
      */
 
+    List<TFirstPageTesting> queryFirstPageList(Map<String, Object> queryMap);
+
 
 }

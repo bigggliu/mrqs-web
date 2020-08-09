@@ -9,4 +9,6 @@ import java.util.List;
 
 public interface OutDiagService extends BaseService<TFirstoutdiagTesting> {
     List<TFirstoutdiagTesting> insertAndUpdateOutDiag(TFirstPageTestingDto tFirstPageTestingDto);
+
+    void update(TFirstPageTestingDto tFirstPageTestingDto);
 }

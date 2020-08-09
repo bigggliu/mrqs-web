@@ -70,4 +70,15 @@ public class IndexInfoManageController {
         return indexInfoManageService.findSelectionDict(fqun);
     }
 
+    @RequestMapping("/updateInfo")
+    public void updateInfo(TFirstPageTestingDto tFirstPageTestingDto) throws Exception {
+        try{
+            indexInfoManageService.update(tFirstPageTestingDto);
+            outDiagService.update(tFirstPageTestingDto);
+            outOperService.update(tFirstPageTestingDto);
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new Exception("修改异常");
+        }
+    }
 }

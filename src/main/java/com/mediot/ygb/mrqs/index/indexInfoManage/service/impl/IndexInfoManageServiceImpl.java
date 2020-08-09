@@ -32,7 +32,11 @@ import com.mediot.ygb.mrqs.index.indexInfoManage.service.IndexInfoManageService;
 import com.mediot.ygb.mrqs.index.indexInfoManage.vo.TFirstPageTestingVo;
 
 import com.mediot.ygb.mrqs.org.dao.TOrgRelationshipMapper;
+import com.mediot.ygb.mrqs.org.dao.TOrgsMapper;
+import com.mediot.ygb.mrqs.org.entity.TOrgsEntity;
 import com.mediot.ygb.mrqs.system.user.vo.UserInfoVo;
+import com.mediot.ygb.mrqs.workingRecord.FileUploadManage.dao.FileUploadMapper;
+import com.mediot.ygb.mrqs.workingRecord.FileUploadManage.entity.FileUploadEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -66,22 +70,29 @@ public class IndexInfoManageServiceImpl extends BaseServiceImpl<TFirstpageTestin
     @Autowired
     TOrgRelationshipMapper tOrgRelationshipMapper;
 
+    @Autowired
+    TOrgsMapper tOrgsMapper;
+
+    @Autowired
+    FileUploadMapper fileUploadMapper;
+
     @Override
     public TFirstPageTesting insertAndUpdate(TFirstPageTestingDto tFirstPageTestingDto) {
+        if(tFirstPageTestingDto.getTFirstPageTestingId() == null){
+            throw new ValidationException("基本信息id不能为空！");
+        }
         if(StringUtils.isBlank(String.valueOf(tFirstPageTestingDto.getBatchId()))&&tFirstPageTestingDto.getBatchId()==null){
             throw new ValidationException("批次id不能为空！");
         }
-        if(tFirstPageTestingDto.getCaseId()==null){
+        if(tFirstPageTestingDto.getCaseNo()==null){
             throw new ValidationException("病案号不能为空！");
         }
-        if(StringUtils.isBlank(String.valueOf(tFirstPageTestingDto.getOrgId()))){
+        if(StringUtils.isBlank(String.valueOf(tFirstPageTestingDto.getUpOrgId()))){
             throw new ValidationException("机构id不能为空！");
         }
-        //
         TFirstPageTesting tFirstPageTesting= JsonUtil.getJsonToBean(JsonUtil.getBeanToJson(tFirstPageTestingDto),TFirstPageTesting.class);
         QueryWrapper queryWrapper=new QueryWrapper();
         queryWrapper.eq("BATCH_ID",tFirstPageTesting.getBatchId());
-        queryWrapper.eq("CASE_ID",tFirstPageTesting.getCaseId());
         queryWrapper.eq("CASE_NO",tFirstPageTesting.getCaseNo());
         if(tFirstPageTestingDto.getTFirstPageTestingId()==null){
             int count=tFirstpageTestingMapper.selectCount(queryWrapper);
@@ -103,7 +114,6 @@ public class IndexInfoManageServiceImpl extends BaseServiceImpl<TFirstpageTestin
         LocalAssert.notNull(tFirstPageTestingDto.getPageSize(),"pageSize不能为空");
         Map<String, Object> queryMap = new HashMap<String, Object>();
         queryMap.put("caseNo",tFirstPageTestingDto.getCaseNo());
-        queryMap.put("orgName",tFirstPageTestingDto.getOrgName());
         queryMap.put("fname",tFirstPageTestingDto.getFname());
         queryMap.put("diagnosisCode",tFirstPageTestingDto.getDiagnosisCode());
         queryMap.put("operationCode",tFirstPageTestingDto.getOperationCode());
@@ -123,44 +133,36 @@ public class IndexInfoManageServiceImpl extends BaseServiceImpl<TFirstpageTestin
                 }
                 queryMap.put("orgIds",orgIds);
         }
-//        if(StringUtils.isNotEmpty(userInfoVo.getOrgId())){
-//            if(!userInfoVo.getOrgId().equals("1266216344326770690")){//测试用，可以删除
-//                List<String> orgIds=Lists.newArrayList();
-//                if(StringUtils.isNotBlank(tFirstPageTestingDto.getOrgId())){
-//                    orgIds.add(tFirstPageTestingDto.getOrgId());
-//                }else {
-//                    orgIds.add(userInfoVo.getOrgId());
-//                    Map<String,Object> qm= Maps.newHashMap();
-//                    qm.put("pid",userInfoVo.getOrgId());
-//                    tOrgRelationshipMapper.selectRefOrgList(qm).stream().forEach(e->{
-//                        orgIds.add(e.getOrgId());
-//                    });
-//                }
-//                queryMap.put("orgIds",orgIds);
-//            }
-//        }
         Page page= PageHelper.startPage(tFirstPageTestingDto.getPageNum(),tFirstPageTestingDto.getPageSize());
         List<TFirstPageTesting> tFirstPageTestingList=Lists.newArrayList();
-        if(StringUtils.isBlank(tFirstPageTestingDto.getDiagnosisCode())&&StringUtils.isBlank(tFirstPageTestingDto.getOperationCode())){
-            tFirstPageTestingList=tFirstpageTestingMapper.selectBaseInfoOfCaseList(queryMap);
-        }else {
-            tFirstPageTestingList=tFirstpageTestingMapper.selectCaseList(queryMap);
-        }
+        tFirstPageTestingList=tFirstpageTestingMapper.queryFirstPageList(queryMap);
         Map<String, Object> jsonMap = new HashMap<String, Object>();
         List<TFirstPageTestingVo> tFirstPageTestingVoList=Lists.newArrayList();
         tFirstPageTestingList.stream().forEach(e->{
             TFirstPageTestingVo tv=JsonUtil.getJsonToBean(JsonUtil.getBeanToJson(e), TFirstPageTestingVo.class);
-            TBaseDict tb=tBaseDictMapper.selectSexByDCode(e.getSexCode());
-            if(tb!=null){
-                tv.setSexCode(tb.getDictName());
-            }else{
-                tv.setSexCode("-");
+            if(StringUtils.isNotBlank(e.getSexCode())){
+                TBaseDict tb=tBaseDictMapper.selectSexByDCode(e.getSexCode());
+                if(tb!=null){
+                    tv.setSexCode(tb.getDictName());
+                }else{
+                    tv.setSexCode("-");
+                }
             }
-            TBaseDict _tb=tBaseDictMapper.selectPayWayByBC(e.getPayWayCode());
-            if(_tb!=null){
-                tv.setPayWayCode(_tb.getDictName());
-            }else{
-                tv.setPayWayCode("-");
+            if(StringUtils.isNotBlank(e.getPayWayCode())){
+                TBaseDict _tb=tBaseDictMapper.selectPayWayByBC(e.getPayWayCode());
+                if(_tb!=null){
+                    tv.setPayWayCode(_tb.getDictName());
+                }else{
+                    tv.setPayWayCode("-");
+                }
+            }
+            TOrgsEntity temp = new TOrgsEntity();
+            temp.setOrgId(Long.valueOf(e.getUpOrgId()));
+            TOrgsEntity org = tOrgsMapper.selectById(temp);
+            if(org != null && StringUtils.isNotBlank(org.getOrgCode())){
+                tv.setOrgCode(org.getOrgCode());
+            }else {
+                tv.setOrgCode("-");
             }
             tFirstPageTestingVoList.add(tv);
         });
@@ -176,6 +178,20 @@ public class IndexInfoManageServiceImpl extends BaseServiceImpl<TFirstpageTestin
         LocalAssert.notNull(tFirstPageTestingDto.getTFirstPageTestingId(),"id不能为空");
         TFirstPageTesting tFirstPageTesting=tFirstpageTestingMapper.selectById(tFirstPageTestingDto.getTFirstPageTestingId());
         TFirstPageTestingVo tFirstPageTestingVo=JsonUtil.getJsonToBean(JsonUtil.getBeanToJson(tFirstPageTesting), TFirstPageTestingVo.class);
+        TOrgsEntity temp = new TOrgsEntity();
+        temp.setOrgId(Long.valueOf(tFirstPageTesting.getUpOrgId()));
+        TOrgsEntity org = tOrgsMapper.selectById(temp);
+        if(org != null && StringUtils.isNotBlank(org.getOrgCode())){
+            tFirstPageTestingVo.setOrgCode(org.getOrgCode());
+        }else {
+            tFirstPageTestingVo.setOrgCode("-");
+        }
+        QueryWrapper<FileUploadEntity> qw = new QueryWrapper<>();
+        qw.eq("BATCH_ID",tFirstPageTesting.getBatchId());
+        List<FileUploadEntity> list = fileUploadMapper.selectList(qw);
+        if(list.size() > 0){
+            tFirstPageTestingVo.setStandardCode(list.get(0).getStandardCode());
+        }
         //插入诊断和手术信息
         QueryWrapper queryWrapper=new QueryWrapper();
         queryWrapper.eq("T_FIRST_PAGE_TESTING_ID",tFirstPageTestingVo.getTFirstPageTestingId());
@@ -208,5 +224,12 @@ public class IndexInfoManageServiceImpl extends BaseServiceImpl<TFirstpageTestin
             resultMap.put(e.getFQun(),tBaseData);
         });
         return resultMap;
+    }
+
+    @Override
+    public void update(TFirstPageTestingDto tFirstPageTestingDto) {
+        LocalAssert.notNull(tFirstPageTestingDto.getTFirstPageTestingId(),"基本信息id不能为空");
+        TFirstPageTesting tFirstPageTesting= JsonUtil.getJsonToBean(JsonUtil.getBeanToJson(tFirstPageTestingDto),TFirstPageTesting.class);
+        tFirstpageTestingMapper.updateById(tFirstPageTesting);
     }
 }

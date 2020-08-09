@@ -9,4 +9,6 @@ import java.util.List;
 
 public interface OutOperService extends BaseService<TFirstoutoperTesting> {
     List<TFirstoutoperTesting> insertAndUpdateOutOper(TFirstPageTestingDto tFirstPageTestingDto);
+
+    void update(TFirstPageTestingDto tFirstPageTestingDto);
 }

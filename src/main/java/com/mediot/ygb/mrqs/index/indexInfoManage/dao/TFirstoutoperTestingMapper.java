@@ -14,5 +14,5 @@ public interface TFirstoutoperTestingMapper extends BaseMapper<TFirstoutoperTest
 
     void batchDelOutOper(List<TFirstoutoperTesting> tftList);
 
-    void batchDelOutDiagByMap(Map<String, Object> queryMap);
+    void batchDelOutOperByMap(Map<String, Object> queryMap);
 }

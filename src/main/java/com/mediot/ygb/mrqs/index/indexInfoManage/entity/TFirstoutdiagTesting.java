@@ -26,6 +26,7 @@ public class TFirstoutdiagTesting implements Serializable {
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     private Long tFirstoutdiagTestingId;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     private Long batchId;
 
     private String caseId;
@@ -45,7 +46,7 @@ public class TFirstoutdiagTesting implements Serializable {
     private String pathologicalNumber;
 
     private String degreeOfDifferentiation;
-
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     private Long tFirstPageTestingId;
 
     @TableField(exist = false)

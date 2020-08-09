@@ -17,4 +17,6 @@ public interface IndexInfoManageService extends BaseService<TFirstPageTesting> {
     TFirstPageTestingVo findIndexInfoById(TFirstPageTestingDto tFirstPageTestingDto);
 
     Map<String,Object> findSelectionDict(String fqun);
+
+    void update(TFirstPageTestingDto tFirstPageTestingDto);
 }

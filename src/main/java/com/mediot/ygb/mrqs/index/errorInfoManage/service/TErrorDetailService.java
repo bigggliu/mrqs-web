@@ -9,4 +9,6 @@ import java.util.Map;
 public interface TErrorDetailService extends BaseService<TErrorDetailEntity> {
 
     Map<String, Object> findtOrgByParam(TErrorDetailDto tErrorDetailDto);
+
+    Map<String,Object> exportErrorDetail(String batchId) throws Exception;
 }

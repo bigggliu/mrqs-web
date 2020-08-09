@@ -1,5 +1,6 @@
 package com.mediot.ygb.mrqs.index.indexInfoManage.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -9,9 +10,11 @@ import java.math.BigDecimal;
 public class TFirstoutoperTestingDto implements Serializable {
 
     private static final long serialVersionUID = -7092996844988557580L;
-
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     private Long tFirstoutoperTestingId;
-
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
+    private Long tFirstPageTestingId;
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     private Long batchId;
 
     private Long caseId;
@@ -47,5 +50,9 @@ public class TFirstoutoperTestingDto implements Serializable {
     private String anesthesiologist;
 
     private String surgicalPatientType;
+
+    private String operationType;
+
+    private String incisionHealingType;
 
 }

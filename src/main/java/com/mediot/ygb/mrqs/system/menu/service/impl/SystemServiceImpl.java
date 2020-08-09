@@ -109,13 +109,17 @@ public class SystemServiceImpl extends BaseServiceImpl<SystemMapper, System> imp
         Map<String, Object> jsonMap = new HashMap<String, Object>();
         List<MenuVo> menuVoList=list.stream().map(e -> JsonUtil.
                 getJsonToBean(JsonUtil.getBeanToJson(e), MenuVo.class)).
-                collect(Collectors.toList()); ;
+                collect(Collectors.toList());
         List<MenuVo> finalList=treeList(menuVoList, "0");
         //PageInfo<MenuVo> pageInfo = new PageInfo<>(finalList);
         //pageInfo.setPages(page.getPages());//总页数
         //pageInfo.setTotal(page.getTotal());//总条数
-        List<List<MenuVo>> subList = Lists.partition(finalList,pageSize);
-        jsonMap.put("data",subList.get(pageNum-1));//数据结果
+        if(finalList.size() > 0){
+            List<List<MenuVo>> subList = Lists.partition(finalList,pageSize);
+            jsonMap.put("data",subList.get(pageNum-1));//数据结果
+        }else {
+            jsonMap.put("data",new ArrayList<>());//数据结果
+        }
         jsonMap.put("total", finalList.size());//获取数据总数
         jsonMap.put("pageSize", pageSize);//获取长度
         jsonMap.put("pageNum", pageNum);//获取当前页数
